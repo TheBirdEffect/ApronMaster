@@ -51,7 +51,7 @@ namespace API.Controllers
         [HttpPost]
         public async Task<AircraftType> AddAircraftType([FromBody] AircraftType type) 
         {
-            await _context.AircraftTypes.AddAsync(type);
+            _context.AircraftTypes.Add(type);
             await _context.SaveChangesAsync();
             
             return type;
