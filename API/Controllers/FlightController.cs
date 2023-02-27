@@ -20,7 +20,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Flight>>> GetFlight() 
+        public async Task<ActionResult<IEnumerable<Flight>>> GetFlights() 
         {
             return await _context.Flights.ToListAsync();
         }
