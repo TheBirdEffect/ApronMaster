@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using API.Data;
+using API.DTOs;
 using API.Entity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace API.Controllers
 {
@@ -48,13 +51,53 @@ namespace API.Controllers
         //     return _type;
         // }
 
+        // [HttpPost]
+        // public async Task<AircraftType> AddAircraftType([FromBody] AircraftType type) 
+        // {
+        //     _context.AircraftTypes.Add(type);
+        //     await _context.SaveChangesAsync();
+            
+        //     return type;
+        // }
+
         [HttpPost]
-        public async Task<AircraftType> AddAircraftType([FromBody] AircraftType type) 
+        public async Task<AircraftType> AddAircraftType(AircraftTypeDto aircraftTypeDto) 
         {
-            _context.AircraftTypes.Add(type);
+            var aType = new AircraftType {
+                Name = aircraftTypeDto.Name,
+                hasUnitLoadOption = aircraftTypeDto.HasUnitLoadOption
+            };
+
+            _context.AircraftTypes.Add(aType);
             await _context.SaveChangesAsync();
             
-            return type;
+            return aType;
         }
+
+        [HttpDelete("{id}")]
+        public async Task<HttpResponseMessage> DeleteAircraftType(int id)
+        {
+            try 
+            {
+                var aType = await _context.AircraftTypes.FindAsync(id); 
+                if(aType != null)
+                {
+                    _context.AircraftTypes.Remove(aType);
+                    var status = await _context.SaveChangesAsync();
+
+                    if(status.Equals(1)){
+                        return new HttpResponseMessage(HttpStatusCode.OK);
+                    }
+                    throw new Exception("Deletion failed");
+                } else {
+                    return new HttpResponseMessage(HttpStatusCode.NotFound);
+                }
+            }
+            catch 
+            {
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+        }
+
     }
 }

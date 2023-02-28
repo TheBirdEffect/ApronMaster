@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace API.Entity
 {
-    public class AircraftType 
+    public class AircraftType
     {
         public int AircraftTypeId { get; set; }
         public String Name { get; set; }
