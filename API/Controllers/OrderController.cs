@@ -9,9 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class OrderController : ControllerBase
+    public class OrderController : BaseController
     {
         private readonly DataContext _context;
         public OrderController(DataContext context)

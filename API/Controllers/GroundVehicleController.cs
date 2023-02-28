@@ -9,9 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class GroundVehicleController : ControllerBase
+    public class GroundVehicleController : BaseController
     {
         private readonly DataContext _context;
         public GroundVehicleController(DataContext context)
