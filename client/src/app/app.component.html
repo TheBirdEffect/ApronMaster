@@ -1,17 +1,24 @@
-<h2>{{title}}</h2>
-<table class="table table-success table-striped table-hover">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Flight Number</th>
-            <th>Destination</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let flight of flights">
-            <td>{{flight.flightId}}</td>
-            <td>{{flight.flightNo}}</td>
-            <td>{{flight.destination}}</td>
-        </tr>
-    </tbody>
-</table>
+<app-navigation></app-navigation>
+<app-dashboard></app-dashboard>
+
+
+
+<!-- <div class="container">
+    <h2>{{title}}</h2>
+    <table class="table table-success table-striped table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Flight Number</th>
+                <th>Destination</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let flight of flights">
+                <td>{{flight.flightId}}</td>
+                <td>{{flight.flightNo}}</td>
+                <td>{{flight.destination}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div> -->
