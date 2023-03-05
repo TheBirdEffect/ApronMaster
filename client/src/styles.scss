@@ -1,1 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
+@import "./variables.scss";
+
+nav {
+    background-color: $--bs-bg-primary;
+}
+
+.bs-grid {
+    background-color: $--bs-bg-primary;
+    margin: 10px;
+}
+
+
+  
