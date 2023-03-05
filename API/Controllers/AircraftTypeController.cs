@@ -3,6 +3,7 @@ using API.Data;
 using API.DTOs;
 using API.Entity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.IIS.Core;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
@@ -44,7 +45,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<HttpResponseMessage> DeleteAircraftType(int id)
+        public async Task<ActionResult<AircraftType>> DeleteAircraftType(int id)
         {
             try 
             {
@@ -55,16 +56,16 @@ namespace API.Controllers
                     var qtyDbActions = await _context.SaveChangesAsync();
 
                     if(qtyDbActions.Equals(1)){
-                        return new HttpResponseMessage(HttpStatusCode.OK);
+                        return aType;
                     }
                     throw new Exception("Deletion failed");
                 } else {
-                    return new HttpResponseMessage(HttpStatusCode.NotFound);
+                    return BadRequest();
                 }
             }
             catch 
             {
-                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                throw new Exception("Internal Server Error 500");
             }
         }
 
