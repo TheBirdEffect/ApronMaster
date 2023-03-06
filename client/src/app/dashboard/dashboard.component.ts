@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { FlightsService } from '../_service/flights.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -6,10 +8,35 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+  flights: any;
 
-  constructor() { }
+  constructor(private flightService:FlightsService) { }
 
   ngOnInit(): void {
+    this.getFlights();
   }
+
+  getFlights():any {
+    this.flightService.getFlights().subscribe({
+      next: response => {
+        this.flights = response
+      },
+      error: error => console.log(error)
+    })
+  }
+
+
+
+  addFlight() {
+    console.log('AddFlight')
+  }
+
+  deleteFlight(flightId:number): void {
+    this.flightService.deleteFlight(flightId).subscribe();
+  }
+
+
+
+
 
 }

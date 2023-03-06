@@ -1,16 +1,47 @@
-<div class="container overflow-hidden text-center">
+<div class="container" style="margin-top: 30px;">
   <div class="row gy-5">
-    <div class="col-6">
+    <div class="col-8">
+      <h4>Flights</h4>
+      <div class="p-3 border bg-light">
+        <div class="container text-center">
+          <table class="table table-secondary table-striped table-hover db-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Flight Number</th>
+                <th>Destination</th>
+                <th>Arrival</th>
+                <th>Departure</th>
+                <th>Options</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let flight of flights">
+                <td>{{flight.flightId}}</td>
+                <td>{{flight.flightNo}}</td>
+                <td>{{flight.destination}}</td>
+                <td>{{flight.arrival}}</td>
+                <td>{{flight.departure}}</td>
+                <td><button class="btn btn-outline-danger" (click)="deleteFlight(flight.flightId)">Delete</button></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="container text-center px-0">
+            <button type="button" class="btn-add-tr btn-add-tr-hover"><i
+                class="bi bi-plus-circle"></i><span></span></button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="col-4">
+      <h4>Time Table</h4>
       <div class="p-3 border bg-light">Custom column padding</div>
     </div>
-    <div class="col-6">
-      <div class="p-3 border bg-light">Custom column padding</div>
-    </div>
-    <div class="col-6">
-      <div class="p-3 border bg-light">Custom column padding</div>
-    </div>
-    <div class="col-6">
-      <div class="p-3 border bg-light">Custom column padding</div>
-    </div>
-  </div>
-</div>
+
+    <ng-template #template>
+      <div class="modal-body text-center">
+        <p>Do you want to confirm?</p>
+        <button type="button" class="btn btn-default">Yes</button>
+        <button type="button" class="btn btn-primary">No</button>
+      </div>

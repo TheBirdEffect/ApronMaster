@@ -8,11 +8,23 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace API.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedSeeds230213 : Migration
+    public partial class ExampleSeedAdded : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Flights_AircraftTypes_AircraftTypeId",
+                table: "Flights");
+
+            migrationBuilder.AlterColumn<int>(
+                name: "AircraftTypeId",
+                table: "Flights",
+                type: "INTEGER",
+                nullable: true,
+                oldClrType: typeof(int),
+                oldType: "INTEGER");
+
             migrationBuilder.InsertData(
                 table: "AircraftTypes",
                 columns: new[] { "AircraftTypeId", "Name", "hasUnitLoadOption" },
@@ -144,11 +156,22 @@ namespace API.Data.Migrations
                     { 26, new DateTime(2023, 2, 14, 14, 45, 0, 0, DateTimeKind.Unspecified), 3, 3, 15000, new DateTime(2023, 2, 14, 14, 32, 0, 0, DateTimeKind.Unspecified), 9 },
                     { 27, new DateTime(2023, 2, 14, 15, 10, 0, 0, DateTimeKind.Unspecified), 3, 3, 0, new DateTime(2023, 2, 14, 15, 0, 0, 0, DateTimeKind.Unspecified), 9 }
                 });
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Flights_AircraftTypes_AircraftTypeId",
+                table: "Flights",
+                column: "AircraftTypeId",
+                principalTable: "AircraftTypes",
+                principalColumn: "AircraftTypeId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Flights_AircraftTypes_AircraftTypeId",
+                table: "Flights");
+
             migrationBuilder.DeleteData(
                 table: "AircraftTypes",
                 keyColumn: "AircraftTypeId",
@@ -598,6 +621,24 @@ namespace API.Data.Migrations
                 table: "AircraftTypes",
                 keyColumn: "AircraftTypeId",
                 keyValue: 5);
+
+            migrationBuilder.AlterColumn<int>(
+                name: "AircraftTypeId",
+                table: "Flights",
+                type: "INTEGER",
+                nullable: false,
+                defaultValue: 0,
+                oldClrType: typeof(int),
+                oldType: "INTEGER",
+                oldNullable: true);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Flights_AircraftTypes_AircraftTypeId",
+                table: "Flights",
+                column: "AircraftTypeId",
+                principalTable: "AircraftTypes",
+                principalColumn: "AircraftTypeId",
+                onDelete: ReferentialAction.Cascade);
         }
     }
 }

@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using API.Data;
+using API.DTOs;
 using API.Entity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -28,5 +25,51 @@ namespace API.Controllers
         {
             return await _context.Flights.FindAsync(id);
         }
+
+        [HttpPost("add")]
+        public async Task<ActionResult<Flight>> AddFlight(FlightDto flightDto) 
+        {
+            if(flightDto.Equals(null)) return BadRequest("No valid flightplan object!");
+
+            var _flight = new Flight {
+                FlightNo = flightDto.FlightNumber,
+                Destination = flightDto.Destination,
+                Arrival = flightDto.Arrival,
+                Departure = flightDto.Departure,
+                AircraftTypeId = flightDto.AircraftType.AircraftTypeId                            
+            };
+
+            await _context.Flights.AddAsync(_flight);
+            await _context.SaveChangesAsync(); 
+
+            return _flight;
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Flight>> DeleteFlight(int id)
+        {
+           try 
+            {
+                var _flight = await _context.Flights.FindAsync(id); 
+                if(_flight != null)
+                {
+                    _context.Flights.Remove(_flight);
+                    var qtyDbActions = await _context.SaveChangesAsync();
+
+                    if(qtyDbActions.Equals(1)){
+                        return _flight;
+                    }
+                    throw new Exception("Deletion failed");
+                } else {
+                    return BadRequest();
+                }
+            }
+            catch 
+            {
+                throw new Exception("Internal Server Error 500");
+            }
+        }
+
+
     }
 }

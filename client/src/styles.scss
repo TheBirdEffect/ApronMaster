@@ -2,6 +2,10 @@
 @import "../node_modules/bootstrap/scss/bootstrap.scss";
 @import "./variables.scss";
 
+body {
+    padding-top: 60px;
+}
+
 nav {
     background-color: $--bs-bg-primary;
 }
@@ -11,5 +15,31 @@ nav {
     margin: 10px;
 }
 
+.btn-add-tr {
+    font-size: x-large;
+    background-color: rgba(0, 151, 91, 0.806);
+    width: 100%;
+    border: none;
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+    box-shadow: none;
+    transition: 0.3s;
+}
+
+.btn-add-tr:hover {
+    background-color: rgba(11, 139, 88, 0.806);
+}
+
+.btn-add-tr span:after {
+    
+}
+
+.db-table {
+    margin-bottom: 0 !important;
+}
 
   
+/* Importing Bootstrap SCSS file. */
+@import "./node_modules/bootstrap/scss/bootstrap";

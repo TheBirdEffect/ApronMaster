@@ -11,14 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230213222128_AddedSeeds230213")]
-    partial class AddedSeeds230213
+    [Migration("20230306003111_FixesAtKeysOfATandFlights")]
+    partial class FixesAtKeysOfATandFlights
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.2");
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.3");
 
             modelBuilder.Entity("API.Entity.AircraftType", b =>
                 {
@@ -82,7 +82,7 @@ namespace API.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AircraftTypeId")
+                    b.Property<int?>("AircraftTypeId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Arrival")
@@ -896,10 +896,8 @@ namespace API.Data.Migrations
             modelBuilder.Entity("API.Entity.Flight", b =>
                 {
                     b.HasOne("API.Entity.AircraftType", "AircraftType")
-                        .WithMany("Flights")
-                        .HasForeignKey("AircraftTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("AircraftTypeId");
 
                     b.Navigation("AircraftType");
                 });
@@ -967,11 +965,6 @@ namespace API.Data.Migrations
                     b.Navigation("GroundVehicle");
 
                     b.Navigation("Order");
-                });
-
-            modelBuilder.Entity("API.Entity.AircraftType", b =>
-                {
-                    b.Navigation("Flights");
                 });
 
             modelBuilder.Entity("API.Entity.Flight", b =>

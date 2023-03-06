@@ -13,6 +13,6 @@ namespace API.Entity
 
         // public int FlightId { get; set; }
         // public Flight Flight { get; set; }
-        // public ICollection<Flight> Flights { get; set; }
+        //public ICollection<Flight> Flights { get; set; }
     }
 }
