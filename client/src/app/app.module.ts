@@ -8,6 +8,7 @@ import { NavigationComponent } from './navigation/navigation.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FormsFlightComponent } from './forms-flight/forms-flight.component';
 import { FormsModule } from '@angular/forms';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,8 @@ import { FormsModule } from '@angular/forms';
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
+    ModalModule
+    
   ],
   providers: [],
   bootstrap: [AppComponent]
