@@ -1,6 +1,7 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { FlightsService } from '../_service/flights.service';
+import { BsModalService}
 
 @Component({
   selector: 'app-dashboard',
