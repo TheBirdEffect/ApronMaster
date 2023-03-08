@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import "../node_modules/bootstrap/scss/bootstrap.scss";
+@import "./node_modules/bootstrap/scss/bootstrap";
 @import "./variables.scss";
 
 body {
@@ -32,14 +33,13 @@ nav {
     background-color: rgba(11, 139, 88, 0.806);
 }
 
-.btn-add-tr span:after {
-    
-}
-
 .db-table {
     margin-bottom: 0 !important;
 }
 
+.corners-round {
+    border-radius: 7px;
+}
+
   
-/* Importing Bootstrap SCSS file. */
-@import "./node_modules/bootstrap/scss/bootstrap";
+

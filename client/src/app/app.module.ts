@@ -9,21 +9,26 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { FormsFlightComponent } from './forms-flight/forms-flight.component';
 import { FormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { AlertModule } from 'ngx-bootstrap/alert';
+import { NgApexchartsModule } from 'ng-apexcharts';
+import { FlightsComponent } from './charts/dashboard/flights/flights.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavigationComponent,
     DashboardComponent,
-    FormsFlightComponent
+    FormsFlightComponent,
+    FlightsComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    ModalModule
-    
+    ModalModule.forRoot(),
+    AlertModule.forRoot(),
+    NgApexchartsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

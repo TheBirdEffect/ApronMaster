@@ -4,38 +4,38 @@
     <div class="container mb-3 text-center">
         <ng-container *ngIf="model">
         <input type="text" 
-            class="form-control" 
+            class="form-control mb-1" 
             name="flightNumber" 
             placeholder="Flight Number" 
             [(ngModel)]="model.flightNumber"
         >
-        </ng-container>
         <input type="datetime-local"
-            class="form-control"
+            class="form-control mb-1"
             name="arrival"
             [(ngModel)]="model.arrival"
         >
         <input type="datetime-local" 
-            class="form-control"
+            class="form-control mb-1"
             name="departure"
             [(ngModel)]="model.departure"
         >
         <input type="text"
-            class="form-control"
+            class="form-control mb-1"
             name="destination"
             placeholder="Destination"
             [(ngModel)]="model.destination"
         >
-        <select class="form-select" id="aircraftType" name="aircraftType" [(ngModel)]="model.aircraftType">
+        <select class="form-select mb-2" id="aircraftType" name="aircraftType" [(ngModel)]="model.aircraftType">
+            <option value="" disabled [selected]="true">Please select an Aircraft Type</option>
             <option *ngFor="let aircraftType of aircraftTypes" [ngValue]="aircraftType">
                 {{aircraftType.name + " | UnitLoadOption: " + aircraftType.hasUnitLoadOption}}
             </option>
         </select>
+        </ng-container>
         
         <div class="text-center">
-            <button class="btn btn-outlined-success me-2" type="submit">Add Flight</button>
-            <button class="btn btn-warning" >Cances</button>
+            <button class="btn btn-outlined-success me-2" name="btnSubmit" type="submit">Add Flight</button>
+            <button class="btn btn-warning" name="btnCancel" (click)="cancel()">Cancel</button>
         </div>
     </div>
-
 </form>

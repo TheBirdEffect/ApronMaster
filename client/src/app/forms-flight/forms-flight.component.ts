@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { AircraftType } from '../_models/aircraftType';
 import { Flight } from '../_models/flight';
@@ -11,6 +11,7 @@ import { FlightsService } from '../_service/flights.service';
   styleUrls: ['./forms-flight.component.scss']
 })
 export class FormsFlightComponent implements OnInit {
+  @Output() cancelForm = new EventEmitter();
   aircraftTypes: any;
   model: any = {}
 
@@ -27,7 +28,8 @@ export class FormsFlightComponent implements OnInit {
       next: subscribe => {
         this.model = subscribe
       }, 
-      error: error => console.log(error)
+      error: error => console.log(error),
+      complete: () => this.cancel()
     });
   }
 
@@ -37,6 +39,10 @@ export class FormsFlightComponent implements OnInit {
         this.aircraftTypes = response;
       }
     })
+  }
+
+  cancel() {
+    this.cancelForm.emit(false);
   }
 
 }

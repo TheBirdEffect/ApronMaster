@@ -1,7 +1,9 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { FlightsService } from '../_service/flights.service';
-import { BsModalService}
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { AlertService } from '../_service/alert.service';
+import * as ApexCharts from 'apexcharts';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,12 +11,18 @@ import { BsModalService}
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+  registerMode = false;
+  modalRef?: BsModalRef;
   flights: any;
 
-  constructor(private flightService:FlightsService) { }
+  constructor(private flightService:FlightsService,
+              private modalService: BsModalService,
+              private alertService: AlertService
+              ) 
+              { }
 
   ngOnInit(): void {
-    this.getFlights();
+    this.getFlights();   
   }
 
   getFlights():any {
@@ -37,7 +45,23 @@ export class DashboardComponent implements OnInit {
   }
 
 
+  //modal
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template);   
+  }
 
+  closeModal() {
+    this.modalRef?.hide();
+  }
+
+  toggleFormMode() {
+    this.registerMode = !this.registerMode;
+  }
+
+  cancelFormMode(event: boolean) {
+    this.registerMode = event;
+    this.closeModal()
+  }
 
 
 }
