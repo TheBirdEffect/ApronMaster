@@ -12,6 +12,7 @@ export class TableOrderComponent {
   private _postitions:any = { };
   private _flights: any = { };
   private _vehicleTypes: any = { };
+  private _orders: any = {}
 
   constructor(private flightservice:FlightsService,
               private aircraftTypeService:AircraftTypesService,
