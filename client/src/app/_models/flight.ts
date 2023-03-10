@@ -1,7 +1,7 @@
 import { DatePipe } from "@angular/common";
 import { AircraftType } from "./aircraftType";
 
-export interface Flight {
+export class Flight {
     flightId: number;
     flightNumber: String;
     arrival: Date;

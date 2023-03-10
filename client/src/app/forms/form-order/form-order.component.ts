@@ -6,6 +6,6 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./form-order.component.scss']
 })
 export class FormOrderComponent {
-
+  
   constructor() {}
 }

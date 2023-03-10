@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, map } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable } from 'rxjs';
 import { Flight } from '../_models/flight';
 
 @Injectable({
@@ -14,8 +14,10 @@ export class FlightsService {
 
   constructor(private http:HttpClient) { }
 
-  getFlights() {
-    return this.http.get(this.basicUrl);
+  getFlights(): Observable<Flight[]> {
+    return this.http.get<Flight[]>(this.basicUrl).pipe(
+      map(response => {return response})
+    );
   }
 
   addFlight(model: any) {
