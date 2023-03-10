@@ -14,6 +14,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { ChartFlightsComponent } from './charts/dashboard/chart-flights/chart-flights.component';
 import { DatePipe } from '@angular/common';
 import { FormOrderComponent } from './forms/form-order/form-order.component';
+import { TableOrderComponent } from './tables/table-order/table-order.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { FormOrderComponent } from './forms/form-order/form-order.component';
     DashboardComponent,
     FormsFlightComponent,
     ChartFlightsComponent,
-    FormOrderComponent
+    FormOrderComponent,
+    TableOrderComponent
   ],
   imports: [
     BrowserModule,
