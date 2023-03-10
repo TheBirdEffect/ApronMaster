@@ -456,3 +456,6 @@ $RECYCLE.BIN/
 appsettings.json
 
 *.db
+*.sqlite3
+
+/API/ApronDB.db
