@@ -4,6 +4,7 @@ import { FlightsService } from '../_service/flights.service';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { AlertService } from '../_service/alert.service';
 import * as ApexCharts from 'apexcharts';
+import { Flight } from '../_models/flight';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,6 +12,8 @@ import * as ApexCharts from 'apexcharts';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+  _flights = new BehaviorSubject<Flight | null>(null);
+  currentFlight = this._flights.asObservable()
   registerMode = false;
   modalRef?: BsModalRef;
   flights: any;
@@ -20,7 +23,7 @@ export class DashboardComponent implements OnInit {
               private alertService: AlertService
               ) 
               { }
-
+  
   ngOnInit(): void {
     this.getFlights();   
   }

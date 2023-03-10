@@ -8,7 +8,7 @@ import { Flight } from '../_models/flight';
 })
 export class FlightsService {
   basicUrl = "https://localhost:5001/api/flight"
-  private currentFlightSource = new BehaviorSubject<Flight | null>(null);
+  currentFlightSource = new BehaviorSubject<Flight | null>(null);
   currentFlight$ = this.currentFlightSource.asObservable();
 
 

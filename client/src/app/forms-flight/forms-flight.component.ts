@@ -16,7 +16,9 @@ export class FormsFlightComponent implements OnInit {
   model: any = {}
 
 
-  constructor(private flightService: FlightsService, private aircrafttypeService: AircraftTypesService) { }
+  constructor(private flightService: FlightsService, 
+              private aircrafttypeService: AircraftTypesService,
+            ) { }
 
   ngOnInit(): void {
     this.getAircraftTypes();

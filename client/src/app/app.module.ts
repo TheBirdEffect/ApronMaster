@@ -11,7 +11,9 @@ import { FormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { NgApexchartsModule } from 'ng-apexcharts';
-import { FlightsComponent } from './charts/dashboard/flights/flights.component';
+import { ChartFlightsComponent } from './charts/dashboard/chart-flights/chart-flights.component';
+import { DatePipe } from '@angular/common';
+import { FormOrderComponent } from './forms/form-order/form-order.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,8 @@ import { FlightsComponent } from './charts/dashboard/flights/flights.component';
     NavigationComponent,
     DashboardComponent,
     FormsFlightComponent,
-    FlightsComponent
+    ChartFlightsComponent,
+    FormOrderComponent
   ],
   imports: [
     BrowserModule,
@@ -30,7 +33,7 @@ import { FlightsComponent } from './charts/dashboard/flights/flights.component';
     AlertModule.forRoot(),
     NgApexchartsModule
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -3,8 +3,8 @@ import { AircraftType } from "./aircraftType";
 
 export interface Flight {
     flightNumber: String;
-    arrival: String;
-    departure: String;
+    arrival: Date;
+    departure: Date;
     destination: String;
     aircraftType: AircraftType;
 }
