@@ -7,7 +7,7 @@ export class order {
     startOfService: Date;
     endOfService: Date;
     qtyFuel: number;
-    position: position;
-    flight: Flight;
-    vehicleType: vehicleType;
+    positionId: number;
+    flightId: number;
+    vehicleTypeId: number;
 }
