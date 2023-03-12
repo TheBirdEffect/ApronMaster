@@ -26,7 +26,7 @@ namespace API.Controllers
             Console.WriteLine($"The number of flights is currently {flights.Count()}");
             foreach(var flight in flights)
             {
-                Console.WriteLine($"{flight.FlightId} {flight.FlightNo} {flight.Arrival} {flight.Departure} {flight.Destination} {_context.AircraftTypes.Find(flight.AircraftTypeId).Name}");
+                Console.WriteLine($"{flight.FlightId} {flight.FlightNumber} {flight.Arrival} {flight.Departure} {flight.Destination} {_context.AircraftTypes.Find(flight.AircraftTypeId).Name}");
             }
         }
     }

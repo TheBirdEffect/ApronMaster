@@ -8,6 +8,9 @@ export class order {
     endOfService: Date;
     qtyFuel: number;
     positionId: number;
+    position: position;
     flightId: number;
+    flight: Flight;
     vehicleTypeId: number;
+    vehicleType: vehicleType;
 }

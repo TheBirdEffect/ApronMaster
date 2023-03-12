@@ -3,9 +3,9 @@ import { AircraftType } from "./aircraftType";
 
 export class Flight {
     flightId: number;
-    flightNumber: String;
+    flightNumber: string;
     arrival: Date;
     departure: Date;
-    destination: String;
+    destination: string;
     aircraftType: AircraftType;
 }

@@ -32,7 +32,7 @@ namespace API.Controllers
             if(flightDto.Equals(null)) return BadRequest("No valid flightplan object!");
 
             var _flight = new Flight {
-                FlightNo = flightDto.FlightNumber,
+                FlightNumber = flightDto.FlightNumber,
                 Destination = flightDto.Destination,
                 Arrival = flightDto.Arrival,
                 Departure = flightDto.Departure,

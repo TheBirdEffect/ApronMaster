@@ -3,6 +3,7 @@ using System;
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230312105231_ChangedFlightNoToFlightNumberInEntity")]
+    partial class ChangedFlightNoToFlightNumberInEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.3");
@@ -824,7 +827,7 @@ namespace API.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -836,57 +839,57 @@ namespace API.Data.Migrations
                         new
                         {
                             VehicleTypeId = 1,
-                            Name = "Pushback tug"
+                            Type = "Pushback tug"
                         },
                         new
                         {
                             VehicleTypeId = 2,
-                            Name = "Catering truck"
+                            Type = "Catering truck"
                         },
                         new
                         {
                             VehicleTypeId = 3,
-                            Name = "Airstairs"
+                            Type = "Airstairs"
                         },
                         new
                         {
                             VehicleTypeId = 4,
-                            Name = "Apron bus"
+                            Type = "Apron bus"
                         },
                         new
                         {
                             VehicleTypeId = 5,
-                            Name = "Belt loader"
+                            Type = "Belt loader"
                         },
                         new
                         {
                             VehicleTypeId = 6,
-                            Name = "Container loader"
+                            Type = "Container loader"
                         },
                         new
                         {
                             VehicleTypeId = 7,
-                            Name = "Water truck"
+                            Type = "Water truck"
                         },
                         new
                         {
                             VehicleTypeId = 8,
-                            Name = "Lavatory-service vehicle"
+                            Type = "Lavatory-service vehicle"
                         },
                         new
                         {
                             VehicleTypeId = 9,
-                            Name = "Refueling truck"
+                            Type = "Refueling truck"
                         },
                         new
                         {
                             VehicleTypeId = 10,
-                            Name = "Ground power unit"
+                            Type = "Ground power unit"
                         },
                         new
                         {
                             VehicleTypeId = 11,
-                            Name = "Luggage/container truck"
+                            Type = "Luggage/container truck"
                         });
                 });
 

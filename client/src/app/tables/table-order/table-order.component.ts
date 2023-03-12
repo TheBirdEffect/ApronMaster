@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { trigger, state, style, animate, transition } from '@angular/animations';
+import { Component, OnInit } from '@angular/core';
+import { accordeonData } from 'src/app/_models/accordeonData';
 import { Flight } from 'src/app/_models/flight';
 import { order } from 'src/app/_models/order';
 import { position } from 'src/app/_models/position';
@@ -12,25 +14,37 @@ import { VehicleService } from 'src/app/_service/vehicle.service';
 @Component({
   selector: 'app-table-order',
   templateUrl: './table-order.component.html',
-  styleUrls: ['./table-order.component.scss']
+  styleUrls: ['./table-order.component.scss'],
 })
-export class TableOrderComponent {
+export class TableOrderComponent implements OnInit {
   private _postitions: position[];
   private _flights: Flight[];
   private _vehicleTypes: vehicleType[];
-  private _orders: order[];
+  public _orders: order[];
+  
+  _accordeonData = new Array<accordeonData>;
 
-  constructor(private flightservice:FlightsService,
-              private vehicleService: VehicleService,
-              private positionService:PositionService,
-              private orderService:OrderService) {}
+  constructor(private flightservice: FlightsService,
+    private vehicleService: VehicleService,
+    private positionService: PositionService,
+    private orderService: OrderService) { 
+    }
+
+  ngOnInit(): void {  
+    this.GetFlights();
+    this.GetVehicleTypes();
+    this.GetPositions();  
+    this.GetOrders();    
+    console.log(this._accordeonData);
+    
+  }
 
   GetPositions() {
     return this.positionService.getPositions().subscribe({
       next: res => {
-        this._postitions = res;        
+        this._postitions = res;
       },
-      error: error => console.log(error)          
+      error: error => console.log(error)
     });
   }
 
@@ -40,18 +54,20 @@ export class TableOrderComponent {
         this._flights = res;
       },
       error: error => console.log(error),
-      complete: () => console.log(this._flights[0])
+      complete: () => {
+        this.SetToggleOptions()
+        console.log(this._accordeonData);
+        
+      }
     })
   }
 
   GetVehicleTypes() {
-    return this.vehicleService.GetVehicleType().subscribe({
+    return this.vehicleService.GetVehicleTypes().subscribe({
       next: res => {
         this._vehicleTypes = res;
       },
-      error: error => console.log(error),
-      complete: () => console.log(this._vehicleTypes[0])
-      
+      error: error => console.log(error)
     })
   }
 
@@ -63,10 +79,35 @@ export class TableOrderComponent {
       error: error => console.log(error),
       complete: () => {
         this._orders.forEach(order => {
+          order.position = this._postitions[order.positionId-1]
+          order.flight = this._flights[order.flightId-1]
+          order.vehicleType = this._vehicleTypes[order.vehicleTypeId-1];
         })
       }
-        //VehicleType and flights should assinged to the Order Models per index
-      
-      })
+    })
   }
+
+  SetToggleOptions() {
+    if(this._flights) {
+      this._flights.forEach(flight => {
+        const data = new accordeonData;
+        data.name = flight.flightNumber;
+        data.isCollapsed = false;
+        this._accordeonData.push(data);
+      })
+    }
+  }
+
+  expandRow(accData: accordeonData) {
+    accData;
+    this._accordeonData.forEach(data => {
+      if(accData.name == data.name) {
+        accData.isCollapsed = !accData.isCollapsed;
+        //console.log(this._accordeonData);
+        
+      }
+
+    })
+  }
+
 }

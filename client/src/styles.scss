@@ -5,6 +5,7 @@
 
 body {
     padding-top: 60px;
+    overflow-y: scroll;
 }
 
 nav {
@@ -39,6 +40,10 @@ nav {
 
 .corners-round {
     border-radius: 7px;
+}
+
+.table-collapse-header {
+    background-color: $--bs-bg-secondary !important;
 }
 
   

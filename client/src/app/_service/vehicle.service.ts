@@ -8,11 +8,17 @@ import { vehicleType } from '../_models/vehicleType';
 })
 export class VehicleService {
   basicApiPath = "https://localhost:5001/api"
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-  GetVehicleType(): Observable<vehicleType[]> {
+  GetVehicleTypes(): Observable<vehicleType[]> {
     return this.http.get<vehicleType[]>(this.basicApiPath + "/vehicletype").pipe(
-      map(res => {return res})
+      map(res => { return res })
+    )
+  }
+
+  GetVehicleType(id: number): Observable<vehicleType> {
+    return this.http.get<vehicleType>(this.basicApiPath + "/vehicletype/" + id).pipe(
+      map(res => { return res })
     )
   }
 }

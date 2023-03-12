@@ -19,7 +19,7 @@ namespace API.Data.Migrations
             modelBuilder.Entity<Flight>().HasData(
                 new Flight{
                     FlightId=1,
-                    FlightNo="EZY2023", 
+                    FlightNumber="EZY2023", 
                     Arrival=new DateTime(2023, 02, 14, 12, 00, 00), 
                     Departure=new DateTime(2023, 02, 14, 12, 50, 00),
                     Destination="EDDH",
@@ -28,7 +28,7 @@ namespace API.Data.Migrations
                     
                 new Flight{
                     FlightId=2,
-                    FlightNo="LH2134", 
+                    FlightNumber="LH2134", 
                     Arrival=new DateTime(2023, 02, 14, 14, 00, 00), 
                     Departure=new DateTime(2023, 02, 14, 15, 15, 00),
                     Destination="EDDM",
@@ -37,7 +37,7 @@ namespace API.Data.Migrations
 
                 new Flight{
                     FlightId=3,
-                    FlightNo="LH789", 
+                    FlightNumber="LH789", 
                     Arrival=new DateTime(2023, 02, 14, 14, 30, 00), 
                     Departure=new DateTime(2023, 02, 14, 15, 15, 00),
                     Destination="EDDB",
@@ -67,17 +67,17 @@ namespace API.Data.Migrations
             );
 
             modelBuilder.Entity<VehicleType>().HasData(
-                new VehicleType{VehicleTypeId=1, Type="Pushback tug"},
-                new VehicleType{VehicleTypeId=2, Type="Catering truck"},
-                new VehicleType{VehicleTypeId=3, Type="Airstairs"},
-                new VehicleType{VehicleTypeId=4, Type="Apron bus"},
-                new VehicleType{VehicleTypeId=5, Type="Belt loader"},
-                new VehicleType{VehicleTypeId=6, Type="Container loader"},
-                new VehicleType{VehicleTypeId=7, Type="Water truck"},
-                new VehicleType{VehicleTypeId=8, Type="Lavatory-service vehicle"},
-                new VehicleType{VehicleTypeId=9, Type="Refueling truck"},
-                new VehicleType{VehicleTypeId=10, Type="Ground power unit"},
-                new VehicleType{VehicleTypeId=11, Type="Luggage/container truck"}
+                new VehicleType{VehicleTypeId=1, Name="Pushback tug"},
+                new VehicleType{VehicleTypeId=2, Name="Catering truck"},
+                new VehicleType{VehicleTypeId=3, Name="Airstairs"},
+                new VehicleType{VehicleTypeId=4, Name="Apron bus"},
+                new VehicleType{VehicleTypeId=5, Name="Belt loader"},
+                new VehicleType{VehicleTypeId=6, Name="Container loader"},
+                new VehicleType{VehicleTypeId=7, Name="Water truck"},
+                new VehicleType{VehicleTypeId=8, Name="Lavatory-service vehicle"},
+                new VehicleType{VehicleTypeId=9, Name="Refueling truck"},
+                new VehicleType{VehicleTypeId=10, Name="Ground power unit"},
+                new VehicleType{VehicleTypeId=11, Name="Luggage/container truck"}
             );
 
             modelBuilder.Entity<GroundVehicle>().HasData(

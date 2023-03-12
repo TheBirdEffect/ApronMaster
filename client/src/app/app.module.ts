@@ -15,6 +15,7 @@ import { ChartFlightsComponent } from './charts/dashboard/chart-flights/chart-fl
 import { DatePipe } from '@angular/common';
 import { FormOrderComponent } from './forms/form-order/form-order.component';
 import { TableOrderComponent } from './tables/table-order/table-order.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { TableOrderComponent } from './tables/table-order/table-order.component'
     FormsModule,
     ModalModule.forRoot(),
     AlertModule.forRoot(),
-    NgApexchartsModule
+    NgApexchartsModule,
+    BrowserAnimationsModule
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]

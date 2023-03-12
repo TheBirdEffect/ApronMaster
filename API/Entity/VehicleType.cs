@@ -8,7 +8,7 @@ namespace API.Entity
     public class VehicleType
     {
         public int VehicleTypeId { get; set; }
-        public String Type { get; set; }
+        public String Name { get; set; }
 
         public ICollection<GroundVehicle> GroundVehicles { get; set; }
         public ICollection<Order> Orders { get; set; }

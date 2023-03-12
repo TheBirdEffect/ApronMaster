@@ -7,7 +7,7 @@ namespace API.Entity
         [Required]
         public int FlightId { get; set; }
         [Required]
-        public String FlightNo { get; set; }
+        public String FlightNumber { get; set; }
 
         public DateTime Arrival { get; set; }   
         public DateTime Departure { get; set; }
