@@ -3,6 +3,7 @@ import { BehaviorSubject, combineLatest, interval, Observable, of, startWith, Su
 import { FlightsService } from '../_service/flights.service';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { AlertService } from '../_service/alert.service';
+import { FormsFlightComponent } from '../forms/forms-flight/forms-flight.component';
 import * as ApexCharts from 'apexcharts';
 import { Flight } from '../_models/flight';
 
@@ -22,8 +23,6 @@ export class DashboardComponent implements OnInit {
     private modalService: BsModalService,
     private alertService: AlertService
   ) { }
-
-  //https://blog.eyas.sh/2018/12/data-and-page-content-refresh-patterns-in-angular/ hier gehts weiter
 
 
   ngOnInit(): void {

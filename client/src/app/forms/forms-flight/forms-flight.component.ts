@@ -1,9 +1,9 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { AircraftType } from '../_models/aircraftType';
-import { Flight } from '../_models/flight';
-import { AircraftTypesService } from '../_service/aircraft-types.service';
-import { FlightsService } from '../_service/flights.service';
+import { AircraftType } from '../../_models/aircraftType';
+import { Flight } from '../../_models/flight';
+import { AircraftTypesService } from '../../_service/aircraft-types.service';
+import { FlightsService } from '../../_service/flights.service';
 
 @Component({
   selector: 'app-forms-flight',
