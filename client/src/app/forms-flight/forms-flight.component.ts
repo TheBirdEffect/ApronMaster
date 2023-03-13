@@ -27,11 +27,13 @@ export class FormsFlightComponent implements OnInit {
 
   addFlight() {
     this.flightService.addFlight(this.model).subscribe({
-      next: subscribe => {
-        this.model = subscribe
+      next: response => {
+        this.model = response
       }, 
       error: error => console.log(error),
-      complete: () => this.cancel()
+      complete: () =>  {
+        this.cancel()
+      }
     });
   }
 

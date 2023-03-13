@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, map, Observable } from 'rxjs';
+import { BehaviorSubject, catchError, map, tap, Observable } from 'rxjs';
 import { Flight } from '../_models/flight';
 
 @Injectable({
@@ -8,37 +8,41 @@ import { Flight } from '../_models/flight';
 })
 export class FlightsService {
   basicUrl = "https://localhost:5001/api/flight"
-  currentFlightSource = new BehaviorSubject<Flight | null>(null);
-  currentFlight$ = this.currentFlightSource.asObservable();
+  flightsSource = new BehaviorSubject<Flight[] | null>(null);
+  currentFlights$ = this.flightsSource.asObservable();
 
 
   constructor(private http:HttpClient) { }
 
   getFlights(): Observable<Flight[]> {
     return this.http.get<Flight[]>(this.basicUrl).pipe(
-      map(response => {return response})
+      map((response:Flight[]) => {
+        this.flightsSource.next(response);
+        return response;
+      })
     );
   }
 
-  addFlight(model: any) {
+  addFlight(model: Flight) {
     return this.http.post<Flight>("https://localhost:5001/api/Flight/add", model).pipe(
       map((response: Flight) => {
-        const flight = response;
-        if(flight) {
-          this.currentFlightSource.next(flight);
+        const flightsFromSource = this.flightsSource.getValue();
+        flightsFromSource?.push(response);
+        if(flightsFromSource) {
+          console.log(this.flightsSource.getValue())
+          this.flightsSource.next(flightsFromSource);     
         }
       })
-    );    
-  }
-
-  setCurrentFlight(flight: Flight) {
-    this.currentFlightSource.next(flight);
+    )
   }
 
   deleteFlight(id: number) {
-    return this.http.delete(this.basicUrl + "/" + id).pipe(
+    return this.http.delete<Flight>(this.basicUrl + "/" + id).pipe(
       map( response => {
-        console.log(response);
+        const flightsFromSource = this.flightsSource.getValue()
+        flightsFromSource?.forEach((flight, index) => {
+          if(flight.flightId == response.flightId) flightsFromSource.splice(index, 1)
+        })
       })
     )
   }

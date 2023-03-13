@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { BehaviorSubject, combineLatest, interval, startWith, switchMap } from 'rxjs';
+import { BehaviorSubject, combineLatest, interval, Observable, of, startWith, Subscription, switchMap } from 'rxjs';
 import { FlightsService } from '../_service/flights.service';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { AlertService } from '../_service/alert.service';
@@ -14,21 +14,14 @@ import { Flight } from '../_models/flight';
 export class DashboardComponent implements OnInit {
   registerMode = false;
   modalRef?: BsModalRef;
+  flights$:Observable<Flight[] | null> = of(null);
   flights: any;
+  subscription: Subscription;
 
-  constructor(private flightService: FlightsService,
+  constructor(public flightService: FlightsService,
     private modalService: BsModalService,
     private alertService: AlertService
   ) { }
-
-  private readonly autoRefresh$ = interval(1000).pipe(
-    startWith(0)
-  );
-
-  private readonly refreshFlights$ = new BehaviorSubject(undefined);
-  private readonly flight$ = combineLatest(this.autoRefresh$, this.refreshFlights$).pipe(
-    switchMap(() => this.flightService.getFlights())
-  );
 
   //https://blog.eyas.sh/2018/12/data-and-page-content-refresh-patterns-in-angular/ hier gehts weiter
 
@@ -37,8 +30,8 @@ export class DashboardComponent implements OnInit {
     this.getFlights();
   }
 
-  getFlights(): any {
-    this.flightService.getFlights().subscribe({
+  getFlights() {
+    return this.flightService.getFlights().subscribe({
       next: response => {
         this.flights = response
       },
@@ -47,13 +40,8 @@ export class DashboardComponent implements OnInit {
   }
 
 
-
-  addFlight() {
-    console.log('AddFlight')
-  }
-
   deleteFlight(flightId: number): void {
-    this.flightService.deleteFlight(flightId).subscribe();
+    this.flightService.deleteFlight(flightId).subscribe()
   }
 
 

@@ -21,7 +21,7 @@ export class TableOrderComponent implements OnInit {
   private _flights: Flight[];
   private _vehicleTypes: vehicleType[];
   public _orders: order[];
-  
+
   _accordeonData = new Array<accordeonData>;
 
   constructor(private flightservice: FlightsService,
@@ -35,8 +35,6 @@ export class TableOrderComponent implements OnInit {
     this.GetVehicleTypes();
     this.GetPositions();  
     this.GetOrders();    
-    console.log(this._accordeonData);
-    
   }
 
   GetPositions() {
@@ -88,11 +86,14 @@ export class TableOrderComponent implements OnInit {
   }
 
   SetToggleOptions() {
-    if(this._flights) {
-      this._flights.forEach(flight => {
+    let flights = this.flightservice.flightsSource.getValue();
+    if(flights) {
+      flights.forEach(flight => {
         const data = new accordeonData;
-        data.name = flight.flightNumber;
+        data.name = flight?.flightNumber;
         data.isCollapsed = false;
+        console.log(data);
+        
         this._accordeonData.push(data);
       })
     }
