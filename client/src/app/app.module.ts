@@ -16,6 +16,7 @@ import { DatePipe } from '@angular/common';
 import { FormOrderComponent } from './forms/form-order/form-order.component';
 import { TableOrderComponent } from './tables/table-order/table-order.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TableFlightComponent } from './tables/table-flight/table-flight.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     FormsFlightComponent,
     ChartFlightsComponent,
     FormOrderComponent,
-    TableOrderComponent
+    TableOrderComponent,
+    TableFlightComponent
   ],
   imports: [
     BrowserModule,
