@@ -38,8 +38,8 @@
         data-placement="left"
         title="click to switch time zones between UTC and local time"
         >
-          <div *ngIf="isUtcTime">{{ rxTime | date: 'HH:mm:ss' }} UTC</div>
-          <div *ngIf="!isUtcTime">{{ rxTime | date: 'HH:mm:ss' }} LOC</div>
+          <div *ngIf="timeService.currentTimeZone$ | async">{{ rxTime | date: 'HH:mm:ss' }} UTC</div>
+          <div *ngIf="!(timeService.currentTimeZone$ | async)">{{ rxTime | date: 'HH:mm:ss' }} LOC</div>
         </li>
       </ul>
       <ul class="navbar-nav">

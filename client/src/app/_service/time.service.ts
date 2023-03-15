@@ -19,19 +19,29 @@ export class TimeService {
     )
   }
 
+  toggleTimeZone() {
+    let timeZoneValue = this.timeSource.getValue();
+    timeZoneValue = !timeZoneValue;
+    this.setTimeZone(timeZoneValue);
+  }
+
+  getCurrentTimeZone(): boolean {
+    return this.timeSource.getValue();
+  }
+
   setTimeZone(isUtcTime: boolean) {
     const _message = new timeZoneMessage();
     _message.utcRecentTimeZone = isUtcTime;
-    localStorage.setItem('data', JSON.stringify(_message));
+    localStorage.setItem('user_data', JSON.stringify(_message));
     this.timeSource.next(_message.utcRecentTimeZone);  
   }
 
   getTimeZone() {
-    const timeZoneState = localStorage.getItem('data');
+    const timeZoneState = localStorage.getItem('user_data');
     if(timeZoneState) {
       const _message: timeZoneMessage = JSON.parse(timeZoneState);
+      console.log(_message.utcRecentTimeZone);
       this.timeSource.next(_message.utcRecentTimeZone);
     }
-    
   }
 }

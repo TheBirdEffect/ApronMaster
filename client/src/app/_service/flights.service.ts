@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, map, tap, Observable } from 'rxjs';
+import { BehaviorSubject, catchError, map, tap, Observable, timer, share } from 'rxjs';
 import { Flight } from '../_models/flight';
 
 @Injectable({
@@ -44,6 +44,15 @@ export class FlightsService {
           if(flight.flightId == response.flightId) flightsFromSource.splice(index, 1)
         })
       })
+    )
+  }
+
+  autoRefreshFlights(timeInSeconds: number) {
+    timeInSeconds = (timeInSeconds * 1000)
+    return timer(0, timeInSeconds)
+    .pipe(
+      map( () => this.getFlights().subscribe()),
+      share()
     )
   }
 }

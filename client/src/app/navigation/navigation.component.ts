@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Subscription, timestamp } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { OnSameUrlNavigation } from '@angular/router';
+import { subscribeOn, Subscription, timestamp } from 'rxjs';
 import { TimeService } from '../_service/time.service';
 
 @Component({
@@ -7,10 +8,9 @@ import { TimeService } from '../_service/time.service';
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss']
 })
-export class NavigationComponent implements OnInit {
+export class NavigationComponent implements OnInit, OnDestroy {
   rxTime = new Date();
   timeSubscription:Subscription;
-  isUtcTime = true;
 
   constructor(public timeService: TimeService) {}
   
@@ -19,21 +19,23 @@ export class NavigationComponent implements OnInit {
     this.timeSubscription = this.timeService.getNowUTC().subscribe(time => {
       this.rxTime = this.getTime(time);
     });    
-    this.timeService.getTimeZone();
+    this.timeService.getTimeZone()
   }
 
   toggleUtcToLocal() {
-    this.isUtcTime = !this.isUtcTime; 
-    this.timeService.setTimeZone(this.isUtcTime);
+    this.timeService.toggleTimeZone();
   }
 
   getTime(time: Date) {
     //Converting Local-Time to UTC-Time
-    if(this.isUtcTime){
+    if(this.timeService.getCurrentTimeZone()){
       return new Date(time.getTime() + (time.getTimezoneOffset() * 60000));
     } else {
       return time;
     }
-    
+  }
+
+  ngOnDestroy(): void {
+    this.timeSubscription.unsubscribe();
   }
 }
