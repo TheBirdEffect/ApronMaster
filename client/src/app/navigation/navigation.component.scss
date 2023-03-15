@@ -1,0 +1,26 @@
+@import "../../../node_modules/font-awesome/css/font-awesome.min.css";
+@import "../../variables.scss";
+
+._btn-hover {
+    background-color: $--bs-bg-primary !important;
+    border-radius: 10px;
+    border: none;
+
+    &:hover {
+        background-color: aqua;
+    }
+}
+
+.ico-custom {
+    font-size: x-large !important;
+}
+
+.date-text li {
+    color: $--bs-color-primary !important;
+    text-shadow: 0.125rem 0.125rem #000;
+}
+
+.date-icon li {
+    margin-right: 0.3rem !important;
+    color: $--bs-color-secondary;
+}

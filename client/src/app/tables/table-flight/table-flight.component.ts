@@ -18,11 +18,11 @@ export class TableFlightComponent implements OnInit{
   subscription: Subscription;
 
   constructor(public flightService: FlightsService,
-    private modalService: BsModalService,
-    private alertService: AlertService
+    private modalService: BsModalService
   ) { }
+
   ngOnInit(): void {
-    this.getFlights();  
+    this.getFlights();
   }
 
   getFlights() {

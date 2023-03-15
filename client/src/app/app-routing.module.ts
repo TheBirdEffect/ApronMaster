@@ -7,11 +7,11 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { PreferencesComponent } from './preferences/preferences.component';
 
 const routes: Routes = [
-  { path: '/dashboard', component: DashboardComponent},
-  { path: '/airportdata', component:  AirportDataComponent},
-  { path: '/preferences', component: PreferencesComponent},
-  { path: '/about', component: AboutComponent},
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  { path: 'dashboard', component: DashboardComponent},
+  { path: 'myairport', component:  AirportDataComponent},
+  { path: 'preferences', component: PreferencesComponent},
+  { path: 'about', component: AboutComponent},
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent}
 ];
 

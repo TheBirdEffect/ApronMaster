@@ -45,7 +45,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     ModalModule.forRoot(),
     AlertModule.forRoot(),
     NgApexchartsModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]
