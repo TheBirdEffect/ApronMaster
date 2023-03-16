@@ -1,7 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, tap, Observable, timer, share } from 'rxjs';
+import { FilterEnum } from '../_enums/FilterEnum';
+import { SortEnum } from '../_enums/SortEnum';
 import { Flight } from '../_models/flight';
+
 
 @Injectable({
   providedIn: 'root'
@@ -11,13 +14,15 @@ export class FlightsService {
   flightsSource = new BehaviorSubject<Flight[] | null>(null);
   currentFlights$ = this.flightsSource.asObservable();
 
-
   constructor(private http:HttpClient) { }
 
   getFlights(): Observable<Flight[]> {
     return this.http.get<Flight[]>(this.basicUrl).pipe(
       map((response:Flight[]) => {
-        this.flightsSource.next(response);
+        let flights: Flight[] = response;              
+        flights = this.filterFlights(flights, FilterEnum.onlyCurrent);
+        flights = this.sortFlights(flights, SortEnum.increase);       
+        this.flightsSource.next(flights);      
         return response;
       })
     );
@@ -26,10 +31,10 @@ export class FlightsService {
   addFlight(model: Flight) {
     return this.http.post<Flight>("https://localhost:5001/api/Flight/add", model).pipe(
       map((response: Flight) => {
-        const flightsFromSource = this.flightsSource.getValue();
+        let flightsFromSource = this.flightsSource.getValue();
         flightsFromSource?.push(response);
         if(flightsFromSource) {
-          console.log(this.flightsSource.getValue())
+          flightsFromSource = this.sortFlights(flightsFromSource, SortEnum.increase)
           this.flightsSource.next(flightsFromSource);     
         }
       })
@@ -54,5 +59,32 @@ export class FlightsService {
       map( () => this.getFlights().subscribe()),
       share()
     )
+  }
+
+  sortFlights(flights: Flight[], kindOfSort: SortEnum): Flight[] {
+    if(kindOfSort === SortEnum.increase) {
+      return flights.sort((a,b) => {
+        return <any>new Date(a.arrival) - <any>new Date(b.arrival);
+      })
+    } else {
+      return flights.sort((a,b) => {
+        return <any>new Date(b.arrival) - <any>new Date(a.arrival);
+      })
+    }
+  }
+
+  filterFlights(flights: Flight[], filterEnum: FilterEnum): Flight[] {
+    const now = new Date();   
+    if(filterEnum === FilterEnum.onlyCurrent) {
+      const newFlightsArray: Flight[] = [];
+      flights.forEach(flight => {        
+        if(<any>new Date(flight.arrival) > now) {
+          newFlightsArray.push(flight);
+          
+        }
+      })            
+      return newFlightsArray;
+    }
+    return flights;
   }
 }

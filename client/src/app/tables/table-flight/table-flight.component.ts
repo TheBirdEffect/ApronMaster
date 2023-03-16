@@ -23,7 +23,7 @@ export class TableFlightComponent implements OnInit{
 
   ngOnInit(): void {
     this.getFlights();
-    this.flightService.autoRefreshFlights(30).subscribe();
+    //this.flightService.autoRefreshFlights(30).subscribe();
   }
 
   getFlights() {
