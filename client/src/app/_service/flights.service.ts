@@ -20,7 +20,7 @@ export class FlightsService {
     return this.http.get<Flight[]>(this.basicUrl).pipe(
       map((response:Flight[]) => {
         let flights: Flight[] = response;              
-        flights = this.filterFlights(flights, FilterEnum.onlyCurrent);
+        flights = this.filterFlights(flights, FilterEnum.everything);
         flights = this.sortFlights(flights, SortEnum.increase);       
         this.flightsSource.next(flights);      
         return response;

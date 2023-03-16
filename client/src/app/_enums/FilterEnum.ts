@@ -1,4 +1,4 @@
 export enum FilterEnum {
     onlyCurrent,
-    older
+    everything
 }
