@@ -1,56 +1,8 @@
-<h4>Orders</h4>
-<div class="p-3 border bg-light corners-round">
-  <div class="container text-center">
-    <table class="table table-striped table-light table-hover db-table">
-      <thead>
-        <tr>
-          <th></th>
-          <th>Flight Number</th>
-          <th>Position</th>
-          <th>Start of Servie</th>
-          <th>End of Servie</th>
-          <th>Qty of Fuel</th>
-          <th>Vehicle Type</th>
-        </tr>
-      </thead>
-      <tbody>
-        <ng-container *ngFor="let flight of _accordeonData">
-          <tr (click)="expandRow(flight)" role="button" >
-            <td></td>
-            <td>{{flight.name}}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr *ngFor="let order of _orders">
-            <ng-container *ngIf="flight.name == order.flight.flightNumber && flight.isCollapsed">
-              <td></td>
-              <td></td>
-              <td>{{order.position.name}}</td>
-              <td>{{order.startOfService}}</td>
-              <td>{{order.endOfService}}</td>
-              <td>{{order.qtyFuel}}</td>
-              <td>{{order.vehicleType.name}}</td>
-            </ng-container>
-            <!-- <td><button class="btn btn-outline-danger" (click)="deleteFlight(flight.flightId)">Delete</button></td> -->
-          </tr>
-        </ng-container>
-        <!-- <tr *ngFor="let order of _orders">
-          <td>{{order.startOfService}}</td>
-          <td>{{order.endOfService}}</td>
-          <td>{{order.qtyFuel}}</td>
-          <td>{{order.position.name}}</td>
-          <td>{{order.flight.flightNumber}}</td>
-          <td>{{order.vehicleType.name}}</td>
-          <td><button class="btn btn-outline-danger" (click)="deleteFlight(flight.flightId)">Delete</button></td>
-        </tr> -->
-      </tbody>
-    </table>
-    <div class="container text-center px-0">
-      <!-- <button type="button" class="btn-add-tr btn-add-tr-hover" (click)="openModal(template)">
-              <i class="bi bi-plus-circle"></i></button> -->
-    </div>
+<div class="row">
+  <div class="col">
+    <app-table-orders-group ></app-table-orders-group>
+  </div>
+  <div class="col">
+    <app-table-orders-detail></app-table-orders-detail>
   </div>
 </div>

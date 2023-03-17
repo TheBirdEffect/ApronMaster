@@ -17,12 +17,6 @@ import { VehicleService } from 'src/app/_service/vehicle.service';
   styleUrls: ['./table-order.component.scss'],
 })
 export class TableOrderComponent implements OnInit {
-  private _postitions: position[];
-  private _flights: Flight[];
-  private _vehicleTypes: vehicleType[];
-  public _orders: order[];
-
-  _accordeonData = new Array<accordeonData>;
 
   constructor(private flightservice: FlightsService,
     private vehicleService: VehicleService,
@@ -30,83 +24,8 @@ export class TableOrderComponent implements OnInit {
     private orderService: OrderService) { 
     }
 
-  ngOnInit(): void {  
-    this.GetFlights();
-    this.GetVehicleTypes();
-    this.GetPositions();  
-    this.GetOrders();    
+  ngOnInit(): void {     
   }
 
-  GetPositions() {
-    return this.positionService.getPositions().subscribe({
-      next: res => {
-        this._postitions = res;
-      },
-      error: error => console.log(error)
-    });
-  }
-
-  GetFlights() {
-    return this.flightservice.getFlights().subscribe({
-      next: res => {
-        this._flights = res;
-      },
-      error: error => console.log(error),
-      complete: () => {
-        this.SetToggleOptions()
-        //console.log(this._accordeonData);
-        
-      }
-    })
-  }
-
-  GetVehicleTypes() {
-    return this.vehicleService.GetVehicleTypes().subscribe({
-      next: res => {
-        this._vehicleTypes = res;
-      },
-      error: error => console.log(error)
-    })
-  }
-
-  GetOrders() {
-    return this.orderService.GetOrders().subscribe({
-      next: res => {
-        this._orders = res;
-      },
-      error: error => console.log(error),
-      complete: () => {
-        this._orders.forEach(order => {
-          order.position = this._postitions[order.positionId-1]
-          order.flight = this._flights[order.flightId-1]
-          order.vehicleType = this._vehicleTypes[order.vehicleTypeId-1];
-        })
-      }
-    })
-  }
-
-  SetToggleOptions() {
-    let flights = this.flightservice.flightsSource.getValue();
-    if(flights) {
-      flights.forEach(flight => {
-        const data = new accordeonData;
-        data.name = flight?.flightNumber;
-        data.isCollapsed = false;        
-        this._accordeonData.push(data);
-      })
-    }
-  }
-
-  expandRow(accData: accordeonData) {
-    accData;
-    this._accordeonData.forEach(data => {
-      if(accData.name == data.name) {
-        accData.isCollapsed = !accData.isCollapsed;
-        //console.log(this._accordeonData);
-        
-      }
-
-    })
-  }
 
 }
