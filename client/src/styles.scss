@@ -53,5 +53,15 @@ nav {
 .icon-edit {
     color: $--bs-bg-primary !important;
 }
+
+.underconstruction {
+    margin: 30px auto;
+    background-image: url($--bs-image-construction);
+    height: 400px;
+    width: 600px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
   
 
