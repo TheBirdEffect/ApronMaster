@@ -54,7 +54,7 @@ export class TableOrderComponent implements OnInit {
       error: error => console.log(error),
       complete: () => {
         this.SetToggleOptions()
-        console.log(this._accordeonData);
+        //console.log(this._accordeonData);
         
       }
     })
@@ -91,9 +91,7 @@ export class TableOrderComponent implements OnInit {
       flights.forEach(flight => {
         const data = new accordeonData;
         data.name = flight?.flightNumber;
-        data.isCollapsed = false;
-        console.log(data);
-        
+        data.isCollapsed = false;        
         this._accordeonData.push(data);
       })
     }

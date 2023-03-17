@@ -64,4 +64,10 @@ nav {
     background-position: center;
 }
   
+::ng-deep .tabset-link {
+    color: $--bs-bg-primary;
+}
 
+::ng-deep .tabset-link :active {
+    color: $--bs-bg-secondary;
+}

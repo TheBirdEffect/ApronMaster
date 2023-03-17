@@ -42,6 +42,14 @@ namespace API.Data.Migrations
                     Departure=new DateTime(2023, 04, 14, 15, 15, 00),
                     Destination="EDDB",
                     AircraftTypeId=2
+                    },
+                new Flight{
+                    FlightId=4,
+                    FlightNumber="EZY4903", 
+                    Arrival=new DateTime(2023, 04, 15, 05, 30, 00), 
+                    Departure=new DateTime(2023, 04, 15, 06, 45, 00),
+                    Destination="EDDB",
+                    AircraftTypeId=5
                     }
             );
 
