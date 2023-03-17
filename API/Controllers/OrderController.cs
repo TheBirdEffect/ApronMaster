@@ -12,9 +12,11 @@ namespace API.Controllers
     public class OrderController : BaseController
     {
         private readonly DataContext _context;
-        public OrderController(DataContext context)
+        private readonly DataContext _posContext;
+        public OrderController(DataContext context, DataContext posContext)
         {
             _context = context;
+            _posContext = posContext;
         }
 
         [HttpGet]
@@ -29,5 +31,14 @@ namespace API.Controllers
             return await _context.Orders.FindAsync(id);
         }
 
-    }
+        [HttpGet("full{id}")]
+        public async Task<ActionResult<Order>> AssembleOrder(int id) {
+            var assembledOrder =    from o in _context.Orders
+                                        join p in _context.Positions
+                                            on o.PositionId equals p.PositionId
+                                    select new {
+                                        
+                                    }
+    }    
+        // https://www.c-sharpcorner.com/UploadFile/ff2f08/sql-join-in-linq-linq-to-entity-linq-to-sql/
 }
