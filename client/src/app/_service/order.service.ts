@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
-import { accordeonData } from '../_models/accordeonData';
+import { Flight } from '../_models/flight';
 import { order } from '../_models/order';
 
 @Injectable({
@@ -12,9 +12,8 @@ export class OrderService {
   _ordersSource = new BehaviorSubject<order[] | null>(null);
   currentOrders$ = this._ordersSource.asObservable();
 
-  _accordeonDataSource = new BehaviorSubject<accordeonData[] | null>(null);
-  currentAccordeonData$ = this._accordeonDataSource.asObservable();
-
+  private _ordersOfFlight = new BehaviorSubject<order[] | null>(null);
+  currentOrdersOfFlight$ = this._ordersOfFlight.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -26,4 +25,23 @@ export class OrderService {
       })
     )
   }
+
+  GetOrdersOfFlight(flight: Flight) {
+    console.log(flight);
+    return this.http.get<order[]>(this.basicApiPath + "/order/flight" + flight?.flightId).pipe(
+      map(response => {
+        this._ordersOfFlight.next(response);
+        return response;
+      })
+    )
+  }
+
+  /*
+    Getter and setter to set BehaviorSubjects
+  */
+
+  /*
+    BehaviorSubject _flightForOrder
+  */
+
 }

@@ -4,24 +4,25 @@ import { FlightsService } from '../../_service/flights.service';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { AlertService } from '../../_service/alert.service';
 import { Flight } from '../../_models/flight';
+import { OrderService } from 'src/app/_service/order.service';
 
 @Component({
   selector: 'app-table-flight',
   templateUrl: './table-flight.component.html',
   styleUrls: ['./table-flight.component.scss']
 })
-export class TableFlightComponent implements OnInit{
+export class TableFlightComponent implements OnInit {
   @Input() editMode = true;
-  @Output() flightClicked = new EventEmitter<Flight>();
 
   registerMode = false;
   modalRef?: BsModalRef;
-  flights$:Observable<Flight[] | null> = of(null);
+  flights$: Observable<Flight[] | null> = of(null);
   flights: any;
   subscription: Subscription;
 
   constructor(public flightService: FlightsService,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private orderService: OrderService
   ) { }
 
   ngOnInit(): void {
@@ -39,38 +40,42 @@ export class TableFlightComponent implements OnInit{
       error: error => console.log(error)
     })
   }
-  
-  
+
+
   deleteFlight(flightId: number): void {
     this.flightService.deleteFlight(flightId).subscribe()
   }
-  
-  
+
+
   //modal
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template);
   }
-  
+
   closeModal() {
     this.modalRef?.hide();
   }
-  
+
   toggleFormMode() {
     this.registerMode = !this.registerMode;
   }
-  
+
   cancelFormMode(event: boolean) {
     this.registerMode = event;
     this.closeModal()
   }
 
-  rowClicked(flight: Flight) {
-    this.flightClicked.emit(flight);
-    console.log(flight);
-    
+  transmitChosenFlightForOrders(flight: Flight) {
+    this.orderService.GetOrdersOfFlight(flight).subscribe({
+      next: response => {
+        console.log(response);
+      },
+      error: error => console.log(error)
+      
+    })
   }
-  
-  
+
+
 }
 
 
