@@ -7,10 +7,21 @@ import { OrderService } from 'src/app/_service/order.service';
   styleUrls: ['./table-orders-detail.component.scss']
 })
 export class TableOrdersDetailComponent {
+  className: string;
 
-  constructor(private orderService: OrderService) {}
+  constructor(public orderService: OrderService) {}
 
-  GetFlightsOfOrders() {
+  
 
+  toggleRowColor() {
+    if(this.className === "active") {
+      this.className = "";
+    } else {
+      this.className = "active";
+    }
+
+    console.log(this.className);
+    
   }
+
 }

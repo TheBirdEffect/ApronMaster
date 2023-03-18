@@ -5,7 +5,7 @@
             <thead>
                 <tr>
                     <th>Flight Number</th>
-                    <th>Destination</th>
+                    <th *ngIf="editMode">Destination</th>
                     <th>Arrival</th>
                     <th>Departure</th>
                     <th *ngIf="editMode">Options</th>
@@ -14,7 +14,7 @@
             <tbody>
                 <tr type="button" *ngFor="let flight of flightService.currentFlights$ | async" (click)="transmitChosenFlightForOrders(flight)">
                     <td>{{flight.flightNumber}}</td>
-                    <td>{{flight.destination}}</td>
+                    <td *ngIf="editMode">{{flight.destination}}</td>
                     <td>{{flight.arrival | date:'dd. MMM yyyy HH:mm' }}</td>
                     <td>{{flight.departure | date: 'dd. MMM yyyy HH:mm'}}</td>
                     <td>

@@ -40,8 +40,4 @@ export class OrderService {
     Getter and setter to set BehaviorSubjects
   */
 
-  /*
-    BehaviorSubject _flightForOrder
-  */
-
 }
