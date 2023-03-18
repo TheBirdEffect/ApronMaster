@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { OrderService } from 'src/app/_service/order.service';
 
 @Component({
   selector: 'app-table-orders-detail',
@@ -7,4 +8,9 @@ import { Component } from '@angular/core';
 })
 export class TableOrdersDetailComponent {
 
+  constructor(private orderService: OrderService) {}
+
+  GetFlightsOfOrders() {
+
+  }
 }

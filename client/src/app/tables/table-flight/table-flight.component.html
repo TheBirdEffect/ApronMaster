@@ -12,7 +12,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr type="button" *ngFor="let flight of flightService.currentFlights$ | async" (click)="rowClicked(flight)">
+                <tr type="button" *ngFor="let flight of flightService.currentFlights$ | async" (click)="transmitChosenFlightForOrders(flight)">
                     <td>{{flight.flightNumber}}</td>
                     <td>{{flight.destination}}</td>
                     <td>{{flight.arrival | date:'dd. MMM yyyy HH:mm' }}</td>
