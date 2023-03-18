@@ -17,7 +17,7 @@ namespace API.Entity
         //Create FK for AircaftTypes
         public int? AircraftTypeId { get; set; }
         
-        public AircraftType AircraftType { get; set; }
+        public AircraftType? AircraftType { get; set; }
 
         public virtual ICollection<Order>? Orders { get; set; }
     }

@@ -19,16 +19,16 @@ namespace API.Entity
 
         //Create FK for Position
         public int PositionId { get; set; }
-        public Position Position { get; set; }
+        public Position? Position { get; set; }
 
         //Create FK for Flight
         public int FlightId { get; set; }
-        public Flight Flight { get; set; }
+        public Flight? Flight { get; set; }
 
         //Create FK for VehicleType
         public int VehicleTypeId { get; set; }
-        public VehicleType VehicleType { get; set; }
+        public VehicleType? VehicleType { get; set; }
 
-        public ICollection<VehicleSchedule> VehicleSchedules { get; set; }
+        public ICollection<VehicleSchedule>? VehicleSchedules { get; set; }
     }
 }
