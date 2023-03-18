@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, TemplateRef } from '@angular/core';
 import { Observable, of, Subscription, } from 'rxjs';
 import { FlightsService } from '../../_service/flights.service';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
@@ -11,6 +11,9 @@ import { Flight } from '../../_models/flight';
   styleUrls: ['./table-flight.component.scss']
 })
 export class TableFlightComponent implements OnInit{
+  @Input() editMode = true;
+  @Output() flightClicked = new EventEmitter<Flight>();
+
   registerMode = false;
   modalRef?: BsModalRef;
   flights$:Observable<Flight[] | null> = of(null);
@@ -23,6 +26,8 @@ export class TableFlightComponent implements OnInit{
 
   ngOnInit(): void {
     this.getFlights();
+    console.log(this.editMode);
+
     //this.flightService.autoRefreshFlights(30).subscribe();
   }
 
@@ -57,6 +62,12 @@ export class TableFlightComponent implements OnInit{
   cancelFormMode(event: boolean) {
     this.registerMode = event;
     this.closeModal()
+  }
+
+  rowClicked(flight: Flight) {
+    this.flightClicked.emit(flight);
+    console.log(flight);
+    
   }
   
   

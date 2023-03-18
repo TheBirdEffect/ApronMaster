@@ -68,6 +68,6 @@ nav {
     color: $--bs-bg-primary;
 }
 
-// ::ng-deep .tabset-link :active {
-//     color: $--bs-bg-secondary;
-// }
+::ng-deep.tabset-link :active {
+    color: $--bs-bg-secondary;
+}

@@ -22,6 +22,8 @@ import { AirportDataComponent } from './airport-data/airport-data.component';
 import { PreferencesComponent } from './preferences/preferences.component';
 import { AboutComponent } from './about/about.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { TableOrdersGroupComponent } from './tables/table-order/table-orders-group/table-orders-group.component';
+import { TableOrdersDetailComponent } from './tables/table-order/table-orders-detail/table-orders-detail.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,9 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     AirportDataComponent,
     PreferencesComponent,
     AboutComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    TableOrdersGroupComponent,
+    TableOrdersDetailComponent,
   ],
   imports: [
     BrowserModule,
