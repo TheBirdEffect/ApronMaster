@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Data.Migrations;
+using API.DTOs;
 using API.Entity;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,7 +22,6 @@ namespace API.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<VehicleSchedule> VehicleSchedules { get; set; }
         public DbSet<Flight> Flights { get; set; }
-
 
         
         protected override void OnModelCreating(ModelBuilder modelBuilder) 
