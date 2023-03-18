@@ -1,0 +1,7 @@
+Start Backend API
+
+dotnet watch run --no-hot-reload
+
+Start Frontend client
+
+ng serve
