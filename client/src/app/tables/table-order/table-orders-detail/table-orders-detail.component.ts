@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { order } from 'src/app/_models/order';
 import { OrderService } from 'src/app/_service/order.service';
 
 @Component({
@@ -11,7 +12,9 @@ export class TableOrdersDetailComponent {
 
   constructor(public orderService: OrderService) {}
 
-  
+  DeleteOrder(order: order) {
+    this.orderService.DeleteOrder(order.orderId).subscribe();
+  }
 
   toggleRowColor() {
     if(this.className === "active") {

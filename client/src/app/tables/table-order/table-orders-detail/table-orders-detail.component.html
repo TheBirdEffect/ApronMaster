@@ -15,7 +15,7 @@
             </thead>
             <tbody>
                 <tr type="button" *ngFor="let order of orderService.currentOrdersOfFlight$ | async" 
-                    (click)="toggleRowColor()" [ngClass]="{active: className}">
+                    (click)="toggleRowColor()">
                     <td>{{order.flight.flightNumber}}</td>
                     <td>{{order.startOfService | date:'HH:mm' }}</td>
                     <td>{{order.endOfService | date: 'HH:mm'}}</td>
@@ -27,7 +27,7 @@
                             <button class="btn btn-warning px-3">
                                 <i class="bi bi-pencil-fill"></i>
                             </button>
-                            <button class="btn btn-danger px-3">
+                            <button class="btn btn-danger px-3" (click)="DeleteOrder(order)">
                                 <i class="bi bi-trash3"></i>
                             </button>
                         </div>
