@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FormsFlightComponent } from './forms/forms-flight/forms-flight.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { AlertModule } from 'ngx-bootstrap/alert';
@@ -47,6 +47,7 @@ import { TableOrdersDetailComponent } from './tables/table-order/table-orders-de
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     ModalModule.forRoot(),
     AlertModule.forRoot(),
     TabsModule.forRoot(),

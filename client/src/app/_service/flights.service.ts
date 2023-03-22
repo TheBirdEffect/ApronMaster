@@ -28,6 +28,10 @@ export class FlightsService {
     );
   }
 
+  getFlightById(id: number): Observable<Flight> {
+    return this.http.get<Flight>(this.basicUrl + "/" + id);
+  }
+
   addFlight(model: Flight) {
     return this.http.post<Flight>("https://localhost:5001/api/Flight/add", model).pipe(
       map((response: Flight) => {

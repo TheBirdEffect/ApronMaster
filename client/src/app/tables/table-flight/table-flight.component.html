@@ -31,14 +31,18 @@
             </tbody>
         </table>
         <div *ngIf="editMode" class="container text-center px-0">
-            <button type="button" class="btn-add-tr btn-add-tr-hover" (click)="openModal(template)">
+            <button type="button" class="btn-add-tr btn-add-tr-hover" (click)="openModal(addTemplate)">
                 <i class="bi bi-plus-circle"></i></button>
         </div>
     </div>
 </div>
 
-<ng-template #template>
+<ng-template #addTemplate>
     <div class="modal-body text-center bg-light">
         <app-forms-flight (cancelForm)="cancelFormMode($event)"></app-forms-flight>
     </div>
+</ng-template>
+
+<ng-template #editTemplate>
+
 </ng-template>

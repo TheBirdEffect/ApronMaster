@@ -1,4 +1,4 @@
-<form #flightForm="ngForm" (ngSubmit)="addFlight()" autocomplete="off">
+<!-- <form #flightForm="ngForm" (ngSubmit)="addFlight()" autocomplete="off" >
     <h3 class="text-center">Add Flight</h3>
     <hr>
     <div class="container mb-3 text-center">
@@ -33,6 +33,54 @@
         </select>
         </ng-container>
         
+        <div class="text-center">
+            <button class="btn btn-outline-success me-2" name="btnSubmit" type="submit">Add Flight</button>
+            <button class="btn btn-danger" name="btnCancel" (click)="cancel()">Cancel</button>
+        </div>
+    </div>
+</form> -->
+
+<h3>{{title}}</h3>
+<form *ngIf="!loading" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="row">
+        <div class="mb-3 col">
+            <label class="form-label">Flight Number</label>
+            <input type="text" formControlName="flightNumber" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.flightNumber.errors }" />
+            <div *ngIf="submitted && f.flightNumber.errors" class="invalid-feedback">
+                <div *ngIf="f.flightNumber.errors.required">Flight Number is required</div>
+            </div>
+        </div>
+        <div class="mb-3 col">
+            <label class="form-label">Arrival</label>
+            <input type="datetime-local" formControlName="arrival" class="form-contol" [ngClass]="{ 'is-invalid': submitted && f.arrival.errors }" />
+            <div *ngIf="submitted && f.arrival.errors" class="invalid-feedback">
+                <div *ngIf="f.arrival.errors.required">Arrival is required</div> 
+            </div>
+        </div>
+        <div class="mb-3 col">
+            <label class="form-label">Departure</label>
+            <input type="datetime-local" formControlName="departure" class="form-contol" [ngClass]="{ 'is-invalid': submitted && f.departure.errors }" />
+            <div *ngIf="submitted && f.departure.errors" class="invalid-feedback">
+                <div *ngIf="f.departure.errors.required">Departure is required</div> 
+            </div>
+        </div>
+        <div class="mb-3 col">
+            <label class="form-label">Destination</label>
+            <input type="datetime-local" formControlName="destination" class="form-contol" [ngClass]="{ 'is-invalid': submitted && f.destination.errors }" />
+            <div *ngIf="submitted && f.destination.errors" class="invalid-feedback">
+                <div *ngIf="f.destination.errors.required">Destination is required</div> 
+            </div>
+        </div>
+        <div class="mb-3 col">
+            <label class="form-label">AircraftType</label>
+            <select formControlName="aircraftType" class="form-contol" [(ngModel)]="model.aircraftType" [ngClass]="{ 'is-invalid': submitted && f.arrival.errors }">
+                <option value="" disabled [selected]="true">Please select an Aircraft Type</option>
+                <option *ngFor="let aircraftType of aircraftTypes" [ngValue]="aircraftType">
+            </select>
+            <div *ngIf="submitted && f.arrival.errors" class="invalid-feedback">
+                <div *ngIf="f.arrival.errors.required">Arrival is required</div> 
+            </div>
+        </div>
         <div class="text-center">
             <button class="btn btn-outline-success me-2" name="btnSubmit" type="submit">Add Flight</button>
             <button class="btn btn-danger" name="btnCancel" (click)="cancel()">Cancel</button>
