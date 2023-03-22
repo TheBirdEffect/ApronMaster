@@ -36,6 +36,48 @@ export class OrderService {
     )
   }
 
+  SetOrder(order: order): Observable<order> {
+    return this.http.post<order>(this.basicApiPath + "/order/add", order).pipe(
+      map(response => {
+        this.AddToObservableArray(response);
+        console.log(this._ordersOfFlight.getValue());
+        return response;
+      })
+    )
+  }
+
+  UpdateOrder(order: order): Observable<order> {
+    return this.http.post<order>(this.basicApiPath + "/order/update", order).pipe(
+      map(response => {
+        const orders = this._ordersOfFlight.getValue();
+        orders?.forEach((order, index) => {
+          if(order.orderId == response.orderId) order = response;
+        })
+        this._ordersOfFlight.next(orders);
+        return response;
+      })
+    )
+  }
+
+  DeleteOrder(id: number) {
+    return this.http.delete<order>(this.basicApiPath + "/order/" + id).pipe(
+      map( response => {
+        const orders = this._ordersOfFlight.getValue();
+        orders?.forEach((order, index) => {
+          if(order.orderId == response.orderId) orders.splice(index, 1)
+        })
+      })
+    )
+  }
+
+
+  AddToObservableArray(order: order) {
+    const orders = this._ordersOfFlight.getValue();
+    if(orders != null) {
+      orders.push(order)
+    }
+    this._ordersSource.next(orders);
+  }
   /*
     Getter and setter to set BehaviorSubjects
   */
