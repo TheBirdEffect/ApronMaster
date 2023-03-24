@@ -1,45 +1,3 @@
-<!-- <form #flightForm="ngForm" (ngSubmit)="onSubmit()" autocomplete="off" >
-    <h3 class="text-center">Add Flight</h3>
-    <hr>
-    <div class="container mb-3 text-center">
-        <ng-container *ngIf="model">
-        <input type="text" 
-            class="form-control mb-1" 
-            name="flightNumber" 
-            placeholder="Flight Number" 
-            [(ngModel)]="model.flightNumber"
-        >
-        <input type="datetime-local"
-            class="form-control mb-1"
-            name="arrival"
-            [(ngModel)]="model.arrival"
-        >
-        <input type="datetime-local" 
-            class="form-control mb-1"
-            name="departure"
-            [(ngModel)]="model.departure"
-        >
-        <input type="text"
-            class="form-control mb-1"
-            name="destination"
-            placeholder="Destination"
-            [(ngModel)]="model.destination"
-        >
-        <select class="form-select mb-2" id="aircraftType" name="aircraftType" [(ngModel)]="model.aircraftType">
-            <option value="" disabled [selected]="true">Please select an Aircraft Type</option>
-            <option *ngFor="let aircraftType of aircrafttypeService.currentType$ | async" [ngValue]="aircraftType">
-                {{aircraftType.name + " | UnitLoadOption: " + aircraftType.hasUnitLoadOption}}
-            </option>
-        </select>
-        </ng-container>
-        
-        <div class="text-center">
-            <button class="btn btn-outline-success me-2" name="btnSubmit" type="submit">Add Flight</button>
-            <button class="btn btn-danger" name="btnCancel" (click)="cancel()">Cancel</button>
-        </div>
-    </div>
-</form> -->
-
 <h3>Add {{title}}</h3>
 <form [formGroup]="form" (ngSubmit)="onSubmit(form)">
     <div class="row">
@@ -54,8 +12,8 @@
             <!-- <label class="form-label">Destination</label> -->
             <input type="text" formControlName="destination" class="form-control mb-1" placeholder="Destination"/>
             <!-- <label class="form-label">AircraftType</label> -->
-            <select formControlName="aircraftType" class="form-control" [(ngModel)]="model.aircraftType">
-                <option value="" disabled selected>Please select an Aircraft Type</option>
+            <select formControlName="aircraftType" class="form-control mb-1">
+                <option value="" disabled="disabled" selected="true">Please select an Aircraft Type</option>
                 <option *ngFor="let aircraftType of aircrafttypeService.currentType$ | async" [ngValue]="aircraftType">
                     {{aircraftType.name + " | UnitLoadOption: " + aircraftType.hasUnitLoadOption}}
                 </option>
