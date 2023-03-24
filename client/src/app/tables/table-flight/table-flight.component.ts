@@ -20,6 +20,9 @@ export class TableFlightComponent implements OnInit {
   flights: any;
   subscription: Subscription;
 
+  //Properties for UpdateMode
+  flightToUpdate: Flight;
+
   constructor(public flightService: FlightsService,
     private modalService: BsModalService,
     private orderService: OrderService
@@ -41,6 +44,9 @@ export class TableFlightComponent implements OnInit {
     })
   }
 
+  updateFlight(flight: Flight){ 
+    this.flightService.flightSource.next(flight);
+  }
 
   deleteFlight(flightId: number): void {
     this.flightService.deleteFlight(flightId).subscribe()

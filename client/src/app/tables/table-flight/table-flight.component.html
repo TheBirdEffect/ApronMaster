@@ -39,7 +39,11 @@
                         <td>{{flight.arrival | date:'dd. MMM yyyy HH:mm' }}</td>
                         <td>{{flight.departure | date: 'dd. MMM yyyy HH:mm'}}</td>
                         <td>
-                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                            <div class="btn-group btn-group-toggle" 
+                                data-toggle="buttons" 
+                                (click)="updateFlight(flight)"
+                                (click)="openModal(editTemplate)"
+                                >
                                 <button class="btn btn-warning px-3">
                                     <i class="bi bi-pencil-fill"></i>
                                 </button>
@@ -57,16 +61,16 @@
             </div>
         </div>
     </ng-container>
-    
-    
 </div>
 
 <ng-template #addTemplate>
     <div class="modal-body text-center bg-light">
-        <app-forms-flight (cancelForm)="cancelFormMode($event)"></app-forms-flight>
+        <app-forms-flight [updateMode]="false" (cancelForm)="cancelFormMode($event)"></app-forms-flight>
     </div>
 </ng-template>
 
 <ng-template #editTemplate>
-
+    <div class="modal-body text-center bg-light">
+        <app-forms-flight [updateMode]="true" (cancelForm)="cancelFormMode($event)"></app-forms-flight>
+    </div>
 </ng-template>
