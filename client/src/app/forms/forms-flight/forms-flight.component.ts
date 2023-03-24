@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { first, map } from 'rxjs';
@@ -13,11 +13,14 @@ import { FlightsService } from '../../_service/flights.service';
   styleUrls: ['./forms-flight.component.scss']
 })
 export class FormsFlightComponent implements OnInit {
+  @Input() updateMode: boolean;
   @Output() cancelForm = new EventEmitter();
 
   id: number;
   form: FormGroup
   title = "Flight";
+
+  flightToUpdate: Flight;
 
 
   constructor(private flightService: FlightsService,
@@ -28,7 +31,7 @@ export class FormsFlightComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAircraftTypes();
-    this.id = this.route.snapshot.params['id'];
+    this.flightToUpdate = this.flightService.flightSource.getValue()
 
     this.form = this.formBuilder.group({
       flightNumber: ['', Validators.required],
@@ -37,6 +40,18 @@ export class FormsFlightComponent implements OnInit {
       destination: ['', Validators.required],
       aircraftType: ['', Validators.required]
     });
+
+    if(this.updateMode) {
+      this.form.patchValue(
+        {
+          flightNumber: this.flightToUpdate.flightNumber,
+          arrival: this.flightToUpdate.arrival,
+          departure: this.flightToUpdate.departure,
+          destination: this.flightToUpdate.destination,
+          aircraftType: this.flightToUpdate.aircraftType
+        }
+      )
+    }
   }
 
   //https://jasonwatmore.com/post/2022/12/05/angular-14-dynamic-add-edit-form-that-supports-create-and-update-mode#users-add-edit-component-ts
@@ -68,6 +83,7 @@ export class FormsFlightComponent implements OnInit {
     this.addFlight(flight);
     this.cancel()
   }
+
   mapFlight(form: FormGroup): Flight {
     return form.value;
   }
