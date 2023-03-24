@@ -1,4 +1,9 @@
-<h3>Add {{title}}</h3>
+<div *ngIf="updateMode">
+    <h3>Edit {{title}}</h3>
+</div>
+<div *ngIf="!updateMode">
+    <h3>Add {{title}}</h3>
+</div>
 <form [formGroup]="form" (ngSubmit)="onSubmit(form)">
     <div class="row">
         <div class="container mb-3 text-center">
