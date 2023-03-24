@@ -27,16 +27,16 @@ namespace API.Controllers
         }
 
         [HttpPost("add")]
-        public async Task<ActionResult<Flight>> AddFlight(FlightDto flightDto) 
+        public async Task<ActionResult<Flight>> AddFlight(Flight flight) 
         {
-            if(flightDto.Equals(null)) return BadRequest("No valid flightplan object!");
+            if(flight.Equals(null)) return BadRequest("No valid flightplan object!");
 
             var _flight = new Flight {
-                FlightNumber = flightDto.FlightNumber,
-                Destination = flightDto.Destination,
-                Arrival = flightDto.Arrival,
-                Departure = flightDto.Departure,
-                AircraftTypeId = flightDto.AircraftType.AircraftTypeId                            
+                FlightNumber = flight.FlightNumber,
+                Destination = flight.Destination,
+                Arrival = flight.Arrival,
+                Departure = flight.Departure,
+                AircraftTypeId = flight.AircraftType.AircraftTypeId                            
             };
 
             await _context.Flights.AddAsync(_flight);
