@@ -17,7 +17,6 @@ export class AircraftTypesService {
     return this.http.get<AircraftType[]>(this.baseUrl + "/AircraftType").pipe(
       map((response: AircraftType[]) => {
         this.typesSource.next(response);
-        console.log('AircraftTypes', this.typesSource.getValue());
       })
     );
   }
