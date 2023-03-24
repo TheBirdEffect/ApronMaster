@@ -14,14 +14,10 @@ import { FlightsService } from '../../_service/flights.service';
 })
 export class FormsFlightComponent implements OnInit {
   @Output() cancelForm = new EventEmitter();
-  aircraftTypes: any;
-  model: any = {}
 
   id: number;
   form: FormGroup
   title = "Flight";
-  loading = false;
-  submitted = false;
 
 
   constructor(private flightService: FlightsService,
@@ -62,7 +58,7 @@ export class FormsFlightComponent implements OnInit {
   getAircraftTypes() {
     this.aircrafttypeService.GetAircraftTypes().subscribe({
       next: response => {
-        this.aircraftTypes = response;
+        //this.aircraftTypes = response;
       }
     })
   }
