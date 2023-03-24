@@ -14,6 +14,9 @@ export class FlightsService {
   flightsSource = new BehaviorSubject<Flight[] | null>(null);
   currentFlights$ = this.flightsSource.asObservable();
 
+  flightSource = new BehaviorSubject<Flight| any>(null);
+  currentFlight$ = this.flightSource.asObservable();
+
   constructor(private http:HttpClient) { }
 
   getFlights(): Observable<Flight[]> {
