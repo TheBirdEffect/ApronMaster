@@ -1,8 +1,11 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, TemplateRef } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Observable } from 'rxjs';
+import { stateObservablesEnum } from 'src/app/_enums/stateObservablesEnum';
 import { FlightsService } from 'src/app/_service/flights.service';
 import { OrderService } from 'src/app/_service/order.service';
 import { PositionService } from 'src/app/_service/position.service';
+import { StateService } from 'src/app/_service/state.service';
 import { VehicleService } from 'src/app/_service/vehicle.service';
 
 @Component({
@@ -10,33 +13,45 @@ import { VehicleService } from 'src/app/_service/vehicle.service';
   templateUrl: './table-order.component.html',
   styleUrls: ['./table-order.component.scss'],
 })
-export class TableOrderComponent implements OnInit {
+export class TableOrderComponent implements OnInit, OnChanges {
 
-  constructor(private modalService: BsModalService) { 
-    }
+  constructor(private modalService: BsModalService
+    , private stateService: StateService) {
+  }
+  
 
-    modalIsOpened = false;
-    modalRef?: BsModalRef;
+  modalIsOpened$: Observable<boolean>;
+  modalIsOpen: boolean;
+  modalRef?: BsModalRef;
 
-  ngOnInit(): void {     
+
+  ngOnInit(): void {
+    this.stateService.getStateObservable(
+      stateObservablesEnum.ORDER_DETAIL_PRESELECTOR_IS_OPEN
+    ).subscribe( response => this.modalIsOpen = response);    
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes['modalIsOpen']) {
+    }
+  }
 
-    //modal
-    openModal(template: TemplateRef<any>) {
-      this.modalRef = this.modalService.show(template);
-    }
-  
-    closeModal() {
-      this.modalRef?.hide();
-    }
-  
-    toggleModalMode() {
-      this.modalIsOpened = !this.modalIsOpened;
-    }
-  
-    cancelFormMode(event: boolean) {
-      this.modalIsOpened = event;
-      this.closeModal()
-    }
+  //modal
+  openModal(template: TemplateRef<any>) {
+    console.log('opened');
+    
+    this.modalRef = this.modalService.show(template);
+  }
+
+  closeModal() {
+    this.modalRef?.hide();
+  }
+
+  cancelFormMode(event: boolean) {
+    this.stateService.setStateObservable(
+      stateObservablesEnum.ORDER_DETAIL_PRESELECTOR_IS_OPEN
+      , true
+    )
+    this.closeModal()
+  }
 }

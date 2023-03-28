@@ -1,6 +1,8 @@
-import { Component, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { stateObservablesEnum } from 'src/app/_enums/stateObservablesEnum';
 import { order } from 'src/app/_models/order';
 import { OrderService } from 'src/app/_service/order.service';
+import { StateService } from 'src/app/_service/state.service';
 
 @Component({
   selector: 'app-table-orders-detail',
@@ -8,9 +10,14 @@ import { OrderService } from 'src/app/_service/order.service';
   styleUrls: ['./table-orders-detail.component.scss']
 })
 export class TableOrdersDetailComponent {
+  @Output() toggleModalState = new EventEmitter<boolean>();
+
   className: string;
 
-  constructor(public orderService: OrderService) {}
+  constructor(
+    public orderService: OrderService,
+    private stateService: StateService
+    ) {}
 
   DeleteOrder(order: order) {
     this.orderService.DeleteOrder(order.orderId).subscribe();
@@ -25,6 +32,13 @@ export class TableOrdersDetailComponent {
 
     console.log(this.className);
     
+  }
+
+  openAddOrderPreselector() {
+    this.toggleModalState.emit(true);
+    this.stateService.setStateObservable(
+      stateObservablesEnum.ORDER_DETAIL_PRESELECTOR_IS_OPEN
+        ,true);
   }
 
 }
