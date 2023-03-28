@@ -40,11 +40,10 @@
                         <td>{{flight.departure | date: 'dd. MMM yyyy HH:mm'}}</td>
                         <td>
                             <div class="btn-group btn-group-toggle" 
-                                data-toggle="buttons" 
+                                data-toggle="buttons">
+                                <button class="btn btn-warning px-3"
                                 (click)="updateFlight(flight)"
-                                (click)="openModal(editTemplate)"
-                                >
-                                <button class="btn btn-warning px-3">
+                                (click)="openModal(editTemplate)">
                                     <i class="bi bi-pencil-fill"></i>
                                 </button>
                                 <button class="btn btn-danger px-3" (click)="deleteFlight(flight.flightId)">

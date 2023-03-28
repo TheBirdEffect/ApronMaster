@@ -27,7 +27,7 @@ export class OrderService {
   }
 
   GetOrdersOfFlight(flight: Flight) {
-    console.log(flight);
+    //console.log(flight);
     return this.http.get<order[]>(this.basicApiPath + "/order/flight" + flight?.flightId).pipe(
       map(response => {
         this._ordersOfFlight.next(response);
@@ -40,7 +40,7 @@ export class OrderService {
     return this.http.post<order>(this.basicApiPath + "/order/add", order).pipe(
       map(response => {
         this.AddToObservableArray(response);
-        console.log(this._ordersOfFlight.getValue());
+        //console.log(this._ordersOfFlight.getValue());
         return response;
       })
     )

@@ -20,4 +20,8 @@ export class AircraftTypesService {
       })
     );
   }
+
+  GetAircraftType(id: number) {
+    return this.http.get<AircraftType>(this.baseUrl + "/aircrafttype/" + id);
+  }
 }

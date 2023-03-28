@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { first, map } from 'rxjs';
+import { first, map, Observable, tap } from 'rxjs';
 import { AircraftType } from '../../_models/aircraftType';
 import { Flight } from '../../_models/flight';
 import { AircraftTypesService } from '../../_service/aircraft-types.service';
@@ -20,7 +20,9 @@ export class FormsFlightComponent implements OnInit {
   form: FormGroup
   title = "Flight";
 
-  flightToUpdate: Flight;
+  flightToUpdate$: Observable<Flight>;
+  currentAircraftType: AircraftType;
+
 
 
   constructor(private flightService: FlightsService,
@@ -31,27 +33,28 @@ export class FormsFlightComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAircraftTypes();
-    this.flightToUpdate = this.flightService.flightSource.getValue()
 
     this.form = this.formBuilder.group({
-      flightNumber: ['', Validators.required],
+      flightId: ['0', Validators.nullValidator],
+      flightNumber: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(8)]],
       arrival: ['', Validators.required],
       departure: ['', Validators.required],
       destination: ['', Validators.required],
+      aircraftTypeId: ['0', Validators.nullValidator],
       aircraftType: ['', Validators.required]
     });
 
-    if(this.updateMode) {
-      this.form.patchValue(
-        {
-          flightNumber: this.flightToUpdate.flightNumber,
-          arrival: this.flightToUpdate.arrival,
-          departure: this.flightToUpdate.departure,
-          destination: this.flightToUpdate.destination,
-          aircraftType: this.flightToUpdate.aircraftType
-        }
+    if (this.updateMode) {
+      this.flightToUpdate$ = this.flightService.loadFlight().pipe(
+        tap(flight => {         
+          this.form.patchValue(flight)
+        })
+        
       )
     }
+
+    console.log('UpdateMode', this.updateMode);
+    
   }
 
   //https://jasonwatmore.com/post/2022/12/05/angular-14-dynamic-add-edit-form-that-supports-create-and-update-mode#users-add-edit-component-ts
@@ -70,6 +73,12 @@ export class FormsFlightComponent implements OnInit {
     });
   }
 
+  updateFlight(model: Flight) {
+    console.log('ContentOfFlight@updateFlight', model);  
+    this.flightService.updateFlight(model).subscribe({
+    })
+  }
+
   getAircraftTypes() {
     this.aircrafttypeService.GetAircraftTypes().subscribe({
       next: response => {
@@ -78,9 +87,20 @@ export class FormsFlightComponent implements OnInit {
     })
   }
 
+  getAircraftType(id: number) {
+    this.aircrafttypeService.GetAircraftType(id).subscribe();
+  }
+
   onSubmit(form: FormGroup) {
-    const flight = this.mapFlight(form);    
-    this.addFlight(flight);
+    const flight = this.mapFlight(form);  
+    if(this.updateMode) {
+      console.log(flight);      
+      this.updateFlight(flight)
+      this.updateMode = !this.updateMode;
+    } else {
+      this.addFlight(flight);
+    }
+ 
     this.cancel()
   }
 
@@ -90,6 +110,9 @@ export class FormsFlightComponent implements OnInit {
 
   cancel() {
     this.cancelForm.emit(false);
+    if(this.updateMode) {
+      this.updateMode = !this.updateMode
+    }
   }
 
 }

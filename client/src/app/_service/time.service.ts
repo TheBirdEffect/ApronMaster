@@ -40,7 +40,7 @@ export class TimeService {
     const timeZoneState = localStorage.getItem('user_data');
     if(timeZoneState) {
       const _message: timeZoneMessage = JSON.parse(timeZoneState);
-      console.log(_message.utcRecentTimeZone);
+      //console.log(_message.utcRecentTimeZone);
       this.timeSource.next(_message.utcRecentTimeZone);
     }
   }

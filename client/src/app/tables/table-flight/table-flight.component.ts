@@ -22,6 +22,7 @@ export class TableFlightComponent implements OnInit {
 
   //Properties for UpdateMode
   flightToUpdate: Flight;
+  responsedFlight: any;
 
   constructor(public flightService: FlightsService,
     private modalService: BsModalService,
@@ -30,7 +31,7 @@ export class TableFlightComponent implements OnInit {
 
   ngOnInit(): void {
     this.getFlights();
-    console.log(this.editMode);
+    //console.log(this.editMode);
 
     //this.flightService.autoRefreshFlights(30).subscribe();
   }
@@ -39,13 +40,35 @@ export class TableFlightComponent implements OnInit {
     return this.flightService.getFlights().subscribe({
       next: response => {
         this.flights = response
+        console.log(this.flights);
+        
       },
       error: error => console.log(error)
     })
   }
 
-  updateFlight(flight: Flight){ 
-    this.flightService.flightSource.next(flight);
+  getFullFlightById(id: number) {
+    this.flightService.getFullFlightByID(id).subscribe({
+      next: (response: Flight) => { 
+        // const flight = new Flight();
+
+        // flight.aircraftType = response.aircraftType;
+        // flight.aircraftTypeId = response.aircraftTypeId;
+        // flight.arrival = response.arrival;
+        // flight.departure = response.departure;
+        // flight.destination = response.destination;
+        // flight.flightId = response.flightId,
+        // flight.flightNumber = response.flightNumber;
+
+        return response;         
+      }
+    });
+  }
+
+  updateFlight(flight: Flight){     
+    this.flightService.getFullFlightByID(flight.flightId).subscribe(
+      (response: Flight) => this.flightService.flightSource.next(response)
+    );
   }
 
   deleteFlight(flightId: number): void {
