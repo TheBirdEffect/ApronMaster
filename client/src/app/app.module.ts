@@ -11,6 +11,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { AlertModule } from 'ngx-bootstrap/alert';
+import { PopoverModule } from 'ngx-bootstrap/popover';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { ChartFlightsComponent } from './charts/dashboard/chart-flights/chart-flights.component';
 import { DatePipe } from '@angular/common';
@@ -28,6 +29,7 @@ import { FlightsTabComponent } from './tabs/flights-tab/flights-tab.component';
 import { OrdersTabComponent } from './tabs/orders-tab/orders-tab.component';
 import { VehiclesTabComponent } from './tabs/vehicles-tab/vehicles-tab.component';
 import { AircraftsTabComponent } from './tabs/aircrafts-tab/aircrafts-tab.component';
+import { PreselectorOrderComponent } from './_modalTemplates/preselector-order/preselector-order.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +50,8 @@ import { AircraftsTabComponent } from './tabs/aircrafts-tab/aircrafts-tab.compon
     FlightsTabComponent,
     OrdersTabComponent,
     VehiclesTabComponent,
-    AircraftsTabComponent
+    AircraftsTabComponent,
+    PreselectorOrderComponent
   ],
   imports: [
     BrowserModule,
@@ -59,6 +62,7 @@ import { AircraftsTabComponent } from './tabs/aircrafts-tab/aircrafts-tab.compon
     ModalModule.forRoot(),
     AlertModule.forRoot(),
     TabsModule.forRoot(),
+    PopoverModule.forRoot(),
     NgApexchartsModule,
     BrowserAnimationsModule,
   ],
