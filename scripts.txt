@@ -1,7 +1,9 @@
 Start Backend API
 
+cd .\API
 dotnet watch run --no-hot-reload
 
 Start Frontend client
 
+cd .\client
 ng serve

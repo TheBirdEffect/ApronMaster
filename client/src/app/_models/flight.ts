@@ -7,5 +7,6 @@ export class Flight {
     arrival: Date;
     departure: Date;
     destination: string;
+    aircraftTypeId: number;
     aircraftType: AircraftType;
 }

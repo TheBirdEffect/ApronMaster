@@ -34,7 +34,7 @@ export class ChartFlightsComponent {
   public chartOptions: Partial<ChartOptions> | any;
 
   constructor(private datepipe: DatePipe) {
-    console.log(new DatePipe('en-US').transform("2023-02-14T14:45:00", 'h:mm:ss a'));
+    //console.log(new DatePipe('en-US').transform("2023-02-14T14:45:00", 'h:mm:ss a'));
     
 
     this.chartOptions = {

@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FormsFlightComponent } from './forms/forms-flight/forms-flight.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { AlertModule } from 'ngx-bootstrap/alert';
@@ -24,6 +24,10 @@ import { AboutComponent } from './about/about.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { TableOrdersGroupComponent } from './tables/table-order/table-orders-group/table-orders-group.component';
 import { TableOrdersDetailComponent } from './tables/table-order/table-orders-detail/table-orders-detail.component';
+import { FlightsTabComponent } from './tabs/flights-tab/flights-tab.component';
+import { OrdersTabComponent } from './tabs/orders-tab/orders-tab.component';
+import { VehiclesTabComponent } from './tabs/vehicles-tab/vehicles-tab.component';
+import { AircraftsTabComponent } from './tabs/aircrafts-tab/aircrafts-tab.component';
 
 @NgModule({
   declarations: [
@@ -41,12 +45,17 @@ import { TableOrdersDetailComponent } from './tables/table-order/table-orders-de
     PageNotFoundComponent,
     TableOrdersGroupComponent,
     TableOrdersDetailComponent,
+    FlightsTabComponent,
+    OrdersTabComponent,
+    VehiclesTabComponent,
+    AircraftsTabComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     ModalModule.forRoot(),
     AlertModule.forRoot(),
     TabsModule.forRoot(),

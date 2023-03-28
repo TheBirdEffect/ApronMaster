@@ -1,16 +1,17 @@
 <div>
-    <tabset>
-      <tab  heading="Flights" id="table-flights">
-        <app-table-flight [editMode]="true"></app-table-flight>
+  <tabset>
+    <tab  heading="Flights" id="table-flights">
+        <app-flights-tab></app-flights-tab>
       </tab>
       <tab heading="Orders" id="table-orders">
-        <app-table-order></app-table-order>
+        <app-orders-tab></app-orders-tab>
       </tab>
-      <tab heading="Vehicles">
+      <tab heading="Vehicles" [routerLink]="['vehicles']">
+        <app-vehicles-tab></app-vehicles-tab>
+      </tab>
+      <tab heading="Aircrafts" [routerLink]="['aircrafts']">
+        <app-aircrafts-tab></app-aircrafts-tab>
+      </tab>
 
-      </tab>
-      <tab heading="Aircrafts">
-
-      </tab>
-    </tabset>
-  </div>
+  </tabset>
+</div>
