@@ -28,11 +28,11 @@
             </div>
             <div class="col-8">
                 <select id="setVehicleType" formControlName="vehicleType" class="form-select mb-1">
-                <option value="">Please select a vehicle type</option>
-                <option *ngFor="let vehicleType of vehicleTypes$ | async" [ngValue]="vehicleType">
-                    {{vehicleType.name}}
-                </option>
-            </select>
+                    <option value="">Please select a vehicle type</option>
+                    <option *ngFor="let vehicleType of vehicleTypes$ | async" [ngValue]="vehicleType">
+                        {{vehicleType.name}}
+                    </option>
+                </select>
             </div>
         </div>
         <div class="row accent-grey pt-1 my-1 rounded">
@@ -59,7 +59,8 @@
                 </label>
             </div>
             <div class="col-8">
-                <input id="startOfService" formControlName="startOfService" type="datetime-local" class="form-control" />
+                <input id="startOfService" formControlName="startOfService" type="datetime-local"
+                    class="form-control" />
             </div>
         </div>
         <div class="row accent-grey pt-1 my-1 rounded">
