@@ -6,6 +6,7 @@
 </div>
 <form *ngIf="(!updateMode) ||(flightToUpdate$ | async) ; else loading" [formGroup]="form" (ngSubmit)="onSubmit(form)">
     <div class="row">
+        
         <div class="container mb-3 text-center">
             <input type="text" formControlName="flightNumber" class="form-control mb-1" placeholder="Flight Number"/>
             <!-- <label class="form-label">Arrival</label> -->

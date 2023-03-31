@@ -39,7 +39,7 @@ export class TableOrderComponent implements OnInit, OnChanges {
   //modal
   openModal(template: TemplateRef<any>) {
     console.log('opened');
-    
+    this.modalRef?.setClass('modal-lg')
     this.modalRef = this.modalService.show(template);
   }
 
