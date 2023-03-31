@@ -1,18 +1,24 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { vehicleType } from '../_models/vehicleType';
 
 @Injectable({
   providedIn: 'root'
 })
 export class VehicleService {
+  private vehicleSource = new BehaviorSubject<vehicleType[] | null>(null);
+  public lastFetchedVehicles$ = this.vehicleSource.asObservable();
+
   basicApiPath = "https://localhost:5001/api"
   constructor(private http: HttpClient) { }
 
   GetVehicleTypes(): Observable<vehicleType[]> {
     return this.http.get<vehicleType[]>(this.basicApiPath + "/vehicletype").pipe(
-      map(res => { return res })
+      map(res => { 
+        this.vehicleSource.next(res);  
+        return res 
+      })
     )
   }
 
@@ -21,4 +27,10 @@ export class VehicleService {
       map(res => { return res })
     )
   }
+
+  loadVehicles() {
+    return this.lastFetchedVehicles$;
+  }
 }
+
+

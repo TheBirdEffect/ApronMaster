@@ -1,4 +1,25 @@
-<div>
-    <button class="btn btn-primary">Add order collection</button>
-    <button class="btn btn-primary">Add single order</button>
+<div class="row">
+    <h4>Which kind of order do you want to add?</h4>
+    <div class="col">
+        <div class="text-center mb-3 p-3 bg-secondary bg-opacity-10 border border-secondary rounded">To add a collection
+            of orders to
+            the belonging flight press the "Add order collection"-Button below.
+            <div class="text-danger text-uppercase mt-2">Recommandation:</div>
+            Don't choose this option if you want to add only one order to a belonging flight.
+        </div>
+    </div>
+    <div class="col">
+        <div class="text-center my-3 p-3 bg-secondary bg-opacity-10 border border-secondary rounded">To add only one
+            order
+            to the
+            belonging flight just press the "Add single order"-Button</div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <button class="btn btn-primary"  (click)="navigateToCollection(true)">Add order collection</button>
+    </div>
+    <div class="col">
+        <button class="btn btn-primary" (click)="navigateToCollection(false)">Add single order</button>
+    </div>
 </div>

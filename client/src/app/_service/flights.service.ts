@@ -125,4 +125,8 @@ export class FlightsService {
     return this.currentFlight$.pipe(
     );
   }
+
+  loadFlights() {
+    return this.currentFlights$;
+  }
 }

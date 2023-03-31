@@ -1,15 +1,19 @@
-<div *ngIf="updateMode">
-    <h3>Edit {{title}}</h3>
+<div class="form-header">
+    <div *ngIf="updateMode">
+        <h3>Edit {{title}}</h3>
+    </div>
+    <div *ngIf="!updateMode">
+        <h3>Add {{title}}</h3>
+    </div>
 </div>
-<div *ngIf="!updateMode">
-    <h3>Add {{title}}</h3>
-</div>
+<hr>
 <form *ngIf="(!updateMode) ||(flightToUpdate$ | async) ; else loading" [formGroup]="form" (ngSubmit)="onSubmit(form)">
     <div class="row">
+
         <div class="container mb-3 text-center">
-            <input type="text" formControlName="flightNumber" class="form-control mb-1" placeholder="Flight Number"/>
+            <input type="text" formControlName="flightNumber" class="form-control mb-1" placeholder="Flight Number" />
             <!-- <label class="form-label">Arrival</label> -->
-            <input type="datetime-local" formControlName="arrival" class="form-control mb-1" placeholder="Arrival"/>
+            <input type="datetime-local" formControlName="arrival" class="form-control mb-1" placeholder="Arrival" />
             <!-- <label class="form-label">Departure</label> -->
             <input type="datetime-local" formControlName="departure" class="form-control mb-1"
                 placeholder="Departure" />

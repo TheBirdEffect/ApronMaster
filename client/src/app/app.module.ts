@@ -15,7 +15,6 @@ import { PopoverModule } from 'ngx-bootstrap/popover';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { ChartFlightsComponent } from './charts/dashboard/chart-flights/chart-flights.component';
 import { DatePipe } from '@angular/common';
-import { FormOrderComponent } from './forms/form-order/form-order.component';
 import { TableOrderComponent } from './tables/table-order/table-order.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TableFlightComponent } from './tables/table-flight/table-flight.component';
@@ -30,6 +29,8 @@ import { OrdersTabComponent } from './tabs/orders-tab/orders-tab.component';
 import { VehiclesTabComponent } from './tabs/vehicles-tab/vehicles-tab.component';
 import { AircraftsTabComponent } from './tabs/aircrafts-tab/aircrafts-tab.component';
 import { PreselectorOrderComponent } from './_modalTemplates/preselector-order/preselector-order.component';
+import { FormCollectionOrderComponent } from './forms/forms-order/form-collection-order/form-collection-order.component';
+import { FormSingleOrderComponent } from './forms/forms-order/form-single-order/form-single-order.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,6 @@ import { PreselectorOrderComponent } from './_modalTemplates/preselector-order/p
     DashboardComponent,
     FormsFlightComponent,
     ChartFlightsComponent,
-    FormOrderComponent,
     TableOrderComponent,
     TableFlightComponent,
     AirportDataComponent,
@@ -51,7 +51,9 @@ import { PreselectorOrderComponent } from './_modalTemplates/preselector-order/p
     OrdersTabComponent,
     VehiclesTabComponent,
     AircraftsTabComponent,
-    PreselectorOrderComponent
+    PreselectorOrderComponent,
+    FormCollectionOrderComponent,
+    FormSingleOrderComponent,
   ],
   imports: [
     BrowserModule,
