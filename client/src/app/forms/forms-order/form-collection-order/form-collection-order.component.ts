@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { AircraftType } from 'src/app/_models/aircraftType';
@@ -14,6 +14,7 @@ import { PositionService } from 'src/app/_service/position.service';
   styleUrls: ['./form-collection-order.component.scss']
 })
 export class FormCollectionOrderComponent implements OnInit{
+  @Output() closeModal = new EventEmitter();
 
   collectionForm: FormGroup;
   flights$: Observable<Flight[] | null>;
@@ -21,14 +22,14 @@ export class FormCollectionOrderComponent implements OnInit{
   positions$: Observable<position[] | null>;
 
   constructor(private formBuilder: FormBuilder,
-              private flighService: FlightsService,
+              private flightService: FlightsService,
               private positionService: PositionService,
               private aircraftTypeService: AircraftTypesService
               ) {}
 
   ngOnInit(): void {
     this.positionService.getPositions().subscribe();
-    this.flights$ = this.flighService.loadFlights();
+    this.flights$ = this.flightService.loadFlights();
     this.positions$ = this.positionService.loadPositions()
 
 
@@ -52,5 +53,7 @@ export class FormCollectionOrderComponent implements OnInit{
     console.log(this.collectionForm.value);
   }
 
-  cancel() {}
+  cancel() {
+    this.closeModal.emit(true)
+  }
 }

@@ -8,7 +8,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 export class PreselectorOrderComponent {
   @Output() collectionSelected = new EventEmitter();
 
-  onSubmit(isCollectionSelected: boolean) {
+  navigateToCollection(isCollectionSelected: boolean) {
     this.collectionSelected.emit(isCollectionSelected);    
   }
 }

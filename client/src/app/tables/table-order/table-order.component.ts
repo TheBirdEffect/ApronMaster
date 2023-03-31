@@ -1,12 +1,8 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, TemplateRef } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges, TemplateRef } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Observable } from 'rxjs';
 import { stateObservablesEnum } from 'src/app/_enums/stateObservablesEnum';
-import { FlightsService } from 'src/app/_service/flights.service';
-import { OrderService } from 'src/app/_service/order.service';
-import { PositionService } from 'src/app/_service/position.service';
 import { StateService } from 'src/app/_service/state.service';
-import { VehicleService } from 'src/app/_service/vehicle.service';
 
 @Component({
   selector: 'app-table-order',
