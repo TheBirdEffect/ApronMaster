@@ -23,6 +23,11 @@ export class TableOrderComponent implements OnInit, OnChanges {
   modalIsOpened$: Observable<boolean>;
   modalIsOpen: boolean;
   modalRef?: BsModalRef;
+  config = {
+    backdrop: true,
+    class: 'modal-lg'
+  };
+
 
 
   ngOnInit(): void {
@@ -36,11 +41,23 @@ export class TableOrderComponent implements OnInit, OnChanges {
     }
   }
 
+  preselectRouter(
+    isCollectionSelected: boolean,
+    addOrderCollectionTemplate: TemplateRef<any>,
+    addSingleOrderTemplate: TemplateRef<any>) 
+    {
+    this.closeModal();
+    if(isCollectionSelected) {
+      this.openModal(addOrderCollectionTemplate);
+    } else {
+      this.openModal(addSingleOrderTemplate);
+    }
+  }
+
   //modal
   openModal(template: TemplateRef<any>) {
     console.log('opened');
-    this.modalRef?.setClass('modal-lg')
-    this.modalRef = this.modalService.show(template);
+    this.modalRef = this.modalService.show(template, this.config);
   }
 
   closeModal() {

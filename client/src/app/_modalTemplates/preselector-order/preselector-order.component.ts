@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-preselector-order',
@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./preselector-order.component.scss']
 })
 export class PreselectorOrderComponent {
+  @Output() collectionSelected = new EventEmitter();
 
+  onSubmit(isCollectionSelected: boolean) {
+    this.collectionSelected.emit(isCollectionSelected);    
+  }
 }
