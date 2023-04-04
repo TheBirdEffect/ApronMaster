@@ -3,131 +3,128 @@
 </div>
 <hr>
 <div class="container mb-3">
-    <form [formGroup]="singleOrderForm">
-        <ng-component formArrayName="orders">
-            <ng-component *ngFor="let form of orders.controls; let index i">
-  
-                    <div class="row accent-grey pt-1 my-1 rounded">
-                        <div class="col">
-                            <label for="setFlight" class="form-label">
-                                Flight
-                            </label>
-                        </div>
-                        <div class="col-8">
-                            <select id="setFlight" formControlName="flight" class="form-select mb-1"
-                                (ngModelChange)="updateAircraftTypeByFlight()">
-                                <option disabled="disabled" selected="true" value="">Please select a flight</option>
-                                <option *ngFor="let flight of flights$ | async" [ngValue]="flight">
-                                    {{flight.flightNumber}}
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row accent-grey pt-1 my-1 rounded">
-                        <div class="col">
-                            <label for="setVehicleType" class="form-label">
-                                Vehicle Type
-                            </label>
-                        </div>
-                        <div class="col-8">
-                            <select id="setVehicleType" formControlName="vehicleType" class="form-select mb-1">
-                                <option value="">Please select a vehicle type</option>
-                                <option *ngFor="let vehicleType of vehicleTypes$ | async" [ngValue]="vehicleType">
-                                    {{vehicleType.name}}
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row accent-grey pt-1 my-1 rounded">
-                        <div class="col">
-                            <label for="setPosition" class="form-label">
-                                Set Position
-                            </label>
+    <div *ngFor="let order of formArray.controls let orderIndex = index">
+        <div [formGroup]="order">
+            <hr *ngIf="orderIndex >= 1">
+            <div *ngIf="formArray.length > 1">
+                <h5 class="text-end text-secondary">order {{orderIndex}}</h5>
+            </div>
+            <div class="row accent-grey pt-1 my-1 rounded">
+                <div class="col">
+                    <label for="setFlight" class="form-label">
+                        Flight
+                    </label>
+                </div>
+                <div class="col-8">
+                    <select id="setFlight" formControlName="flight" class="form-select mb-1">
+                        <option disabled="disabled" selected="true" value="">Please select a flight</option>
+                        <option *ngFor="let flight of flights$ | async" [ngValue]="flight">
+                            {{flight.flightNumber}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="row accent-grey pt-1 my-1 rounded">
+                <div class="col">
+                    <label for="setVehicleType" class="form-label">
+                        Vehicle Type
+                    </label>
+                </div>
+                <div class="col-8">
+                    <select id="setVehicleType" formControlName="vehicleType" class="form-select mb-1">
+                        <option value="" selected disabled>Please select a vehicle type</option>
+                        <option *ngFor="let vehicleType of vehicleTypes$ | async" [ngValue]="vehicleType">
+                            {{vehicleType.name}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="row accent-grey pt-1 my-1 rounded">
+                <div class="col">
+                    <label for="setPosition" class="form-label">
+                        Set Position
+                    </label>
 
-                        </div>
-                        <div class="col-8">
-                            <select id="setPosition" formControlName="position" class="form-control mb-1">
-                                <option value="" selected disabled>.. please select the position for turnaround</option>
-                                <option value="" *ngFor="let position of positions$ | async" [ngValue]="position">
-                                    {{position.name + " | isGate: " + position.isGate}}
-                                </option>
-                            </select>
+                </div>
+                <div class="col-8">
+                    <select id="setPosition" formControlName="position" class="form-control mb-1">
+                        <option value="" selected disabled>.. please select the position for turnaround</option>
+                        <option value="" *ngFor="let position of positions$ | async" [ngValue]="position">
+                            {{position.name + " | isGate: " + position.isGate}}
+                        </option>
+                    </select>
 
-                        </div>
+                </div>
+            </div>
+            <div class="row accent-grey pt-1 my-1 rounded">
+                <div class="col">
+                    <label for="startOfService" class="form-label">
+                        Start of Service
+                    </label>
+                </div>
+                <div class="col-8">
+                    <input id="startOfService" formControlName="startOfService" type="datetime-local"
+                        class="form-control" />
+                </div>
+            </div>
+            <div class="row accent-grey pt-1 my-1 rounded">
+                <div class="col">
+                    <label for="endOfService" class="form-label">
+                        End of Service
+                    </label>
+                </div>
+                <div class="col-8">
+                    <input id="endOfService" formControlName="endOfService" type="datetime-local"
+                        class="form-control" />
+                </div>
+            </div>
+            <div class="row accent-grey pt-1 my-1 rounded">
+                <div class="col">
+                    <label for="setRefuelNeeded" class="form-label">
+                        Refuel needed?
+                    </label>
+                </div>
+                <div class="col-8 text-start">
+                    <div class="form-check">
+                        <input class="form-check-input" id="noFuel" type="radio" formControlName="fuel" value="NULL" />
+                        <label class="form-check-label" for="noFuel">
+                            No Fuel needed
+                        </label>
                     </div>
-                    <div class="row accent-grey pt-1 my-1 rounded">
-                        <div class="col">
-                            <label for="startOfService" class="form-label">
-                                Start of Service
-                            </label>
-                        </div>
-                        <div class="col-8">
-                            <input id="startOfService" formControlName="startOfService" type="datetime-local"
-                                class="form-control" />
-                        </div>
+                    <div class="form-check">
+                        <input class="form-check-input" id="jeta1" type="radio" formControlName="fuel" value="jeta1" />
+                        <label class="form-check-label" for="jeta1">
+                            JetA1
+                        </label>
                     </div>
-                    <div class="row accent-grey pt-1 my-1 rounded">
-                        <div class="col">
-                            <label for="endOfService" class="form-label">
-                                End of Service
-                            </label>
-                        </div>
-                        <div class="col-8">
-                            <input id="endOfService" formControlName="endOfService" type="datetime-local"
-                                class="form-control" />
-                        </div>
+                    <div class="form-check">
+                        <input class="form-check-input" id="avgas" type="radio" formControlName="fuel" value="avgas" />
+                        <label class="form-check-label" for="avgas">
+                            Avgas
+                        </label>
                     </div>
-                    <div class="row accent-grey pt-1 my-1 rounded">
-                        <div class="col">
-                            <label for="setRefuelNeeded" class="form-label">
-                                Refuel needed?
-                            </label>
-                        </div>
-                        <div class="col-8 text-start">
-                            <div class="form-check">
-                                <input class="form-check-input" id="noFuel" type="radio" formControlName="fuel"
-                                    value="NULL" />
-                                <label class="form-check-label" for="noFuel">
-                                    No Fuel needed
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" id="jeta1" type="radio" formControlName="fuel"
-                                    value="jeta1" />
-                                <label class="form-check-label" for="jeta1">
-                                    JetA1
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" id="avgas" type="radio" formControlName="fuel"
-                                    value="avgas" />
-                                <label class="form-check-label" for="avgas">
-                                    Avgas
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row accent-grey py-1 my-1 rounded" *ngIf="singleOrderForm.value['fuel'] != 'NULL'">
-                        <div class="col">
-                            <label class="form-check-label" for="fuelAmmount">
-                                Ammount of fuel <span class="text-danger">(in KGs)</span>
-                            </label>
-                        </div>
-                        <div class="col-8">
-                            <input class="form-control" id="fuelAmmount" type="number" formControlName="fuelAmmount" />
-                        </div>
-                    </div>
-            </ng-component>
-        </ng-component>
-        <div class="container text-center px-0 mt-3">
-            <button type="button" class="btn-add-tr btn-add-tr-hover">
-                <i class="bi bi-plus-circle"></i></button>
+                </div>
+            </div>
+            <div class="row accent-grey py-1 my-1 rounded" *ngIf="order.value['fuel'] != 'NULL'">
+                <div class="col">
+                    <label class="form-check-label" for="fuelAmmount">
+                        Ammount of fuel <span class="text-danger">(in KGs)</span>
+                    </label>
+                </div>
+                <div class="col-8">
+                    <input class="form-control" id="fuelAmmount" type="number" formControlName="fuelAmmount" />
+                </div>
+            </div>
         </div>
-        <div class="mt-3">
-            <button class="btn btn-outline-success me-2" [disabled]="singleOrderForm.invalid" name="btnSubmit"
-                type="submit">Calculate</button>
-            <button class="btn btn-danger" type="button" name="btnCancel" (click)="cancel()">Cancel</button>
-        </div>
-    </form>
+    </div>
+    <div class="container text-center px-0 mt-3">
+        <button type="button" class="btn-add-tr btn-add-tr-hover" (click)="newSingleForm()">
+            <i class="bi bi-plus-circle"></i></button>
+    </div>
+    <div class="mt-3">
+        <button class="btn btn-outline-success me-2" [disabled]="formArray.invalid" name="btnSubmit"
+            (click)="onSubmit()">Calculate</button>
+        <button class="btn btn-danger" type="button" name="btnCancel" (click)="cancel()">Cancel</button>
+    </div>
 
 </div>

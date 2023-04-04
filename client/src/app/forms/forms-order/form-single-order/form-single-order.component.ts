@@ -1,6 +1,6 @@
 import { formatCurrency } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { Flight } from 'src/app/_models/flight';
 import { position } from 'src/app/_models/position';
@@ -17,9 +17,20 @@ import { VehicleService } from 'src/app/_service/vehicle.service';
 export class FormSingleOrderComponent implements OnInit {
   @Output() closeModal = new EventEmitter();
 
-  singleOrderForm: FormGroup;
-  formArray: FormArray;
+  formArray = new FormArray([
+    this.formBuilder.group({
+      flight: ['', Validators.required],
+      vehicleType: ['', Validators.nullValidator],
+      position: ['', Validators.required],
+      startOfService: ['', Validators.required],
+      endOfService: ['', Validators.required],
+      fuel: ['NULL', Validators.nullValidator],
+      fuelAmmount: ['', Validators.nullValidator]
+    })
+  ]);
+
   flights$: Observable<Flight[] | null>;
+  flight$: Observable<Flight | null>;
   vehicleTypes$: Observable<vehicleType[] | null>;
   positions$: Observable<position[] | null>;
 
@@ -37,23 +48,17 @@ export class FormSingleOrderComponent implements OnInit {
 
     this.vehicleTypes$ = this.vehicleTypeService.loadVehicles();
     this.flights$ = this.flightService.loadFlights();
-    this.positions$ = this.positionService.loadPositions()
-
-    this.singleOrderForm = this.formBuilder.group({
-      orders: this.formBuilder.array([])
-    })
+    this.positions$ = this.positionService.loadPositions();
+    this.flight$ = this.flightService.loadFlight();
   }
 
-  onSubmit(form: FormGroup<any>) {
-    //console.log('Order Object', this.singleOrderForm.value);
-  }
-
-  get orders() {
-    return this.singleOrderForm.controls['orders'] as FormArray;
+  onSubmit() {
+    console.log(this.formArray.value);
+    console.log(this.formArray.valid);
   }
 
   newSingleForm() {
-    const orderForm = this.formBuilder.group({
+    const form = this.formBuilder.group({
       flight: ['', Validators.required],
       vehicleType: ['', Validators.nullValidator],
       position: ['', Validators.required],
@@ -61,9 +66,8 @@ export class FormSingleOrderComponent implements OnInit {
       endOfService: ['', Validators.required],
       fuel: ['NULL', Validators.nullValidator],
       fuelAmmount: ['', Validators.nullValidator]
-    })
-
-    this.orders.push(orderForm);
+    }) as FormGroup
+    this.formArray.push(form);
   }
 
   updateAircraftTypeByFlight() {
