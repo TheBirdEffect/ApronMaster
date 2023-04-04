@@ -32,7 +32,12 @@ export class FlightsService {
   }
 
   getFlightById(id: number): Observable<Flight> {
-    return this.http.get<Flight>(this.basicUrl + "/" + id);
+    return this.http.get<Flight>(this.basicUrl + "/" + id).pipe(
+      map( (response: Flight) => {
+        this.flightSource.next(response);
+        return response;
+      })
+    );
   }
 
   getFullFlightByID(id: number): Observable<Flight> {
@@ -122,8 +127,7 @@ export class FlightsService {
   }
 
   loadFlight() {
-    return this.currentFlight$.pipe(
-    );
+    return this.currentFlight$;
   }
 
   loadFlights() {
