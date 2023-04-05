@@ -54,6 +54,10 @@ nav {
     color: $--bs-bg-primary !important;
 }
 
+.custom-spinner {
+    color: $--bs-text-primary !important;
+}
+
 .underconstruction {
     margin: 30px auto;
     background-image: url($--bs-image-construction);
@@ -75,3 +79,4 @@ nav {
 .form-header {
     color:dimgray; 
 }
+

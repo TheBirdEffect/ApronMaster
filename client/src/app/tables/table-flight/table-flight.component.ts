@@ -14,6 +14,8 @@ import { OrderService } from 'src/app/_service/order.service';
 export class TableFlightComponent implements OnInit {
   @Input() editMode = true;
 
+  title = 'flights'
+
   registerMode = false;
   modalRef?: BsModalRef;
   flights$: Observable<Flight[] | null> = of(null);
