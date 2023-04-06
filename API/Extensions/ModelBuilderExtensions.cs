@@ -377,13 +377,8 @@ namespace API.Data.Migrations
 
         public static void configureDbRelationships(this ModelBuilder modelBuilder)
         {
-            /**
-                Many to many relationship between Aircraft turnaround template and aircraft type
-            */
-            modelBuilder.Entity<AircraftTurnarroundTemplate>()
-                            .HasMany<AircraftType>(att => att.AircraftTypes)
-                            .WithMany(at => at.AircraftTurnarroundTemplates);
-
+            modelBuilder.Entity<AircraftType_ATT>()
+                .HasKey(i => new { i.aircraftTurnarroundTemplateId, i.AircraftTypeId });
         }
     }
 }

@@ -5,22 +5,29 @@
 namespace API.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedManyToManyRelationforATandATT : Migration
+    public partial class DeletedDynamicRelation : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AircraftTurnarroundTemplateAircraftType");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AircraftType_ATTs_AircraftTurnarroundTemplates_aircraftTurnarroundTemplateId",
+                table: "AircraftType_ATTs",
+                column: "aircraftTurnarroundTemplateId",
+                principalTable: "AircraftTurnarroundTemplates",
+                principalColumn: "TemplateId",
+                onDelete: ReferentialAction.Cascade);
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
             migrationBuilder.DropForeignKey(
-                name: "FK_AircraftTurnarroundTemplates_AircraftTypes_AircraftTypeId",
-                table: "AircraftTurnarroundTemplates");
-
-            migrationBuilder.DropIndex(
-                name: "IX_AircraftTurnarroundTemplates_AircraftTypeId",
-                table: "AircraftTurnarroundTemplates");
-
-            migrationBuilder.DropColumn(
-                name: "AircraftTypeId",
-                table: "AircraftTurnarroundTemplates");
+                name: "FK_AircraftType_ATTs_AircraftTurnarroundTemplates_aircraftTurnarroundTemplateId",
+                table: "AircraftType_ATTs");
 
             migrationBuilder.CreateTable(
                 name: "AircraftTurnarroundTemplateAircraftType",
@@ -50,33 +57,6 @@ namespace API.Data.Migrations
                 name: "IX_AircraftTurnarroundTemplateAircraftType_AircraftTypesAircraftTypeId",
                 table: "AircraftTurnarroundTemplateAircraftType",
                 column: "AircraftTypesAircraftTypeId");
-        }
-
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropTable(
-                name: "AircraftTurnarroundTemplateAircraftType");
-
-            migrationBuilder.AddColumn<int>(
-                name: "AircraftTypeId",
-                table: "AircraftTurnarroundTemplates",
-                type: "INTEGER",
-                nullable: false,
-                defaultValue: 0);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AircraftTurnarroundTemplates_AircraftTypeId",
-                table: "AircraftTurnarroundTemplates",
-                column: "AircraftTypeId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_AircraftTurnarroundTemplates_AircraftTypes_AircraftTypeId",
-                table: "AircraftTurnarroundTemplates",
-                column: "AircraftTypeId",
-                principalTable: "AircraftTypes",
-                principalColumn: "AircraftTypeId",
-                onDelete: ReferentialAction.Cascade);
         }
     }
 }

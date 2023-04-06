@@ -5,7 +5,7 @@
 namespace API.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedTurnarroundTablesTemplateAndOffset : Migration
+    public partial class AddedManyToManyRelationforATandATT : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,14 +17,50 @@ namespace API.Data.Migrations
                     TemplateId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
-                    AircraftTypeId = table.Column<int>(type: "INTEGER", nullable: false)
+                    DescriptionNotes = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AircraftTurnarroundTemplates", x => x.TemplateId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AircraftType_ATTs",
+                columns: table => new
+                {
+                    aircraftTurnarroundTemplateId = table.Column<int>(type: "INTEGER", nullable: false),
+                    AircraftTypeId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AircraftType_ATTs", x => new { x.aircraftTurnarroundTemplateId, x.AircraftTypeId });
                     table.ForeignKey(
-                        name: "FK_AircraftTurnarroundTemplates_AircraftTypes_AircraftTypeId",
+                        name: "FK_AircraftType_ATTs_AircraftTypes_AircraftTypeId",
                         column: x => x.AircraftTypeId,
+                        principalTable: "AircraftTypes",
+                        principalColumn: "AircraftTypeId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AircraftTurnarroundTemplateAircraftType",
+                columns: table => new
+                {
+                    AircraftTurnarroundTemplatesTemplateId = table.Column<int>(type: "INTEGER", nullable: false),
+                    AircraftTypesAircraftTypeId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AircraftTurnarroundTemplateAircraftType", x => new { x.AircraftTurnarroundTemplatesTemplateId, x.AircraftTypesAircraftTypeId });
+                    table.ForeignKey(
+                        name: "FK_AircraftTurnarroundTemplateAircraftType_AircraftTurnarroundTemplates_AircraftTurnarroundTemplatesTemplateId",
+                        column: x => x.AircraftTurnarroundTemplatesTemplateId,
+                        principalTable: "AircraftTurnarroundTemplates",
+                        principalColumn: "TemplateId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AircraftTurnarroundTemplateAircraftType_AircraftTypes_AircraftTypesAircraftTypeId",
+                        column: x => x.AircraftTypesAircraftTypeId,
                         principalTable: "AircraftTypes",
                         principalColumn: "AircraftTypeId",
                         onDelete: ReferentialAction.Cascade);
@@ -59,8 +95,13 @@ namespace API.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AircraftTurnarroundTemplates_AircraftTypeId",
-                table: "AircraftTurnarroundTemplates",
+                name: "IX_AircraftTurnarroundTemplateAircraftType_AircraftTypesAircraftTypeId",
+                table: "AircraftTurnarroundTemplateAircraftType",
+                column: "AircraftTypesAircraftTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AircraftType_ATTs_AircraftTypeId",
+                table: "AircraftType_ATTs",
                 column: "AircraftTypeId");
 
             migrationBuilder.CreateIndex(
@@ -77,6 +118,12 @@ namespace API.Data.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AircraftTurnarroundTemplateAircraftType");
+
+            migrationBuilder.DropTable(
+                name: "AircraftType_ATTs");
+
             migrationBuilder.DropTable(
                 name: "TurnarroundVehicleTimeOffsets");
 

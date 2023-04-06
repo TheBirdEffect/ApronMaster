@@ -15,7 +15,7 @@ namespace API.Entity
         public string? DescriptionNotes { get; set; }
         // public int AircraftTypeId { get; set; }
         // public AircraftType? AircraftType { get; set; }
-        public ICollection<AircraftType> AircraftTypes { get; set; }
+        public virtual ICollection<AircraftType_ATT>? AircraftTypes { get; set; }
         public virtual ICollection<TurnarroundVehicleTimeOffset>? TurnarroundVehicleTimeOffsets { get; set; }
     }
 }

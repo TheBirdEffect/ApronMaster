@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230406071349_AddedTurnarroundTablesTemplateAndOffset")]
-    partial class AddedTurnarroundTablesTemplateAndOffset
+    [Migration("20230406103323_AddedManyToManyRelationforATandATT")]
+    partial class AddedManyToManyRelationforATandATT
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,16 +26,14 @@ namespace API.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AircraftTypeId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("DescriptionNotes")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("TemplateId");
-
-                    b.HasIndex("AircraftTypeId");
 
                     b.ToTable("AircraftTurnarroundTemplates");
                 });
@@ -94,6 +92,21 @@ namespace API.Data.Migrations
                             Name = "ATR-72",
                             hasUnitLoadOption = false
                         });
+                });
+
+            modelBuilder.Entity("API.Entity.AircraftType_ATT", b =>
+                {
+                    b.Property<int>("aircraftTurnarroundTemplateId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AircraftTypeId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("aircraftTurnarroundTemplateId", "AircraftTypeId");
+
+                    b.HasIndex("AircraftTypeId");
+
+                    b.ToTable("AircraftType_ATTs");
                 });
 
             modelBuilder.Entity("API.Entity.Flight", b =>
@@ -949,7 +962,22 @@ namespace API.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("API.Entity.AircraftTurnarroundTemplate", b =>
+            modelBuilder.Entity("AircraftTurnarroundTemplateAircraftType", b =>
+                {
+                    b.Property<int>("AircraftTurnarroundTemplatesTemplateId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AircraftTypesAircraftTypeId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("AircraftTurnarroundTemplatesTemplateId", "AircraftTypesAircraftTypeId");
+
+                    b.HasIndex("AircraftTypesAircraftTypeId");
+
+                    b.ToTable("AircraftTurnarroundTemplateAircraftType");
+                });
+
+            modelBuilder.Entity("API.Entity.AircraftType_ATT", b =>
                 {
                     b.HasOne("API.Entity.AircraftType", "AircraftType")
                         .WithMany()
@@ -1024,7 +1052,7 @@ namespace API.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("API.Entity.VehicleType", "VehicleType")
-                        .WithMany()
+                        .WithMany("TurnarroundVehicleTimeOffsets")
                         .HasForeignKey("VehicleTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1051,6 +1079,21 @@ namespace API.Data.Migrations
                     b.Navigation("GroundVehicle");
 
                     b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("AircraftTurnarroundTemplateAircraftType", b =>
+                {
+                    b.HasOne("API.Entity.AircraftTurnarroundTemplate", null)
+                        .WithMany()
+                        .HasForeignKey("AircraftTurnarroundTemplatesTemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Entity.AircraftType", null)
+                        .WithMany()
+                        .HasForeignKey("AircraftTypesAircraftTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("API.Entity.AircraftTurnarroundTemplate", b =>
@@ -1085,6 +1128,8 @@ namespace API.Data.Migrations
                     b.Navigation("GroundVehicles");
 
                     b.Navigation("Orders");
+
+                    b.Navigation("TurnarroundVehicleTimeOffsets");
                 });
 #pragma warning restore 612, 618
         }

@@ -24,6 +24,7 @@ namespace API.Data
         public DbSet<Flight> Flights { get; set; }
         public DbSet<AircraftTurnarroundTemplate> AircraftTurnarroundTemplates { get; set; }
         public DbSet<TurnarroundVehicleTimeOffset> TurnarroundVehicleTimeOffsets { get; set; }
+        public DbSet<AircraftType_ATT> AircraftType_ATTs { get; set; }
 
         
         protected override void OnModelCreating(ModelBuilder modelBuilder) 
