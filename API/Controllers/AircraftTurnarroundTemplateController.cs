@@ -19,16 +19,24 @@ namespace API.Controllers
             _context = context;
         }
 
-        [HttpGet("all")]
-        public async Task<ICollection<AircraftType_ATT>> GetTurnarroundTemplate()
+        [HttpGet("jointdata/all")]
+        public async Task<ICollection<AircraftType_ATT>> GetAircraftTypeAttJoint()
         {
             var templates = await _context.AircraftType_ATTs.ToListAsync();
 
             return templates;
         }
 
+        [HttpGet("all")]
+        public async Task<ICollection<AircraftTurnarroundTemplate>> GetTurnarroundTemplate()
+        {
+            var templates = await _context.AircraftTurnarroundTemplates.ToListAsync();
 
-        [HttpGet("aircraftType{id}")]
+            return templates;
+        }
+
+
+        [HttpGet("aircraftType/{id}")]
         public async Task<ActionResult<ICollection<AircraftTurnarroundTemplate>>> GetTemplatesByAircraftType(int id)
         {
             return await(from att in _context.AircraftType_ATTs
