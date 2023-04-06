@@ -14,6 +14,6 @@ namespace API.Entity
         // public int FlightId { get; set; }
         // public Flight Flight { get; set; }
         //public ICollection<Flight> Flights { get; set; }
-        public virtual ICollection<AircraftTurnarroundTemplate>? AircraftTurnarroundTemplates { get; set; }
+        public ICollection<AircraftTurnarroundTemplate>? AircraftTurnarroundTemplates { get; set; }
     }
 }

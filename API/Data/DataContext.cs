@@ -28,11 +28,8 @@ namespace API.Data
         
         protected override void OnModelCreating(ModelBuilder modelBuilder) 
         {
-            modelBuilder.Entity<AircraftTurnarroundTemplate>()
-                            .HasMany<AircraftType>(att => att.AircraftTypes)
-                            .WithMany(at => at.AircraftTurnarroundTemplates);
-
             modelBuilder.seedDemoData();
+            modelBuilder.configureDbRelationships();
         }
     }
 }

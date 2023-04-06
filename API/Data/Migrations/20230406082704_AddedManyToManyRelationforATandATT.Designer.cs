@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230406080757_AddedManyToManyRelationforATandATT")]
+    [Migration("20230406082704_AddedManyToManyRelationforATandATT")]
     partial class AddedManyToManyRelationforATandATT
     {
         /// <inheritdoc />
