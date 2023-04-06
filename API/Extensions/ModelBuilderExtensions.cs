@@ -342,6 +342,40 @@ namespace API.Data.Migrations
                     VehicleTypeId=9          
                     }
             );
+            // modelBuilder.Entity<AircraftTurnarroundTemplate>().HasData(
+            //     new AircraftTurnarroundTemplate {
+            //         Name="A32x small",
+            //         AircraftTypeId=4
+            //     },
+            //     new AircraftTurnarroundTemplate {
+            //         Name="B737 small",
+            //         AircraftTypeId=2
+            //     },
+            //     new AircraftTurnarroundTemplate {
+            //         Name="A32x small ./w unit load",
+            //         AircraftTypeId=3
+            //     },
+            //     new AircraftTurnarroundTemplate {
+            //         Name="B737 small ./w unit load",
+            //         AircraftTypeId=1
+            //     },
+            //     new AircraftTurnarroundTemplate {
+            //         Name="A32x big",
+            //         AircraftTypeId=4
+            //     },
+            //     new AircraftTurnarroundTemplate {
+            //         Name="B737 big",
+            //         AircraftTypeId=2
+            //     },
+            //     new AircraftTurnarroundTemplate {
+            //         Name="A32x big ./w unit load",
+            //         AircraftTypeId=3
+            //     },
+            //     new AircraftTurnarroundTemplate {
+            //         Name="B737 big ./w unit load",
+            //         AircraftTypeId=1
+            //     }
+            // );
         }
     }
 }
