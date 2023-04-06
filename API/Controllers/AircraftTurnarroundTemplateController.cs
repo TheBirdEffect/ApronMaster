@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
+using API.DTOs;
 using API.Entity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,37 +19,75 @@ namespace API.Controllers
             _context = context;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<AircraftTurnarroundTemplate>> SetTurnarroundTemplate(
-            AircraftTurnarroundTemplate template
+        [HttpGet("all")]
+        public async Task<ICollection<AircraftType_ATT>> GetTurnarroundTemplate()
+        {
+            var templates = await _context.AircraftType_ATTs.ToListAsync();
+
+            return templates;
+        }
+
+
+        [HttpGet("aircraftType{id}")]
+        public async Task<ActionResult<ICollection<AircraftTurnarroundTemplate>>> GetTemplatesByAircraftType(int id)
+        {
+            return await(from att in _context.AircraftType_ATTs
+                         join tem in _context.AircraftTurnarroundTemplates
+                         on att.aircraftTurnarroundTemplateId equals tem.TemplateId into __templates
+                         from templates in __templates.DefaultIfEmpty()
+                         
+                         where att.AircraftTypeId.Equals(id)
+                         select new AircraftTurnarroundTemplate {
+                            TemplateId = templates.TemplateId,
+                            Name = templates.Name,
+                            DescriptionNotes = templates.DescriptionNotes,
+                            TurnarroundVehicleTimeOffsets = templates.TurnarroundVehicleTimeOffsets
+                         }
+            ).ToListAsync();
+        }
+
+
+        /**
+            This controller is used to store templates  
+        */
+
+        [HttpPost("add")]
+        public async Task<ActionResult<ICollection<AircraftType_ATT>>> SetTurnarroundTemplate(
+            AddTemplateDto templateDto
         )
         {
-            var tempTemplateData = new AircraftTurnarroundTemplate();
+            var tempAircraftType_ATT = new AircraftType_ATT();
+            var tempTemplate = new AircraftTurnarroundTemplate();
+            var aircraftTypeIdList = new List<int>();
 
-            if (!template.Equals(null))
+            var returnableAircratTypeATT = new List<String>();
+
+
+            if (templateDto != null)
             {
-                tempTemplateData.Name = template.Name;
-                tempTemplateData.DescriptionNotes = template.DescriptionNotes;
-                var aircraftTypeList = new List<AircraftType>();
-                foreach (var aircraftType in template.AircraftTypes)
-                {
-                    aircraftTypeList.Add(
-                        _context.AircraftTypes.FirstOrDefault(i => i.AircraftTypeId == aircraftType.AircraftTypeId)
-                    );
-                }
+                tempTemplate.Name = templateDto.name;
+                tempTemplate.DescriptionNotes = templateDto.descriptionNotes;
 
-                await _context.AircraftTurnarroundTemplates.AddAsync(tempTemplateData);
+                _context.AircraftTurnarroundTemplates.Add(tempTemplate);
                 await _context.SaveChangesAsync();
 
-                return Ok(tempTemplateData);
+                //Map template data on the joint table
+                //tempAircraftType_ATT.AircraftTypeId = templateDto.aircraftTypeId;
+                foreach (int aircraftTypeId in templateDto.aircraftTypeIds)
+                {
+                    tempAircraftType_ATT.AircraftTypeId = aircraftTypeId;
+                    tempAircraftType_ATT.aircraftTurnarroundTemplateId = tempTemplate.TemplateId;
+                    var bla = _context.AircraftType_ATTs.Add(tempAircraftType_ATT).ToString();
+                    await _context.SaveChangesAsync();
+                    returnableAircratTypeATT.Add(bla);
+                }
+
+
+
+                return Ok(returnableAircratTypeATT);
             }
 
-            return NotFound(template);
-
-
-
-
-
+            return NotFound();
         }
 
     }
