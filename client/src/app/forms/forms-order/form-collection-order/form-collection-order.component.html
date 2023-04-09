@@ -62,13 +62,13 @@
             </div>
             <div class="col-8">
                 <select id="setPreset" formControlName="turnarroundPreset" class="form-control mb-1">
-                    <option value="NULL" selected disabled>.. please select the position for turnaround</option>
+                    <option value="" selected disabled>.. please select the position for turnaround</option>
                     <option *ngFor="let preset of presets$ | async" [ngValue]="preset">
                         {{preset.name}}
                     </option>
                 </select>
             </div>
-            <div class="row" *ngIf="collectionForm.value['turnarroundPreset']">
+            <div class="row py-1" *ngIf="collectionForm.value['turnarroundPreset']">
                 <div class="col align-middle">
                     Description
                 </div>
