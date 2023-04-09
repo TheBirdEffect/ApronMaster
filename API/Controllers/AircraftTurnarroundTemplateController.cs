@@ -34,19 +34,47 @@ namespace API.Controllers
         [HttpGet("aircraftType/{id}")]
         public async Task<ActionResult<ICollection<AircraftTurnarroundPreset>>> GetTemplatesByAircraftType(int id)
         {
-            return await(from att in _context.AircraftType_ATTs
-                         join tem in _context.AircraftTurnarroundTemplates
-                         on att.aircraftTurnarroundTemplateId equals tem.TemplateId into __templates
-                         from templates in __templates.DefaultIfEmpty()
-                         
-                         where att.AircraftTypeId.Equals(id)
-                         select new AircraftTurnarroundPreset {
-                            TemplateId = templates.TemplateId,
-                            Name = templates.Name,
-                            DescriptionNotes = templates.DescriptionNotes,
-                            TurnarroundVehicleTimeOffsets = templates.TurnarroundVehicleTimeOffsets
-                         }
+            return await (from att in _context.AircraftType_ATTs
+                          join tem in _context.AircraftTurnarroundTemplates
+                          on att.aircraftTurnarroundTemplateId equals tem.TemplateId into __templates
+                          from templates in __templates.DefaultIfEmpty()
+
+                          where att.AircraftTypeId.Equals(id)
+                          select new AircraftTurnarroundPreset
+                          {
+                              TemplateId = templates.TemplateId,
+                              Name = templates.Name,
+                              DescriptionNotes = templates.DescriptionNotes,
+                              TurnarroundVehicleTimeOffsets = templates.TurnarroundVehicleTimeOffsets
+                          }
             ).ToListAsync();
+        }
+
+        [HttpPost("aircraftType/filteredByPositionCharacteristics")]
+        public async Task<ActionResult<ICollection<AircraftTurnarroundPreset>>> GetTemplatesByAircraftTypeAndPositionFiltered(
+            GetTemplateForVehicleTypeDto flight)
+        {
+            if (flight != null)
+            {
+                return await (from att in _context.AircraftType_ATTs
+                              join tem in _context.AircraftTurnarroundTemplates
+                              on att.aircraftTurnarroundTemplateId equals tem.TemplateId into __templates
+                              from templates in __templates.DefaultIfEmpty()
+
+                              where att.AircraftTypeId == flight.aircraftTypeId
+                              && templates.utilizeGangways == flight.utilizeGangways
+
+                              select new AircraftTurnarroundPreset
+                              {
+                                  TemplateId = templates.TemplateId,
+                                  Name = templates.Name,
+                                  DescriptionNotes = templates.DescriptionNotes,
+                                  TurnarroundVehicleTimeOffsets = templates.TurnarroundVehicleTimeOffsets
+                              }
+                     ).ToListAsync();
+            }
+
+            return NotFound();
         }
 
 

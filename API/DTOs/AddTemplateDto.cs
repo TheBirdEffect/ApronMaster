@@ -11,4 +11,10 @@ namespace API.DTOs
         public string descriptionNotes { get; set; }
         public ICollection<int> aircraftTypeIds { get; set; }
     }
+
+    public class GetTemplateForVehicleTypeDto
+    {
+        public int aircraftTypeId { get; set; }
+        public bool utilizeGangways { get; set; }
+    }
 }
