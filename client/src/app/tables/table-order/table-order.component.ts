@@ -18,7 +18,8 @@ export class TableOrderComponent implements OnInit, OnChanges {
 
   modalIsOpened$: Observable<boolean>;
   modalIsOpen: boolean;
-  modalRef?: BsModalRef;
+  preselectorModalRef?: BsModalRef;
+  detailSelectModalRef?: BsModalRef;
   config = {
     backdrop: true,
     class: 'modal-lg'
@@ -42,22 +43,35 @@ export class TableOrderComponent implements OnInit, OnChanges {
     addOrderCollectionTemplate: TemplateRef<any>,
     addSingleOrderTemplate: TemplateRef<any>) 
     {
-    this.closeModal();
+    //this.closeModal();
     if(isCollectionSelected) {
-      this.openModal(addOrderCollectionTemplate);
+      this.openModal(false, addOrderCollectionTemplate);
     } else {
-      this.openModal(addSingleOrderTemplate);
+      this.openModal(false, addSingleOrderTemplate);
     }
   }
 
   //modal
-  openModal(template: TemplateRef<any>) {
+  openModal(preselector: boolean, template: TemplateRef<any>) {
     console.log('opened');
-    this.modalRef = this.modalService.show(template, this.config);
+    if(preselector)
+    {
+      //this.closeModal(true);
+      this.preselectorModalRef = this.modalService.show(template, this.config);
+    } else {
+      //this.closeModal(true);
+      this.detailSelectModalRef = this.modalService.show(template, this.config);
+    }
+    
   }
 
-  closeModal() {
-    this.modalRef?.hide();
+  closeModal(preselector: boolean) {
+    if(preselector)
+    {
+      this.preselectorModalRef?.hide();
+    } else {
+      this.detailSelectModalRef?.hide();
+    }
   }
 
   cancelFormMode(event: boolean) {
@@ -65,6 +79,6 @@ export class TableOrderComponent implements OnInit, OnChanges {
       stateObservablesEnum.ORDER_DETAIL_PRESELECTOR_IS_OPEN
       , true
     )
-    this.closeModal()
+    //this.closeModal()
   }
 }
