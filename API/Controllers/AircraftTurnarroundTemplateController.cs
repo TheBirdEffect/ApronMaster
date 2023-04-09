@@ -52,17 +52,17 @@ namespace API.Controllers
 
         [HttpPost("aircraftType/filteredByPositionCharacteristics")]
         public async Task<ActionResult<ICollection<AircraftTurnarroundPreset>>> GetTemplatesByAircraftTypeAndPositionFiltered(
-            GetTemplateForVehicleTypeDto flight)
+            GetTemplateForVehicleTypeDto collection)
         {
-            if (flight != null)
+            if (collection != null)
             {
                 return await (from att in _context.AircraftType_ATTs
                               join tem in _context.AircraftTurnarroundTemplates
                               on att.aircraftTurnarroundTemplateId equals tem.TemplateId into __templates
                               from templates in __templates.DefaultIfEmpty()
 
-                              where att.AircraftTypeId == flight.aircraftTypeId
-                              && templates.utilizeGangways == flight.utilizeGangways
+                              where att.AircraftTypeId == collection.aircraftTypeId
+                              && templates.utilizeGangways == collection.utilizeGangways
 
                               select new AircraftTurnarroundPreset
                               {

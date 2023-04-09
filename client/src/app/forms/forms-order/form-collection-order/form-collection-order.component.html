@@ -45,10 +45,26 @@
                 </label>
             </div>
             <div class="col-8">
-                <select id="setPosition" formControlName="position" class="form-control mb-1">
+                <select id="setPosition" formControlName="position" class="form-control mb-1"
+                (ngModelChange)="updateTurnarroundPreset()">
                     <option value="" selected disabled>.. please select the position for turnaround</option>
                     <option value="" *ngFor="let position of positions$ | async" [ngValue]="position">
-                        {{position.name + " | isGate: " + position.isGate}}
+                        {{position.name + " | utilizeGangway: " + position.isGate}}
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="row accent-grey pt-1 my-1 rounded">
+            <div class="col">
+                <label for="setPreset" class="form-label">
+                    Turnarround Preset
+                </label>
+            </div>
+            <div class="col-8">
+                <select id="setPreset" formControlName="turnarroundPreset" class="form-control mb-1">
+                    <option value="" selected disabled>.. please select the position for turnaround</option>
+                    <option value="" *ngFor="let preset of presets$ | async" [ngValue]="preset">
+                        {{preset.name}}
                     </option>
                 </select>
             </div>
