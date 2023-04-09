@@ -46,7 +46,7 @@
             </div>
             <div class="col-8">
                 <select id="setPosition" formControlName="position" class="form-control mb-1"
-                (ngModelChange)="updateTurnarroundPreset()">
+                    (ngModelChange)="updateTurnarroundPreset()">
                     <option value="" selected disabled>.. please select the position for turnaround</option>
                     <option value="" *ngFor="let position of positions$ | async" [ngValue]="position">
                         {{position.name + " | utilizeGangway: " + position.isGate}}
@@ -62,11 +62,21 @@
             </div>
             <div class="col-8">
                 <select id="setPreset" formControlName="turnarroundPreset" class="form-control mb-1">
-                    <option value="" selected disabled>.. please select the position for turnaround</option>
-                    <option value="" *ngFor="let preset of presets$ | async" [ngValue]="preset">
+                    <option value="NULL" selected disabled>.. please select the position for turnaround</option>
+                    <option *ngFor="let preset of presets$ | async" [ngValue]="preset">
                         {{preset.name}}
                     </option>
                 </select>
+            </div>
+            <div class="row" *ngIf="collectionForm.value['turnarroundPreset']">
+                <div class="col align-middle">
+                    Description
+                </div>
+                <div class="col-8">
+                    <div class="text-start">     
+                        {{turnarroundPresetValue.descriptionNotes}}
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row accent-grey pt-1 my-1 rounded">
