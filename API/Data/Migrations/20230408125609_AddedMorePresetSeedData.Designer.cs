@@ -3,6 +3,7 @@ using System;
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230408125609_AddedMorePresetSeedData")]
+    partial class AddedMorePresetSeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.3");
@@ -30,6 +33,18 @@ namespace API.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("doService")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("doUnitLoad")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("pushbackNeeded")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("refuelingNeeded")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("utilizeGangways")
                         .HasColumnType("INTEGER");
 
@@ -42,35 +57,77 @@ namespace API.Data.Migrations
                         {
                             TemplateId = 1,
                             DescriptionNotes = "Aircraft turnarrund preset for all Aircrafts of the Airbus A3x series and all Boeing 73x Series without unit load system. This preset is used for turnarounds that utilize gangways for boarding less than 100 passengers.",
-                            Name = "A3x / 37x, PAX < 100 @Gate",
+                            Name = "A3x / 37x, PAX < 100",
+                            doService = true,
+                            doUnitLoad = false,
+                            pushbackNeeded = true,
+                            refuelingNeeded = true,
                             utilizeGangways = true
                         },
                         new
                         {
                             TemplateId = 2,
                             DescriptionNotes = "Aircraft turnarrund preset for all Aircrafts of the Airbus A3x series and all Boeing 73x Series without unit load system. This preset is used for turnarounds that utilize gangways for boarding more than 100 passengers.",
-                            Name = "A3x / 37x, PAX > 100 @Gate",
+                            Name = "A3x / 37x, PAX > 100",
+                            doService = true,
+                            doUnitLoad = false,
+                            pushbackNeeded = true,
+                            refuelingNeeded = true,
                             utilizeGangways = true
                         },
                         new
                         {
                             TemplateId = 3,
                             DescriptionNotes = "Aircraft turnarrund preset for all Aircrafts of the Airbus A3x series and all Boeing 73x Series without unit load system. This preset is not used for turnarounds that utilize gangways for boarding more than 100 passengers.",
-                            Name = "A3x / 37x, PAX > 100 NOT @Gate",
+                            Name = "A3x / 37x, PAX > 100",
+                            doService = true,
+                            doUnitLoad = false,
+                            pushbackNeeded = true,
+                            refuelingNeeded = true,
                             utilizeGangways = false
                         },
                         new
                         {
                             TemplateId = 4,
-                            DescriptionNotes = "Aircraft turnarrund preset for all Aircrafts of the ATR Manufacturer. This preset is not used for turnarounds that utilize gangways for boarding.",
-                            Name = "ATR-42/-72/-82/-92 NOT @Gate",
+                            DescriptionNotes = "Aircraft turnarrund preset for all Aircrafts of the Airbus A3x series and all Boeing 73x Series with unit load system. This preset is not used for turnarounds that utilize gangways for boarding more than 100 passengers.",
+                            Name = "A3x / 37x, PAX > 100, unit loaded",
+                            doService = true,
+                            doUnitLoad = true,
+                            pushbackNeeded = true,
+                            refuelingNeeded = true,
                             utilizeGangways = false
                         },
                         new
                         {
                             TemplateId = 5,
+                            DescriptionNotes = "Aircraft turnarrund preset for all Aircrafts of the ATR Manufacturer. This preset is not used for turnarounds that utilize gangways for boarding.",
+                            Name = "ATR-42/-72/-82/-92",
+                            doService = true,
+                            doUnitLoad = false,
+                            pushbackNeeded = true,
+                            refuelingNeeded = true,
+                            utilizeGangways = false
+                        },
+                        new
+                        {
+                            TemplateId = 6,
                             DescriptionNotes = "Aircraft turnarrund preset for all Aircrafts De Havilland Dash-Q8 without unit load system. This preset is not used for turnarounds that utilize gangways for boarding.",
                             Name = "Dash-Q8",
+                            doService = true,
+                            doUnitLoad = false,
+                            pushbackNeeded = true,
+                            refuelingNeeded = true,
+                            utilizeGangways = false
+                        },
+                        new
+                        {
+                            TemplateId = 7,
+                            DescriptionNotes = "Aircraft turnarrund preset for all Aircrafts De Havilland Dash-Q8 without unit load system. This preset is not used for turnarounds that utilize gangways for boarding.",
+                            Name = "ATR-42/-72/-82/-92",
+                            doService = true,
+                            doUnitLoad = false,
+                            pushbackNeeded = false,
+                            refuelingNeeded = false,
                             utilizeGangways = false
                         });
                 });
@@ -158,16 +215,6 @@ namespace API.Data.Migrations
                         },
                         new
                         {
-                            aircraftTurnarroundTemplateId = 1,
-                            AircraftTypeId = 1
-                        },
-                        new
-                        {
-                            aircraftTurnarroundTemplateId = 1,
-                            AircraftTypeId = 3
-                        },
-                        new
-                        {
                             aircraftTurnarroundTemplateId = 2,
                             AircraftTypeId = 2
                         },
@@ -175,21 +222,6 @@ namespace API.Data.Migrations
                         {
                             aircraftTurnarroundTemplateId = 2,
                             AircraftTypeId = 4
-                        },
-                        new
-                        {
-                            aircraftTurnarroundTemplateId = 2,
-                            AircraftTypeId = 1
-                        },
-                        new
-                        {
-                            aircraftTurnarroundTemplateId = 2,
-                            AircraftTypeId = 3
-                        },
-                        new
-                        {
-                            aircraftTurnarroundTemplateId = 2,
-                            AircraftTypeId = 5
                         },
                         new
                         {
@@ -203,17 +235,27 @@ namespace API.Data.Migrations
                         },
                         new
                         {
-                            aircraftTurnarroundTemplateId = 3,
+                            aircraftTurnarroundTemplateId = 4,
                             AircraftTypeId = 1
                         },
                         new
                         {
-                            aircraftTurnarroundTemplateId = 3,
+                            aircraftTurnarroundTemplateId = 4,
                             AircraftTypeId = 3
                         },
                         new
                         {
                             aircraftTurnarroundTemplateId = 4,
+                            AircraftTypeId = 5
+                        },
+                        new
+                        {
+                            aircraftTurnarroundTemplateId = 5,
+                            AircraftTypeId = 6
+                        },
+                        new
+                        {
+                            aircraftTurnarroundTemplateId = 7,
                             AircraftTypeId = 6
                         });
                 });
@@ -982,7 +1024,7 @@ namespace API.Data.Migrations
                         {
                             TvtoId = 1,
                             AircraftTurnarroundTemplateId = 1,
-                            TimeOffsetEnd = 40,
+                            TimeOffsetEnd = 30,
                             TimeOffsetStart = 0,
                             VehicleTypeId = 5
                         },
@@ -998,41 +1040,41 @@ namespace API.Data.Migrations
                         {
                             TvtoId = 3,
                             AircraftTurnarroundTemplateId = 1,
+                            TimeOffsetEnd = 20,
+                            TimeOffsetStart = 5,
+                            VehicleTypeId = 8
+                        },
+                        new
+                        {
+                            TvtoId = 4,
+                            AircraftTurnarroundTemplateId = 1,
+                            TimeOffsetEnd = 35,
+                            TimeOffsetStart = 20,
+                            VehicleTypeId = 7
+                        },
+                        new
+                        {
+                            TvtoId = 5,
+                            AircraftTurnarroundTemplateId = 1,
+                            TimeOffsetEnd = 60,
+                            TimeOffsetStart = 40,
+                            VehicleTypeId = 1
+                        },
+                        new
+                        {
+                            TvtoId = 6,
+                            AircraftTurnarroundTemplateId = 1,
                             TimeOffsetEnd = 25,
                             TimeOffsetStart = 0,
                             VehicleTypeId = 3
                         },
                         new
                         {
-                            TvtoId = 4,
-                            AircraftTurnarroundTemplateId = 2,
-                            TimeOffsetEnd = 35,
-                            TimeOffsetStart = 0,
-                            VehicleTypeId = 5
-                        },
-                        new
-                        {
-                            TvtoId = 5,
-                            AircraftTurnarroundTemplateId = 2,
-                            TimeOffsetEnd = 30,
-                            TimeOffsetStart = 10,
-                            VehicleTypeId = 5
-                        },
-                        new
-                        {
-                            TvtoId = 6,
-                            AircraftTurnarroundTemplateId = 2,
-                            TimeOffsetEnd = 35,
-                            TimeOffsetStart = 0,
-                            VehicleTypeId = 11
-                        },
-                        new
-                        {
                             TvtoId = 7,
-                            AircraftTurnarroundTemplateId = 2,
-                            TimeOffsetEnd = 40,
+                            AircraftTurnarroundTemplateId = 1,
+                            TimeOffsetEnd = 20,
                             TimeOffsetStart = 5,
-                            VehicleTypeId = 11
+                            VehicleTypeId = 9
                         },
                         new
                         {
@@ -1040,67 +1082,139 @@ namespace API.Data.Migrations
                             AircraftTurnarroundTemplateId = 2,
                             TimeOffsetEnd = 35,
                             TimeOffsetStart = 0,
-                            VehicleTypeId = 3
-                        },
-                        new
-                        {
-                            TvtoId = 9,
-                            AircraftTurnarroundTemplateId = 3,
-                            TimeOffsetEnd = 35,
-                            TimeOffsetStart = 0,
                             VehicleTypeId = 5
                         },
                         new
                         {
-                            TvtoId = 10,
-                            AircraftTurnarroundTemplateId = 3,
-                            TimeOffsetEnd = 30,
+                            TvtoId = 9,
+                            AircraftTurnarroundTemplateId = 2,
+                            TimeOffsetEnd = 25,
                             TimeOffsetStart = 10,
                             VehicleTypeId = 5
                         },
                         new
                         {
-                            TvtoId = 11,
-                            AircraftTurnarroundTemplateId = 3,
+                            TvtoId = 10,
+                            AircraftTurnarroundTemplateId = 2,
                             TimeOffsetEnd = 35,
                             TimeOffsetStart = 0,
                             VehicleTypeId = 11
                         },
                         new
                         {
-                            TvtoId = 12,
-                            AircraftTurnarroundTemplateId = 3,
-                            TimeOffsetEnd = 40,
+                            TvtoId = 11,
+                            AircraftTurnarroundTemplateId = 2,
+                            TimeOffsetEnd = 35,
                             TimeOffsetStart = 5,
                             VehicleTypeId = 11
                         },
                         new
                         {
-                            TvtoId = 13,
-                            AircraftTurnarroundTemplateId = 3,
-                            TimeOffsetEnd = 30,
+                            TvtoId = 12,
+                            AircraftTurnarroundTemplateId = 2,
+                            TimeOffsetEnd = 20,
                             TimeOffsetStart = 5,
-                            VehicleTypeId = 4
+                            VehicleTypeId = 8
+                        },
+                        new
+                        {
+                            TvtoId = 13,
+                            AircraftTurnarroundTemplateId = 2,
+                            TimeOffsetEnd = 35,
+                            TimeOffsetStart = 20,
+                            VehicleTypeId = 7
                         },
                         new
                         {
                             TvtoId = 14,
-                            AircraftTurnarroundTemplateId = 3,
-                            TimeOffsetEnd = 45,
-                            TimeOffsetStart = 15,
-                            VehicleTypeId = 4
+                            AircraftTurnarroundTemplateId = 2,
+                            TimeOffsetEnd = 60,
+                            TimeOffsetStart = 45,
+                            VehicleTypeId = 1
                         },
                         new
                         {
                             TvtoId = 15,
-                            AircraftTurnarroundTemplateId = 3,
-                            TimeOffsetEnd = 30,
+                            AircraftTurnarroundTemplateId = 2,
+                            TimeOffsetEnd = 35,
                             TimeOffsetStart = 0,
                             VehicleTypeId = 3
                         },
                         new
                         {
                             TvtoId = 16,
+                            AircraftTurnarroundTemplateId = 2,
+                            TimeOffsetEnd = 20,
+                            TimeOffsetStart = 5,
+                            VehicleTypeId = 9
+                        },
+                        new
+                        {
+                            TvtoId = 17,
+                            AircraftTurnarroundTemplateId = 3,
+                            TimeOffsetEnd = 35,
+                            TimeOffsetStart = 0,
+                            VehicleTypeId = 5
+                        },
+                        new
+                        {
+                            TvtoId = 18,
+                            AircraftTurnarroundTemplateId = 3,
+                            TimeOffsetEnd = 25,
+                            TimeOffsetStart = 10,
+                            VehicleTypeId = 5
+                        },
+                        new
+                        {
+                            TvtoId = 19,
+                            AircraftTurnarroundTemplateId = 3,
+                            TimeOffsetEnd = 35,
+                            TimeOffsetStart = 0,
+                            VehicleTypeId = 11
+                        },
+                        new
+                        {
+                            TvtoId = 20,
+                            AircraftTurnarroundTemplateId = 3,
+                            TimeOffsetEnd = 35,
+                            TimeOffsetStart = 5,
+                            VehicleTypeId = 11
+                        },
+                        new
+                        {
+                            TvtoId = 21,
+                            AircraftTurnarroundTemplateId = 3,
+                            TimeOffsetEnd = 20,
+                            TimeOffsetStart = 5,
+                            VehicleTypeId = 8
+                        },
+                        new
+                        {
+                            TvtoId = 22,
+                            AircraftTurnarroundTemplateId = 3,
+                            TimeOffsetEnd = 35,
+                            TimeOffsetStart = 20,
+                            VehicleTypeId = 7
+                        },
+                        new
+                        {
+                            TvtoId = 23,
+                            AircraftTurnarroundTemplateId = 3,
+                            TimeOffsetEnd = 60,
+                            TimeOffsetStart = 45,
+                            VehicleTypeId = 1
+                        },
+                        new
+                        {
+                            TvtoId = 24,
+                            AircraftTurnarroundTemplateId = 3,
+                            TimeOffsetEnd = 35,
+                            TimeOffsetStart = 0,
+                            VehicleTypeId = 3
+                        },
+                        new
+                        {
+                            TvtoId = 25,
                             AircraftTurnarroundTemplateId = 3,
                             TimeOffsetEnd = 40,
                             TimeOffsetStart = 0,
@@ -1108,32 +1222,248 @@ namespace API.Data.Migrations
                         },
                         new
                         {
-                            TvtoId = 17,
+                            TvtoId = 26,
                             AircraftTurnarroundTemplateId = 3,
-                            TimeOffsetEnd = 50,
+                            TimeOffsetEnd = 20,
+                            TimeOffsetStart = 5,
+                            VehicleTypeId = 9
+                        },
+                        new
+                        {
+                            TvtoId = 27,
+                            AircraftTurnarroundTemplateId = 3,
+                            TimeOffsetEnd = 40,
                             TimeOffsetStart = 0,
                             VehicleTypeId = 10
                         },
                         new
                         {
-                            TvtoId = 18,
+                            TvtoId = 28,
+                            AircraftTurnarroundTemplateId = 4,
+                            TimeOffsetEnd = 35,
+                            TimeOffsetStart = 0,
+                            VehicleTypeId = 6
+                        },
+                        new
+                        {
+                            TvtoId = 29,
+                            AircraftTurnarroundTemplateId = 4,
+                            TimeOffsetEnd = 25,
+                            TimeOffsetStart = 10,
+                            VehicleTypeId = 6
+                        },
+                        new
+                        {
+                            TvtoId = 30,
+                            AircraftTurnarroundTemplateId = 4,
+                            TimeOffsetEnd = 35,
+                            TimeOffsetStart = 0,
+                            VehicleTypeId = 11
+                        },
+                        new
+                        {
+                            TvtoId = 31,
+                            AircraftTurnarroundTemplateId = 4,
+                            TimeOffsetEnd = 35,
+                            TimeOffsetStart = 5,
+                            VehicleTypeId = 11
+                        },
+                        new
+                        {
+                            TvtoId = 32,
+                            AircraftTurnarroundTemplateId = 4,
+                            TimeOffsetEnd = 20,
+                            TimeOffsetStart = 5,
+                            VehicleTypeId = 8
+                        },
+                        new
+                        {
+                            TvtoId = 33,
+                            AircraftTurnarroundTemplateId = 4,
+                            TimeOffsetEnd = 35,
+                            TimeOffsetStart = 20,
+                            VehicleTypeId = 7
+                        },
+                        new
+                        {
+                            TvtoId = 34,
+                            AircraftTurnarroundTemplateId = 4,
+                            TimeOffsetEnd = 60,
+                            TimeOffsetStart = 45,
+                            VehicleTypeId = 1
+                        },
+                        new
+                        {
+                            TvtoId = 35,
+                            AircraftTurnarroundTemplateId = 4,
+                            TimeOffsetEnd = 35,
+                            TimeOffsetStart = 0,
+                            VehicleTypeId = 3
+                        },
+                        new
+                        {
+                            TvtoId = 36,
+                            AircraftTurnarroundTemplateId = 4,
+                            TimeOffsetEnd = 40,
+                            TimeOffsetStart = 0,
+                            VehicleTypeId = 3
+                        },
+                        new
+                        {
+                            TvtoId = 37,
+                            AircraftTurnarroundTemplateId = 4,
+                            TimeOffsetEnd = 20,
+                            TimeOffsetStart = 5,
+                            VehicleTypeId = 9
+                        },
+                        new
+                        {
+                            TvtoId = 38,
+                            AircraftTurnarroundTemplateId = 4,
+                            TimeOffsetEnd = 40,
+                            TimeOffsetStart = 0,
+                            VehicleTypeId = 10
+                        },
+                        new
+                        {
+                            TvtoId = 39,
                             AircraftTurnarroundTemplateId = 5,
+                            TimeOffsetEnd = 35,
+                            TimeOffsetStart = 0,
+                            VehicleTypeId = 11
+                        },
+                        new
+                        {
+                            TvtoId = 40,
+                            AircraftTurnarroundTemplateId = 5,
+                            TimeOffsetEnd = 20,
+                            TimeOffsetStart = 5,
+                            VehicleTypeId = 8
+                        },
+                        new
+                        {
+                            TvtoId = 41,
+                            AircraftTurnarroundTemplateId = 5,
+                            TimeOffsetEnd = 35,
+                            TimeOffsetStart = 20,
+                            VehicleTypeId = 7
+                        },
+                        new
+                        {
+                            TvtoId = 42,
+                            AircraftTurnarroundTemplateId = 5,
+                            TimeOffsetEnd = 60,
+                            TimeOffsetStart = 45,
+                            VehicleTypeId = 1
+                        },
+                        new
+                        {
+                            TvtoId = 43,
+                            AircraftTurnarroundTemplateId = 5,
+                            TimeOffsetEnd = 40,
+                            TimeOffsetStart = 0,
+                            VehicleTypeId = 10
+                        },
+                        new
+                        {
+                            TvtoId = 44,
+                            AircraftTurnarroundTemplateId = 5,
+                            TimeOffsetEnd = 20,
+                            TimeOffsetStart = 5,
+                            VehicleTypeId = 9
+                        },
+                        new
+                        {
+                            TvtoId = 45,
+                            AircraftTurnarroundTemplateId = 6,
+                            TimeOffsetEnd = 40,
+                            TimeOffsetStart = 0,
+                            VehicleTypeId = 5
+                        },
+                        new
+                        {
+                            TvtoId = 46,
+                            AircraftTurnarroundTemplateId = 6,
                             TimeOffsetEnd = 40,
                             TimeOffsetStart = 0,
                             VehicleTypeId = 11
                         },
                         new
                         {
-                            TvtoId = 19,
-                            AircraftTurnarroundTemplateId = 5,
+                            TvtoId = 47,
+                            AircraftTurnarroundTemplateId = 6,
                             TimeOffsetEnd = 20,
                             TimeOffsetStart = 5,
-                            VehicleTypeId = 4
+                            VehicleTypeId = 8
                         },
                         new
                         {
-                            TvtoId = 20,
-                            AircraftTurnarroundTemplateId = 5,
+                            TvtoId = 48,
+                            AircraftTurnarroundTemplateId = 6,
+                            TimeOffsetEnd = 35,
+                            TimeOffsetStart = 20,
+                            VehicleTypeId = 7
+                        },
+                        new
+                        {
+                            TvtoId = 49,
+                            AircraftTurnarroundTemplateId = 6,
+                            TimeOffsetEnd = 60,
+                            TimeOffsetStart = 45,
+                            VehicleTypeId = 1
+                        },
+                        new
+                        {
+                            TvtoId = 50,
+                            AircraftTurnarroundTemplateId = 6,
+                            TimeOffsetEnd = 20,
+                            TimeOffsetStart = 5,
+                            VehicleTypeId = 9
+                        },
+                        new
+                        {
+                            TvtoId = 51,
+                            AircraftTurnarroundTemplateId = 6,
+                            TimeOffsetEnd = 40,
+                            TimeOffsetStart = 0,
+                            VehicleTypeId = 10
+                        },
+                        new
+                        {
+                            TvtoId = 52,
+                            AircraftTurnarroundTemplateId = 6,
+                            TimeOffsetEnd = 40,
+                            TimeOffsetStart = 0,
+                            VehicleTypeId = 5
+                        },
+                        new
+                        {
+                            TvtoId = 53,
+                            AircraftTurnarroundTemplateId = 6,
+                            TimeOffsetEnd = 40,
+                            TimeOffsetStart = 0,
+                            VehicleTypeId = 11
+                        },
+                        new
+                        {
+                            TvtoId = 54,
+                            AircraftTurnarroundTemplateId = 6,
+                            TimeOffsetEnd = 20,
+                            TimeOffsetStart = 5,
+                            VehicleTypeId = 8
+                        },
+                        new
+                        {
+                            TvtoId = 55,
+                            AircraftTurnarroundTemplateId = 6,
+                            TimeOffsetEnd = 35,
+                            TimeOffsetStart = 20,
+                            VehicleTypeId = 7
+                        },
+                        new
+                        {
+                            TvtoId = 56,
+                            AircraftTurnarroundTemplateId = 6,
                             TimeOffsetEnd = 40,
                             TimeOffsetStart = 0,
                             VehicleTypeId = 10

@@ -1,13 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using API.Data;
 using API.DTOs;
 using API.Entity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SQLitePCL;
 
 namespace API.Controllers
 {
@@ -28,16 +23,16 @@ namespace API.Controllers
         }
 
         [HttpGet("all")]
-        public async Task<ICollection<AircraftTurnarroundTemplate>> GetTurnarroundTemplate()
+        public async Task<ICollection<AircraftTurnarroundPreset>> GetTurnarroundTemplate()
         {
-            var templates = await _context.AircraftTurnarroundTemplates.ToListAsync();
+            var preset = await _context.AircraftTurnarroundTemplates.ToListAsync();
 
-            return templates;
+            return preset;
         }
 
 
         [HttpGet("aircraftType/{id}")]
-        public async Task<ActionResult<ICollection<AircraftTurnarroundTemplate>>> GetTemplatesByAircraftType(int id)
+        public async Task<ActionResult<ICollection<AircraftTurnarroundPreset>>> GetTemplatesByAircraftType(int id)
         {
             return await(from att in _context.AircraftType_ATTs
                          join tem in _context.AircraftTurnarroundTemplates
@@ -45,7 +40,7 @@ namespace API.Controllers
                          from templates in __templates.DefaultIfEmpty()
                          
                          where att.AircraftTypeId.Equals(id)
-                         select new AircraftTurnarroundTemplate {
+                         select new AircraftTurnarroundPreset {
                             TemplateId = templates.TemplateId,
                             Name = templates.Name,
                             DescriptionNotes = templates.DescriptionNotes,
@@ -65,7 +60,7 @@ namespace API.Controllers
         )
         {
             var tempAircraftType_ATT = new AircraftType_ATT();
-            var tempTemplate = new AircraftTurnarroundTemplate();
+            var tempTemplate = new AircraftTurnarroundPreset();
             var aircraftTypeIdList = new List<int>();
 
             var returnableAircratTypeATT = new List<String>();

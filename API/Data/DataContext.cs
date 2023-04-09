@@ -22,7 +22,7 @@ namespace API.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<VehicleSchedule> VehicleSchedules { get; set; }
         public DbSet<Flight> Flights { get; set; }
-        public DbSet<AircraftTurnarroundTemplate> AircraftTurnarroundTemplates { get; set; }
+        public DbSet<AircraftTurnarroundPreset> AircraftTurnarroundTemplates { get; set; }
         public DbSet<TurnarroundVehicleTimeOffset> TurnarroundVehicleTimeOffsets { get; set; }
         public DbSet<AircraftType_ATT> AircraftType_ATTs { get; set; }
 

@@ -13,7 +13,7 @@ namespace API.Entity
         public int TimeOffsetStart { get; set; }
         public int TimeOffsetEnd { get; set; }
         public int AircraftTurnarroundTemplateId { get; set; }
-        public AircraftTurnarroundTemplate? AircraftTurnarroundTemplate { get; set; }
+        public AircraftTurnarroundPreset? AircraftTurnarroundTemplate { get; set; }
         public int VehicleTypeId { get; set; }
         public VehicleType? VehicleType { get; set; }
     }
