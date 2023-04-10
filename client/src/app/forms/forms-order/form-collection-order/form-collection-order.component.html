@@ -32,7 +32,7 @@
                         {{(aircraftType$ | async)?.name + " | UnitLoadOption: " +(aircraftType$ |
                         async)?.hasUnitLoadOption}}
                     </option>
-                    <option *ngIf="!(aircraftType$ | async)" selected disabled>
+                    <option *ngIf="!(aircraftType$ | async)" selected disabled value="">
                         ... changes if flight was chosen
                     </option>
                 </select>

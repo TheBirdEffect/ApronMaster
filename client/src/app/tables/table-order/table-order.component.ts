@@ -14,7 +14,7 @@ export class TableOrderComponent implements OnInit, OnChanges {
   constructor(private modalService: BsModalService
     , private stateService: StateService) {
   }
-  
+
 
   modalIsOpened$: Observable<boolean>;
   modalIsOpen: boolean;
@@ -30,21 +30,19 @@ export class TableOrderComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.stateService.getStateObservable(
       stateObservablesEnum.ORDER_DETAIL_PRESELECTOR_IS_OPEN
-    ).subscribe( response => this.modalIsOpen = response);    
+    ).subscribe(response => this.modalIsOpen = response);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if(changes['modalIsOpen']) {
+    if (changes['modalIsOpen']) {
     }
   }
 
   preselectRouter(
     isCollectionSelected: boolean,
     addOrderCollectionTemplate: TemplateRef<any>,
-    addSingleOrderTemplate: TemplateRef<any>) 
-    {
-    //this.closeModal();
-    if(isCollectionSelected) {
+    addSingleOrderTemplate: TemplateRef<any>) {
+    if (isCollectionSelected) {
       this.openModal(false, addOrderCollectionTemplate);
     } else {
       this.openModal(false, addSingleOrderTemplate);
@@ -54,24 +52,17 @@ export class TableOrderComponent implements OnInit, OnChanges {
   //modal
   openModal(preselector: boolean, template: TemplateRef<any>) {
     console.log('opened');
-    if(preselector)
-    {
-      //this.closeModal(true);
+    if (preselector) {
       this.preselectorModalRef = this.modalService.show(template, this.config);
     } else {
-      //this.closeModal(true);
       this.detailSelectModalRef = this.modalService.show(template, this.config);
     }
-    
+
   }
 
-  closeModal(preselector: boolean) {
-    if(preselector)
-    {
-      this.preselectorModalRef?.hide();
-    } else {
-      this.detailSelectModalRef?.hide();
-    }
+  closeModal() {
+    this.preselectorModalRef?.hide();
+    this.detailSelectModalRef?.hide();
   }
 
   cancelFormMode(event: boolean) {
