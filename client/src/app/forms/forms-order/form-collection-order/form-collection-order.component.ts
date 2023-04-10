@@ -1,5 +1,6 @@
+import { NgSwitchCase } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { AircraftTypeIdAndPosCaracteristics } from 'src/app/_models/DTOs/OrderCollectionDto';
 import { aircraftTurnarroundPreset } from 'src/app/_models/aircraftTurnarroundPreset';
@@ -20,10 +21,13 @@ export class FormCollectionOrderComponent implements OnInit {
   @Output() closeModal = new EventEmitter();
 
   collectionForm: FormGroup;
+  serviceArrayControl: FormArray;
+
   flights$: Observable<Flight[] | null>;
   aircraftType$: Observable<AircraftType | null>;
   positions$: Observable<position[] | null>;
   presets$: Observable<aircraftTurnarroundPreset[] | null>;
+
 
   constructor(private formBuilder: FormBuilder,
     private flightService: FlightsService,
@@ -44,6 +48,8 @@ export class FormCollectionOrderComponent implements OnInit {
       aircraftType: ['', Validators.nullValidator],
       position: ['', Validators.required],
       turnarroundPreset: ['', Validators.required],
+      checkService: [false, Validators.nullValidator],
+      checkPushback: [false, Validators.nullValidator],
       fuel: ['NULL', Validators.nullValidator],
       fuelAmmount: ['', Validators.nullValidator]
     })
@@ -53,7 +59,7 @@ export class FormCollectionOrderComponent implements OnInit {
     return this.collectionForm.get('turnarroundPreset') as FormControl;
   }
 
-  get turnarroundPresetValue(): aircraftTurnarroundPreset{
+  get turnarroundPresetValue(): aircraftTurnarroundPreset {
     return this.collectionForm.value['turnarroundPreset'];
   }
 
@@ -84,7 +90,13 @@ export class FormCollectionOrderComponent implements OnInit {
     }
   }
 
+
+
   onSubmit(form: FormGroup) {
+
+  }
+
+  onCalculate() {
     console.log(this.collectionForm.value);
   }
 
