@@ -1,4 +1,4 @@
-import { NgSwitchCase } from '@angular/common';
+import { FormatWidth, NgSwitchCase } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -21,7 +21,8 @@ export class FormCollectionOrderComponent implements OnInit {
   @Output() closeModal = new EventEmitter();
 
   collectionForm: FormGroup;
-  serviceArrayControl: FormArray;
+  vehicleOffsetUpdateForm: FormGroup;
+  vehicleOffsetArray: FormArray;
 
   flights$: Observable<Flight[] | null>;
   aircraftType$: Observable<AircraftType | null>;
@@ -53,6 +54,17 @@ export class FormCollectionOrderComponent implements OnInit {
       fuel: ['NULL', Validators.nullValidator],
       fuelAmmount: ['', Validators.nullValidator]
     })
+
+    this.vehicleOffsetUpdateForm = this.formBuilder.group({
+      vehicleType: ['', Validators.nullValidator],
+      TimeOffsetStart: ['', Validators.required],
+      TimeOffsetEnd: ['', Validators.required] 
+    }) as FormGroup;
+    
+    this.vehicleOffsetArray = this.formBuilder.array([
+      
+    ])
+
   }
 
   get turnarroundPreset(): FormControl {
