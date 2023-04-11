@@ -14,11 +14,12 @@ export class TableOrderComponent implements OnInit, OnChanges {
   constructor(private modalService: BsModalService
     , private stateService: StateService) {
   }
-  
+
 
   modalIsOpened$: Observable<boolean>;
   modalIsOpen: boolean;
-  modalRef?: BsModalRef;
+  preselectorModalRef?: BsModalRef;
+  detailSelectModalRef?: BsModalRef;
   config = {
     backdrop: true,
     class: 'modal-lg'
@@ -29,35 +30,39 @@ export class TableOrderComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.stateService.getStateObservable(
       stateObservablesEnum.ORDER_DETAIL_PRESELECTOR_IS_OPEN
-    ).subscribe( response => this.modalIsOpen = response);    
+    ).subscribe(response => this.modalIsOpen = response);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if(changes['modalIsOpen']) {
+    if (changes['modalIsOpen']) {
     }
   }
 
   preselectRouter(
     isCollectionSelected: boolean,
     addOrderCollectionTemplate: TemplateRef<any>,
-    addSingleOrderTemplate: TemplateRef<any>) 
-    {
-    this.closeModal();
-    if(isCollectionSelected) {
-      this.openModal(addOrderCollectionTemplate);
+    addSingleOrderTemplate: TemplateRef<any>) {
+    if (isCollectionSelected) {
+      this.openModal(false, addOrderCollectionTemplate);
     } else {
-      this.openModal(addSingleOrderTemplate);
+      this.openModal(false, addSingleOrderTemplate);
     }
   }
 
   //modal
-  openModal(template: TemplateRef<any>) {
+  openModal(preselector: boolean, template: TemplateRef<any>) {
     console.log('opened');
-    this.modalRef = this.modalService.show(template, this.config);
+    if (preselector) {
+      this.preselectorModalRef = this.modalService.show(template, this.config);
+    } else {
+      this.detailSelectModalRef = this.modalService.show(template, this.config);
+    }
+
   }
 
   closeModal() {
-    this.modalRef?.hide();
+    this.preselectorModalRef?.hide();
+    this.detailSelectModalRef?.hide();
   }
 
   cancelFormMode(event: boolean) {
@@ -65,6 +70,6 @@ export class TableOrderComponent implements OnInit, OnChanges {
       stateObservablesEnum.ORDER_DETAIL_PRESELECTOR_IS_OPEN
       , true
     )
-    this.closeModal()
+    //this.closeModal()
   }
 }

@@ -3,6 +3,7 @@ using System;
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,14 +11,16 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230406103847_DeletedDynamicRelation")]
+    partial class DeletedDynamicRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.3");
 
-            modelBuilder.Entity("API.Entity.AircraftTurnarroundPreset", b =>
+            modelBuilder.Entity("API.Entity.AircraftTurnarroundTemplate", b =>
                 {
                     b.Property<int>("TemplateId")
                         .ValueGeneratedOnAdd()
@@ -30,49 +33,9 @@ namespace API.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("utilizeGangways")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("TemplateId");
 
                     b.ToTable("AircraftTurnarroundTemplates");
-
-                    b.HasData(
-                        new
-                        {
-                            TemplateId = 1,
-                            DescriptionNotes = "Aircraft turnarrund preset for all Aircrafts of the Airbus A3x series and all Boeing 73x Series. This preset is used for turnarounds that utilize gangways for boarding LESS than 100 passengers.",
-                            Name = "A3x / 37x, PAX < 100 @Gate",
-                            utilizeGangways = true
-                        },
-                        new
-                        {
-                            TemplateId = 2,
-                            DescriptionNotes = "Aircraft turnarrund preset for all Aircrafts of the Airbus A3x series and all Boeing 73x Series. This preset is used for turnarounds that utilize gangways for boarding MORE than 100 passengers.",
-                            Name = "A3x / 37x, PAX > 100 @Gate",
-                            utilizeGangways = true
-                        },
-                        new
-                        {
-                            TemplateId = 3,
-                            DescriptionNotes = "Aircraft turnarrund preset for all Aircrafts of the Airbus A3x series and all Boeing 73x Series. This preset is NOT used for turnarounds that utilize gangways for boarding MORE than 100 passengers.",
-                            Name = "A3x / 37x, PAX > 100 NOT @Gate",
-                            utilizeGangways = false
-                        },
-                        new
-                        {
-                            TemplateId = 4,
-                            DescriptionNotes = "Aircraft turnarrund preset for all Aircrafts of the ATR Manufacturer. This preset is NOT used for turnarounds that utilize gangways for boarding.",
-                            Name = "ATR-42/-72/-82/-92 NOT @Gate",
-                            utilizeGangways = false
-                        },
-                        new
-                        {
-                            TemplateId = 5,
-                            DescriptionNotes = "Aircraft turnarrund preset for all Aircrafts De Havilland Dash-Q8 without unit load system. This preset is not used for turnarounds that utilize gangways for boarding.",
-                            Name = "Dash-Q8",
-                            utilizeGangways = false
-                        });
                 });
 
             modelBuilder.Entity("API.Entity.AircraftType", b =>
@@ -144,83 +107,6 @@ namespace API.Data.Migrations
                     b.HasIndex("AircraftTypeId");
 
                     b.ToTable("AircraftType_ATTs");
-
-                    b.HasData(
-                        new
-                        {
-                            aircraftTurnarroundTemplateId = 1,
-                            AircraftTypeId = 2
-                        },
-                        new
-                        {
-                            aircraftTurnarroundTemplateId = 1,
-                            AircraftTypeId = 4
-                        },
-                        new
-                        {
-                            aircraftTurnarroundTemplateId = 1,
-                            AircraftTypeId = 1
-                        },
-                        new
-                        {
-                            aircraftTurnarroundTemplateId = 1,
-                            AircraftTypeId = 3
-                        },
-                        new
-                        {
-                            aircraftTurnarroundTemplateId = 2,
-                            AircraftTypeId = 2
-                        },
-                        new
-                        {
-                            aircraftTurnarroundTemplateId = 2,
-                            AircraftTypeId = 4
-                        },
-                        new
-                        {
-                            aircraftTurnarroundTemplateId = 2,
-                            AircraftTypeId = 1
-                        },
-                        new
-                        {
-                            aircraftTurnarroundTemplateId = 2,
-                            AircraftTypeId = 3
-                        },
-                        new
-                        {
-                            aircraftTurnarroundTemplateId = 2,
-                            AircraftTypeId = 5
-                        },
-                        new
-                        {
-                            aircraftTurnarroundTemplateId = 3,
-                            AircraftTypeId = 5
-                        },
-                        new
-                        {
-                            aircraftTurnarroundTemplateId = 3,
-                            AircraftTypeId = 2
-                        },
-                        new
-                        {
-                            aircraftTurnarroundTemplateId = 3,
-                            AircraftTypeId = 4
-                        },
-                        new
-                        {
-                            aircraftTurnarroundTemplateId = 3,
-                            AircraftTypeId = 1
-                        },
-                        new
-                        {
-                            aircraftTurnarroundTemplateId = 3,
-                            AircraftTypeId = 3
-                        },
-                        new
-                        {
-                            aircraftTurnarroundTemplateId = 4,
-                            AircraftTypeId = 6
-                        });
                 });
 
             modelBuilder.Entity("API.Entity.Flight", b =>
@@ -257,8 +143,8 @@ namespace API.Data.Migrations
                         {
                             FlightId = 1,
                             AircraftTypeId = 2,
-                            Arrival = new DateTime(2023, 4, 18, 12, 0, 0, 0, DateTimeKind.Unspecified),
-                            Departure = new DateTime(2023, 4, 18, 12, 50, 0, 0, DateTimeKind.Unspecified),
+                            Arrival = new DateTime(2023, 4, 14, 12, 0, 0, 0, DateTimeKind.Unspecified),
+                            Departure = new DateTime(2023, 4, 14, 12, 50, 0, 0, DateTimeKind.Unspecified),
                             Destination = "EDDH",
                             FlightNumber = "EZY2023"
                         },
@@ -266,8 +152,8 @@ namespace API.Data.Migrations
                         {
                             FlightId = 2,
                             AircraftTypeId = 5,
-                            Arrival = new DateTime(2023, 4, 18, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            Departure = new DateTime(2023, 4, 18, 15, 15, 0, 0, DateTimeKind.Unspecified),
+                            Arrival = new DateTime(2023, 4, 14, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            Departure = new DateTime(2023, 4, 14, 15, 15, 0, 0, DateTimeKind.Unspecified),
                             Destination = "EDDM",
                             FlightNumber = "LH2134"
                         },
@@ -275,8 +161,8 @@ namespace API.Data.Migrations
                         {
                             FlightId = 3,
                             AircraftTypeId = 2,
-                            Arrival = new DateTime(2023, 4, 18, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            Departure = new DateTime(2023, 4, 18, 15, 15, 0, 0, DateTimeKind.Unspecified),
+                            Arrival = new DateTime(2023, 4, 14, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            Departure = new DateTime(2023, 4, 14, 15, 15, 0, 0, DateTimeKind.Unspecified),
                             Destination = "EDDB",
                             FlightNumber = "LH789"
                         },
@@ -284,8 +170,8 @@ namespace API.Data.Migrations
                         {
                             FlightId = 4,
                             AircraftTypeId = 5,
-                            Arrival = new DateTime(2023, 4, 19, 5, 30, 0, 0, DateTimeKind.Unspecified),
-                            Departure = new DateTime(2023, 4, 19, 6, 45, 0, 0, DateTimeKind.Unspecified),
+                            Arrival = new DateTime(2023, 4, 15, 5, 30, 0, 0, DateTimeKind.Unspecified),
+                            Departure = new DateTime(2023, 4, 15, 6, 45, 0, 0, DateTimeKind.Unspecified),
                             Destination = "EDDB",
                             FlightNumber = "EZY4903"
                         });
@@ -559,271 +445,271 @@ namespace API.Data.Migrations
                         new
                         {
                             OrderId = 1,
-                            EndOfService = new DateTime(2023, 4, 18, 12, 30, 0, 0, DateTimeKind.Unspecified),
+                            EndOfService = new DateTime(2023, 4, 14, 12, 30, 0, 0, DateTimeKind.Unspecified),
                             FlightId = 1,
                             PositionId = 3,
                             QtyFuel = 0,
-                            StartOfService = new DateTime(2023, 4, 18, 12, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartOfService = new DateTime(2023, 4, 14, 12, 0, 0, 0, DateTimeKind.Unspecified),
                             VehicleTypeId = 5
                         },
                         new
                         {
                             OrderId = 2,
-                            EndOfService = new DateTime(2023, 4, 18, 12, 35, 0, 0, DateTimeKind.Unspecified),
+                            EndOfService = new DateTime(2023, 4, 14, 12, 35, 0, 0, DateTimeKind.Unspecified),
                             FlightId = 1,
                             PositionId = 3,
                             QtyFuel = 0,
-                            StartOfService = new DateTime(2023, 4, 18, 12, 10, 0, 0, DateTimeKind.Unspecified),
+                            StartOfService = new DateTime(2023, 4, 14, 12, 10, 0, 0, DateTimeKind.Unspecified),
                             VehicleTypeId = 5
                         },
                         new
                         {
                             OrderId = 3,
-                            EndOfService = new DateTime(2023, 4, 18, 12, 35, 0, 0, DateTimeKind.Unspecified),
+                            EndOfService = new DateTime(2023, 4, 14, 12, 35, 0, 0, DateTimeKind.Unspecified),
                             FlightId = 1,
                             PositionId = 3,
                             QtyFuel = 0,
-                            StartOfService = new DateTime(2023, 4, 18, 12, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartOfService = new DateTime(2023, 4, 14, 12, 0, 0, 0, DateTimeKind.Unspecified),
                             VehicleTypeId = 11
                         },
                         new
                         {
                             OrderId = 4,
-                            EndOfService = new DateTime(2023, 4, 18, 12, 35, 0, 0, DateTimeKind.Unspecified),
+                            EndOfService = new DateTime(2023, 4, 14, 12, 35, 0, 0, DateTimeKind.Unspecified),
                             FlightId = 1,
                             PositionId = 3,
                             QtyFuel = 0,
-                            StartOfService = new DateTime(2023, 4, 18, 12, 5, 0, 0, DateTimeKind.Unspecified),
+                            StartOfService = new DateTime(2023, 4, 14, 12, 5, 0, 0, DateTimeKind.Unspecified),
                             VehicleTypeId = 11
                         },
                         new
                         {
                             OrderId = 5,
-                            EndOfService = new DateTime(2023, 4, 18, 12, 30, 0, 0, DateTimeKind.Unspecified),
+                            EndOfService = new DateTime(2023, 4, 14, 12, 30, 0, 0, DateTimeKind.Unspecified),
                             FlightId = 1,
                             PositionId = 3,
                             QtyFuel = 0,
-                            StartOfService = new DateTime(2023, 4, 18, 12, 20, 0, 0, DateTimeKind.Unspecified),
+                            StartOfService = new DateTime(2023, 4, 14, 12, 20, 0, 0, DateTimeKind.Unspecified),
                             VehicleTypeId = 7
                         },
                         new
                         {
                             OrderId = 6,
-                            EndOfService = new DateTime(2023, 4, 18, 12, 15, 0, 0, DateTimeKind.Unspecified),
+                            EndOfService = new DateTime(2023, 4, 14, 12, 15, 0, 0, DateTimeKind.Unspecified),
                             FlightId = 1,
                             PositionId = 3,
                             QtyFuel = 0,
-                            StartOfService = new DateTime(2023, 4, 18, 12, 5, 0, 0, DateTimeKind.Unspecified),
+                            StartOfService = new DateTime(2023, 4, 14, 12, 5, 0, 0, DateTimeKind.Unspecified),
                             VehicleTypeId = 8
                         },
                         new
                         {
                             OrderId = 7,
-                            EndOfService = new DateTime(2023, 4, 18, 12, 35, 0, 0, DateTimeKind.Unspecified),
+                            EndOfService = new DateTime(2023, 4, 14, 12, 35, 0, 0, DateTimeKind.Unspecified),
                             FlightId = 1,
                             PositionId = 3,
                             QtyFuel = 0,
-                            StartOfService = new DateTime(2023, 4, 18, 12, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartOfService = new DateTime(2023, 4, 14, 12, 0, 0, 0, DateTimeKind.Unspecified),
                             VehicleTypeId = 3
                         },
                         new
                         {
                             OrderId = 8,
-                            EndOfService = new DateTime(2023, 4, 18, 12, 18, 0, 0, DateTimeKind.Unspecified),
+                            EndOfService = new DateTime(2023, 4, 14, 12, 18, 0, 0, DateTimeKind.Unspecified),
                             FlightId = 1,
                             PositionId = 3,
                             QtyFuel = 12000,
-                            StartOfService = new DateTime(2023, 4, 18, 12, 3, 0, 0, DateTimeKind.Unspecified),
+                            StartOfService = new DateTime(2023, 4, 14, 12, 3, 0, 0, DateTimeKind.Unspecified),
                             VehicleTypeId = 9
                         },
                         new
                         {
                             OrderId = 9,
-                            EndOfService = new DateTime(2023, 4, 18, 12, 50, 0, 0, DateTimeKind.Unspecified),
+                            EndOfService = new DateTime(2023, 4, 14, 12, 50, 0, 0, DateTimeKind.Unspecified),
                             FlightId = 1,
                             PositionId = 3,
                             QtyFuel = 0,
-                            StartOfService = new DateTime(2023, 4, 18, 12, 42, 0, 0, DateTimeKind.Unspecified),
+                            StartOfService = new DateTime(2023, 4, 14, 12, 42, 0, 0, DateTimeKind.Unspecified),
                             VehicleTypeId = 1
                         },
                         new
                         {
                             OrderId = 10,
-                            EndOfService = new DateTime(2023, 4, 18, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            EndOfService = new DateTime(2023, 4, 14, 15, 0, 0, 0, DateTimeKind.Unspecified),
                             FlightId = 2,
                             PositionId = 11,
                             QtyFuel = 0,
-                            StartOfService = new DateTime(2023, 4, 18, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartOfService = new DateTime(2023, 4, 14, 14, 0, 0, 0, DateTimeKind.Unspecified),
                             VehicleTypeId = 6
                         },
                         new
                         {
                             OrderId = 11,
-                            EndOfService = new DateTime(2023, 4, 18, 15, 5, 0, 0, DateTimeKind.Unspecified),
+                            EndOfService = new DateTime(2023, 4, 14, 15, 5, 0, 0, DateTimeKind.Unspecified),
                             FlightId = 2,
                             PositionId = 11,
                             QtyFuel = 0,
-                            StartOfService = new DateTime(2023, 4, 18, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartOfService = new DateTime(2023, 4, 14, 14, 0, 0, 0, DateTimeKind.Unspecified),
                             VehicleTypeId = 3
                         },
                         new
                         {
                             OrderId = 12,
-                            EndOfService = new DateTime(2023, 4, 18, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            EndOfService = new DateTime(2023, 4, 14, 14, 30, 0, 0, DateTimeKind.Unspecified),
                             FlightId = 2,
                             PositionId = 11,
                             QtyFuel = 0,
-                            StartOfService = new DateTime(2023, 4, 18, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartOfService = new DateTime(2023, 4, 14, 14, 0, 0, 0, DateTimeKind.Unspecified),
                             VehicleTypeId = 11
                         },
                         new
                         {
                             OrderId = 13,
-                            EndOfService = new DateTime(2023, 4, 18, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            EndOfService = new DateTime(2023, 4, 14, 15, 0, 0, 0, DateTimeKind.Unspecified),
                             FlightId = 2,
                             PositionId = 11,
                             QtyFuel = 0,
-                            StartOfService = new DateTime(2023, 4, 18, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            StartOfService = new DateTime(2023, 4, 14, 14, 30, 0, 0, DateTimeKind.Unspecified),
                             VehicleTypeId = 11
                         },
                         new
                         {
                             OrderId = 14,
-                            EndOfService = new DateTime(2023, 4, 18, 14, 40, 0, 0, DateTimeKind.Unspecified),
+                            EndOfService = new DateTime(2023, 4, 14, 14, 40, 0, 0, DateTimeKind.Unspecified),
                             FlightId = 2,
                             PositionId = 11,
                             QtyFuel = 0,
-                            StartOfService = new DateTime(2023, 4, 18, 14, 25, 0, 0, DateTimeKind.Unspecified),
+                            StartOfService = new DateTime(2023, 4, 14, 14, 25, 0, 0, DateTimeKind.Unspecified),
                             VehicleTypeId = 7
                         },
                         new
                         {
                             OrderId = 15,
-                            EndOfService = new DateTime(2023, 4, 18, 12, 25, 0, 0, DateTimeKind.Unspecified),
+                            EndOfService = new DateTime(2023, 4, 14, 12, 25, 0, 0, DateTimeKind.Unspecified),
                             FlightId = 2,
                             PositionId = 11,
                             QtyFuel = 0,
-                            StartOfService = new DateTime(2023, 4, 18, 14, 5, 0, 0, DateTimeKind.Unspecified),
+                            StartOfService = new DateTime(2023, 4, 14, 14, 5, 0, 0, DateTimeKind.Unspecified),
                             VehicleTypeId = 8
                         },
                         new
                         {
                             OrderId = 16,
-                            EndOfService = new DateTime(2023, 4, 18, 14, 45, 0, 0, DateTimeKind.Unspecified),
+                            EndOfService = new DateTime(2023, 4, 14, 14, 45, 0, 0, DateTimeKind.Unspecified),
                             FlightId = 2,
                             PositionId = 11,
                             QtyFuel = 0,
-                            StartOfService = new DateTime(2023, 4, 18, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartOfService = new DateTime(2023, 4, 14, 14, 0, 0, 0, DateTimeKind.Unspecified),
                             VehicleTypeId = 3
                         },
                         new
                         {
                             OrderId = 17,
-                            EndOfService = new DateTime(2023, 4, 18, 14, 20, 0, 0, DateTimeKind.Unspecified),
+                            EndOfService = new DateTime(2023, 4, 14, 14, 20, 0, 0, DateTimeKind.Unspecified),
                             FlightId = 2,
                             PositionId = 11,
                             QtyFuel = 30000,
-                            StartOfService = new DateTime(2023, 4, 18, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartOfService = new DateTime(2023, 4, 14, 14, 0, 0, 0, DateTimeKind.Unspecified),
                             VehicleTypeId = 9
                         },
                         new
                         {
                             OrderId = 18,
-                            EndOfService = new DateTime(2023, 4, 18, 15, 5, 0, 0, DateTimeKind.Unspecified),
+                            EndOfService = new DateTime(2023, 4, 14, 15, 5, 0, 0, DateTimeKind.Unspecified),
                             FlightId = 2,
                             PositionId = 11,
                             QtyFuel = 0,
-                            StartOfService = new DateTime(2023, 4, 18, 14, 5, 0, 0, DateTimeKind.Unspecified),
+                            StartOfService = new DateTime(2023, 4, 14, 14, 5, 0, 0, DateTimeKind.Unspecified),
                             VehicleTypeId = 4
                         },
                         new
                         {
                             OrderId = 19,
-                            EndOfService = new DateTime(2023, 4, 18, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            EndOfService = new DateTime(2023, 4, 14, 15, 0, 0, 0, DateTimeKind.Unspecified),
                             FlightId = 3,
                             PositionId = 3,
                             QtyFuel = 0,
-                            StartOfService = new DateTime(2023, 4, 18, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            StartOfService = new DateTime(2023, 4, 14, 14, 30, 0, 0, DateTimeKind.Unspecified),
                             VehicleTypeId = 5
                         },
                         new
                         {
                             OrderId = 20,
-                            EndOfService = new DateTime(2023, 4, 18, 15, 5, 0, 0, DateTimeKind.Unspecified),
+                            EndOfService = new DateTime(2023, 4, 14, 15, 5, 0, 0, DateTimeKind.Unspecified),
                             FlightId = 3,
                             PositionId = 3,
                             QtyFuel = 0,
-                            StartOfService = new DateTime(2023, 4, 18, 14, 40, 0, 0, DateTimeKind.Unspecified),
+                            StartOfService = new DateTime(2023, 4, 14, 14, 40, 0, 0, DateTimeKind.Unspecified),
                             VehicleTypeId = 5
                         },
                         new
                         {
                             OrderId = 21,
-                            EndOfService = new DateTime(2023, 4, 18, 15, 5, 0, 0, DateTimeKind.Unspecified),
+                            EndOfService = new DateTime(2023, 4, 14, 15, 5, 0, 0, DateTimeKind.Unspecified),
                             FlightId = 3,
                             PositionId = 3,
                             QtyFuel = 0,
-                            StartOfService = new DateTime(2023, 4, 18, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            StartOfService = new DateTime(2023, 4, 14, 14, 30, 0, 0, DateTimeKind.Unspecified),
                             VehicleTypeId = 11
                         },
                         new
                         {
                             OrderId = 22,
-                            EndOfService = new DateTime(2023, 4, 18, 15, 5, 0, 0, DateTimeKind.Unspecified),
+                            EndOfService = new DateTime(2023, 4, 14, 15, 5, 0, 0, DateTimeKind.Unspecified),
                             FlightId = 3,
                             PositionId = 3,
                             QtyFuel = 0,
-                            StartOfService = new DateTime(2023, 4, 18, 14, 38, 0, 0, DateTimeKind.Unspecified),
+                            StartOfService = new DateTime(2023, 4, 14, 14, 38, 0, 0, DateTimeKind.Unspecified),
                             VehicleTypeId = 11
                         },
                         new
                         {
                             OrderId = 23,
-                            EndOfService = new DateTime(2023, 4, 18, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            EndOfService = new DateTime(2023, 4, 14, 15, 0, 0, 0, DateTimeKind.Unspecified),
                             FlightId = 3,
                             PositionId = 3,
                             QtyFuel = 0,
-                            StartOfService = new DateTime(2023, 4, 18, 14, 50, 0, 0, DateTimeKind.Unspecified),
+                            StartOfService = new DateTime(2023, 4, 14, 14, 50, 0, 0, DateTimeKind.Unspecified),
                             VehicleTypeId = 7
                         },
                         new
                         {
                             OrderId = 24,
-                            EndOfService = new DateTime(2023, 4, 18, 14, 45, 0, 0, DateTimeKind.Unspecified),
+                            EndOfService = new DateTime(2023, 4, 14, 14, 45, 0, 0, DateTimeKind.Unspecified),
                             FlightId = 3,
                             PositionId = 3,
                             QtyFuel = 0,
-                            StartOfService = new DateTime(2023, 4, 18, 14, 32, 0, 0, DateTimeKind.Unspecified),
+                            StartOfService = new DateTime(2023, 4, 14, 14, 32, 0, 0, DateTimeKind.Unspecified),
                             VehicleTypeId = 8
                         },
                         new
                         {
                             OrderId = 25,
-                            EndOfService = new DateTime(2023, 4, 18, 14, 5, 0, 0, DateTimeKind.Unspecified),
+                            EndOfService = new DateTime(2023, 4, 14, 14, 5, 0, 0, DateTimeKind.Unspecified),
                             FlightId = 3,
                             PositionId = 3,
                             QtyFuel = 0,
-                            StartOfService = new DateTime(2023, 4, 18, 14, 35, 0, 0, DateTimeKind.Unspecified),
+                            StartOfService = new DateTime(2023, 4, 14, 14, 35, 0, 0, DateTimeKind.Unspecified),
                             VehicleTypeId = 3
                         },
                         new
                         {
                             OrderId = 26,
-                            EndOfService = new DateTime(2023, 4, 18, 14, 45, 0, 0, DateTimeKind.Unspecified),
+                            EndOfService = new DateTime(2023, 4, 14, 14, 45, 0, 0, DateTimeKind.Unspecified),
                             FlightId = 3,
                             PositionId = 3,
                             QtyFuel = 15000,
-                            StartOfService = new DateTime(2023, 4, 18, 14, 32, 0, 0, DateTimeKind.Unspecified),
+                            StartOfService = new DateTime(2023, 4, 14, 14, 32, 0, 0, DateTimeKind.Unspecified),
                             VehicleTypeId = 9
                         },
                         new
                         {
                             OrderId = 27,
-                            EndOfService = new DateTime(2023, 4, 18, 15, 10, 0, 0, DateTimeKind.Unspecified),
+                            EndOfService = new DateTime(2023, 4, 14, 15, 10, 0, 0, DateTimeKind.Unspecified),
                             FlightId = 3,
                             PositionId = 3,
                             QtyFuel = 0,
-                            StartOfService = new DateTime(2023, 4, 18, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartOfService = new DateTime(2023, 4, 14, 15, 0, 0, 0, DateTimeKind.Unspecified),
                             VehicleTypeId = 9
                         });
                 });
@@ -981,168 +867,6 @@ namespace API.Data.Migrations
                     b.HasIndex("VehicleTypeId");
 
                     b.ToTable("TurnarroundVehicleTimeOffsets");
-
-                    b.HasData(
-                        new
-                        {
-                            TvtoId = 1,
-                            AircraftTurnarroundTemplateId = 1,
-                            TimeOffsetEnd = 40,
-                            TimeOffsetStart = 0,
-                            VehicleTypeId = 5
-                        },
-                        new
-                        {
-                            TvtoId = 2,
-                            AircraftTurnarroundTemplateId = 1,
-                            TimeOffsetEnd = 35,
-                            TimeOffsetStart = 0,
-                            VehicleTypeId = 11
-                        },
-                        new
-                        {
-                            TvtoId = 3,
-                            AircraftTurnarroundTemplateId = 1,
-                            TimeOffsetEnd = 25,
-                            TimeOffsetStart = 0,
-                            VehicleTypeId = 3
-                        },
-                        new
-                        {
-                            TvtoId = 4,
-                            AircraftTurnarroundTemplateId = 2,
-                            TimeOffsetEnd = 35,
-                            TimeOffsetStart = 0,
-                            VehicleTypeId = 5
-                        },
-                        new
-                        {
-                            TvtoId = 5,
-                            AircraftTurnarroundTemplateId = 2,
-                            TimeOffsetEnd = 30,
-                            TimeOffsetStart = 10,
-                            VehicleTypeId = 5
-                        },
-                        new
-                        {
-                            TvtoId = 6,
-                            AircraftTurnarroundTemplateId = 2,
-                            TimeOffsetEnd = 35,
-                            TimeOffsetStart = 0,
-                            VehicleTypeId = 11
-                        },
-                        new
-                        {
-                            TvtoId = 7,
-                            AircraftTurnarroundTemplateId = 2,
-                            TimeOffsetEnd = 40,
-                            TimeOffsetStart = 5,
-                            VehicleTypeId = 11
-                        },
-                        new
-                        {
-                            TvtoId = 8,
-                            AircraftTurnarroundTemplateId = 2,
-                            TimeOffsetEnd = 35,
-                            TimeOffsetStart = 0,
-                            VehicleTypeId = 3
-                        },
-                        new
-                        {
-                            TvtoId = 9,
-                            AircraftTurnarroundTemplateId = 3,
-                            TimeOffsetEnd = 35,
-                            TimeOffsetStart = 0,
-                            VehicleTypeId = 5
-                        },
-                        new
-                        {
-                            TvtoId = 10,
-                            AircraftTurnarroundTemplateId = 3,
-                            TimeOffsetEnd = 30,
-                            TimeOffsetStart = 10,
-                            VehicleTypeId = 5
-                        },
-                        new
-                        {
-                            TvtoId = 11,
-                            AircraftTurnarroundTemplateId = 3,
-                            TimeOffsetEnd = 35,
-                            TimeOffsetStart = 0,
-                            VehicleTypeId = 11
-                        },
-                        new
-                        {
-                            TvtoId = 12,
-                            AircraftTurnarroundTemplateId = 3,
-                            TimeOffsetEnd = 40,
-                            TimeOffsetStart = 5,
-                            VehicleTypeId = 11
-                        },
-                        new
-                        {
-                            TvtoId = 13,
-                            AircraftTurnarroundTemplateId = 3,
-                            TimeOffsetEnd = 30,
-                            TimeOffsetStart = 5,
-                            VehicleTypeId = 4
-                        },
-                        new
-                        {
-                            TvtoId = 14,
-                            AircraftTurnarroundTemplateId = 3,
-                            TimeOffsetEnd = 45,
-                            TimeOffsetStart = 15,
-                            VehicleTypeId = 4
-                        },
-                        new
-                        {
-                            TvtoId = 15,
-                            AircraftTurnarroundTemplateId = 3,
-                            TimeOffsetEnd = 30,
-                            TimeOffsetStart = 0,
-                            VehicleTypeId = 3
-                        },
-                        new
-                        {
-                            TvtoId = 16,
-                            AircraftTurnarroundTemplateId = 3,
-                            TimeOffsetEnd = 40,
-                            TimeOffsetStart = 0,
-                            VehicleTypeId = 3
-                        },
-                        new
-                        {
-                            TvtoId = 17,
-                            AircraftTurnarroundTemplateId = 3,
-                            TimeOffsetEnd = 50,
-                            TimeOffsetStart = 0,
-                            VehicleTypeId = 10
-                        },
-                        new
-                        {
-                            TvtoId = 18,
-                            AircraftTurnarroundTemplateId = 5,
-                            TimeOffsetEnd = 40,
-                            TimeOffsetStart = 0,
-                            VehicleTypeId = 11
-                        },
-                        new
-                        {
-                            TvtoId = 19,
-                            AircraftTurnarroundTemplateId = 5,
-                            TimeOffsetEnd = 20,
-                            TimeOffsetStart = 5,
-                            VehicleTypeId = 4
-                        },
-                        new
-                        {
-                            TvtoId = 20,
-                            AircraftTurnarroundTemplateId = 5,
-                            TimeOffsetEnd = 40,
-                            TimeOffsetStart = 0,
-                            VehicleTypeId = 10
-                        });
                 });
 
             modelBuilder.Entity("API.Entity.VehicleSchedule", b =>
@@ -1246,15 +970,13 @@ namespace API.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("API.Entity.AircraftTurnarroundPreset", "aircraftTurnarroundTemplate")
-                        .WithMany()
+                    b.HasOne("API.Entity.AircraftTurnarroundTemplate", null)
+                        .WithMany("AircraftTypes")
                         .HasForeignKey("aircraftTurnarroundTemplateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("AircraftType");
-
-                    b.Navigation("aircraftTurnarroundTemplate");
                 });
 
             modelBuilder.Entity("API.Entity.Flight", b =>
@@ -1314,7 +1036,7 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entity.TurnarroundVehicleTimeOffset", b =>
                 {
-                    b.HasOne("API.Entity.AircraftTurnarroundPreset", "AircraftTurnarroundTemplate")
+                    b.HasOne("API.Entity.AircraftTurnarroundTemplate", "AircraftTurnarroundTemplate")
                         .WithMany("TurnarroundVehicleTimeOffsets")
                         .HasForeignKey("AircraftTurnarroundTemplateId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1350,8 +1072,10 @@ namespace API.Data.Migrations
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("API.Entity.AircraftTurnarroundPreset", b =>
+            modelBuilder.Entity("API.Entity.AircraftTurnarroundTemplate", b =>
                 {
+                    b.Navigation("AircraftTypes");
+
                     b.Navigation("TurnarroundVehicleTimeOffsets");
                 });
 
