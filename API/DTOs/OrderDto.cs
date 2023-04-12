@@ -24,4 +24,14 @@ namespace API.DTOs
         public Flight Flight { get; set; }
         public Position Position { get; set; }
     }
+
+    public class TransferSingleOrders {
+        public DateTime startOfService { get; set; }
+        public DateTime endOfService { get; set; }
+        public string fuel { get; set; }
+        public double fuelAmmount { get; set; }  
+        public Flight flight { get; set; }
+        public VehicleType vehicleType { get; set; }
+        public Position position { get; set; }
+    }
 }

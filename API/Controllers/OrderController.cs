@@ -102,6 +102,48 @@ namespace API.Controllers
             return Ok(newOrderDto);
         }
 
+        [HttpPost("transfer/fromSingleOrderForm")]
+        public async Task<ActionResult<ICollection<Order>>> TransferAndAddSingleOrders(ICollection<TransferSingleOrders> data)
+        {
+            if (data != null)
+            {
+                var _data = data;
+                List<Order> newOrders = new List<Order>();
+
+                foreach (var singleOrder in _data)
+                {
+                    var newOrder = new Order
+                    {
+                        FlightId = singleOrder.flight.FlightId,
+                        PositionId = singleOrder.position.PositionId,
+                        VehicleTypeId = singleOrder.vehicleType.VehicleTypeId,
+                        QtyFuel = (int)singleOrder.fuelAmmount,
+                        StartOfService = singleOrder.startOfService,
+                        EndOfService = singleOrder.endOfService
+                        //TODO: Add property for fuelType if database is extended 
+                    };
+                    newOrders.Add(newOrder);
+                }
+
+
+                await this._context.AddRangeAsync(newOrders);
+
+                this._context.SaveChanges();
+
+                foreach (var order in newOrders)
+                {
+                    order.Flight = await _context.Flights.FindAsync(order.FlightId);
+                    order.Position = await _context.Positions.FindAsync(order.PositionId);
+                    order.VehicleType = await _context.VehicleTypes.FindAsync(order.VehicleTypeId);
+                }
+
+                return Ok(newOrders);
+            }
+
+            return NotFound("Offset data not found!");
+
+        }
+
         [HttpPost("transfer/fromVehicleOffsets")]
         public async Task<ActionResult<ICollection<Order>>> TransferAndAddOrdersFromVehicleOffset(ICollection<TransferVehicleOffsetToOrder> data)
         {

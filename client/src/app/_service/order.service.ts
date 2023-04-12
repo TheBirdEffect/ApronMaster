@@ -62,6 +62,15 @@ export class OrderService {
     )
   }
 
+  SetSingleOrders(singleOrderFromForm: any): Observable<order[]> {
+    return this.http.post<order[]>(this.basicApiPath + "/Order/transfer/fromSingleOrderForm", singleOrderFromForm).pipe(
+      map( response => {
+        this.AddCollectionToObservableArray(response);
+        return response;
+      })
+    )
+  }
+
   UpdateOrder(order: order): Observable<order> {
     return this.http.post<order>(this.basicApiPath + "/order/update", order).pipe(
       map(response => {

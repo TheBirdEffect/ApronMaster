@@ -41,6 +41,7 @@ export class FormCollectionOrderDetailComponent implements OnInit, OnDestroy {
 
   orderCollectionFormData$: Observable<OrderCollectionFormData | null>;
   stateOffsetDataLoaded$: Observable<boolean>;
+  arrivalTime$: Observable<OrderCollectionFormData | null>;
 
   __orderCollectionFormData: Subscription;
   __stateOffsetData: Subscription;
@@ -51,7 +52,9 @@ export class FormCollectionOrderDetailComponent implements OnInit, OnDestroy {
     , private vehicleTypeService: VehicleService
     , private stateService: StateService
     , private orderService: OrderService
-    , private modalService: ModalService) { }
+    , private modalService: ModalService) 
+    { 
+    }
 
   ngOnInit(): void {
     this.orderCollectionFormData$ = this.turnarroundPresetsService.loadOrderCollectionFormData();
@@ -68,7 +71,7 @@ export class FormCollectionOrderDetailComponent implements OnInit, OnDestroy {
       next: (response) => {
         console.log('Response: ', response);
         
-        if (response) {
+        if (response) {          
           this.vehicleOffsetArray.clear();
           this.vehicleArray = [];
           this.flight = response.flight;
