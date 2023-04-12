@@ -7,5 +7,6 @@ export class turnarroundVehicleTimeOffset
     timeOffsetStart: number;
     timeOffsetEnd: number;
     aircraftTurnarroundPreset: aircraftTurnarroundPreset
+    vehicleTypeId: number;
     vehicleType: vehicleType;
 }

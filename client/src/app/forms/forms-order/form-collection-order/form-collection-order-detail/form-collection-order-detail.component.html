@@ -1,0 +1,32 @@
+<div *ngIf="stateOffsetDataLoaded$ | async" class="container mb-3">
+    <div class="row accent-grey pt-1 my-1 rounded">
+        <div class="col">
+            Vehicle Type
+        </div>
+        <div class="col">
+            Time offset start
+        </div>
+        <div class="col">
+            Time offset end
+        </div>
+    </div>
+    <div *ngFor="let offset of vehicleOffsetArray.controls let i = index">
+        <div [formGroup]="offset">
+            <div class="row accent-grey pt-1 my-1 rounded">
+                <div class="col" *ngIf="vehicleArray.length == vehicleOffsetArray.length">
+                    {{vehicleArray[i].name}}
+                </div>
+                <div class="col">
+                    <input type="number" class="form-control" formControlName="timeOffsetStart">
+                </div>
+                <div class="col">
+                    <input type="number" class="form-control" formControlName="timeOffsetEnd">
+                </div>
+            </div>
+        </div>   
+    </div>
+    <div class="mt-3">
+        <button class="btn btn-outline-success me-2" [disabled]="vehicleOffsetArray.invalid" name="btnCalculate"
+            type="button" (click)="onSubmit()">Submit Orders</button>
+    </div>
+</div>

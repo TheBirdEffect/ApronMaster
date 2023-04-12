@@ -1,7 +1,7 @@
-import { FormatWidth, NgSwitchCase } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { stateObservablesEnum } from 'src/app/_enums/stateObservablesEnum';
 import { AircraftTypeIdAndPosCaracteristics } from 'src/app/_models/DTOs/OrderCollectionDto';
 import { aircraftTurnarroundPreset } from 'src/app/_models/aircraftTurnarroundPreset';
 import { AircraftType } from 'src/app/_models/aircraftType';
@@ -10,6 +10,7 @@ import { position } from 'src/app/_models/position';
 import { AircraftTypesService } from 'src/app/_service/aircraft-types.service';
 import { FlightsService } from 'src/app/_service/flights.service';
 import { PositionService } from 'src/app/_service/position.service';
+import { StateService } from 'src/app/_service/state.service';
 import { TurnarroundPresetService } from 'src/app/_service/turnarround-preset.service';
 
 @Component({
@@ -21,8 +22,6 @@ export class FormCollectionOrderComponent implements OnInit {
   @Output() closeModal = new EventEmitter();
 
   collectionForm: FormGroup;
-  vehicleOffsetUpdateForm: FormGroup;
-  vehicleOffsetArray: FormArray;
 
   flights$: Observable<Flight[] | null>;
   aircraftType$: Observable<AircraftType | null>;
@@ -34,7 +33,7 @@ export class FormCollectionOrderComponent implements OnInit {
     private flightService: FlightsService,
     private positionService: PositionService,
     private aircraftTypeService: AircraftTypesService,
-    private turnarroundPresetsService: TurnarroundPresetService
+    private turnarroundPresetsService: TurnarroundPresetService,
   ) { }
 
   ngOnInit(): void {
@@ -54,16 +53,6 @@ export class FormCollectionOrderComponent implements OnInit {
       fuel: ['NULL', Validators.nullValidator],
       fuelAmmount: ['', Validators.nullValidator]
     })
-
-    this.vehicleOffsetUpdateForm = this.formBuilder.group({
-      vehicleType: ['', Validators.nullValidator],
-      TimeOffsetStart: ['', Validators.required],
-      TimeOffsetEnd: ['', Validators.required] 
-    }) as FormGroup;
-    
-    this.vehicleOffsetArray = this.formBuilder.array([
-      
-    ])
 
   }
 
@@ -109,7 +98,7 @@ export class FormCollectionOrderComponent implements OnInit {
   }
 
   onCalculate() {
-    console.log(this.collectionForm.value);
+    this.turnarroundPresetsService.SetOrderCollectionFormData(this.collectionForm.value);    
   }
 
   cancel() {

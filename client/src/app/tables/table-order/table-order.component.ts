@@ -51,7 +51,7 @@ export class TableOrderComponent implements OnInit, OnChanges {
 
   //modal
   openModal(preselector: boolean, template: TemplateRef<any>) {
-    console.log('opened');
+    //console.log('opened');
     if (preselector) {
       this.preselectorModalRef = this.modalService.show(template, this.config);
     } else {

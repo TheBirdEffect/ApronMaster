@@ -99,7 +99,7 @@ export class TableFlightComponent implements OnInit {
   transmitChosenFlightForOrders(flight: Flight) {
     this.orderService.GetOrdersOfFlight(flight).subscribe({
       next: response => {
-        console.log(response);
+        //console.log(response);
       },
       error: error => console.log(error)
       
