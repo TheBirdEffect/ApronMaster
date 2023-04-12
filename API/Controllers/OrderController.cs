@@ -102,6 +102,69 @@ namespace API.Controllers
             return Ok(newOrderDto);
         }
 
+        [HttpPost("transfer/fromVehicleOffsets")]
+        public async Task<ActionResult<ICollection<Order>>> TransferAndAddOrdersFromVehicleOffset(ICollection<TransferVehicleOffsetToOrder> data)
+        {
+            if (data != null)
+            {
+                var _data = data;
+                List<Order> newOrders = new List<Order>();
+
+                // var index = 1;
+                // foreach (var items in _data)
+                // {
+                //     Console.WriteLine($"Offset Number {index}");
+                //     Console.WriteLine("FlightId: " + items.Flight.FlightId + " FlightNo.: " + items.Flight.FlightNumber
+                //                         + " Arrival: " + items.Flight.Arrival + " Departure: " + items.Flight.Departure);
+                //     Console.WriteLine("Vehicle Type ID: " + items.VehicleTypeId);
+                //     Console.WriteLine("Time offset start: " + items.TimeOffsetStart + " Time offset end: " + items.TimeOffsetEnd);
+                //     if (items.VehicleTypeId == 9)
+                //     {
+                //         Console.WriteLine("Fuel type: " + items.FuelType + " Fuel ammount: " + items.FuelAmmount);
+                //     }
+                //     Console.WriteLine("-------------------------------------");
+                //     index++;
+                // }
+
+                foreach (var offset in _data)
+                {
+                    var newOrder = new Order
+                    {
+                        FlightId = offset.Flight.FlightId,
+                        PositionId = offset.Position.PositionId,
+                        VehicleTypeId = offset.VehicleTypeId,
+                        QtyFuel = offset.FuelAmmount
+                    };
+
+                    /**
+                    * If the TimeOffsetStart < 0, the vehicle's StartOfService is calculated by the DepartureTime minus the TimeOffset.
+                    * this is very useful when a vehicle's StartOfSerice time depends on the end of the turn
+                    * Else the TimeOffsetStart is calculated by the DepartureTime plus TimeOffsetStart
+                    **/
+                    if (offset.TimeOffsetStart < 0)
+                    {
+                        newOrder.StartOfService = offset.Flight.Departure.AddMinutes(offset.TimeOffsetStart);
+                        newOrder.EndOfService = offset.Flight.Departure.AddMinutes(offset.TimeOffsetEnd);
+                    }
+                    else
+                    {
+                        newOrder.StartOfService = offset.Flight.Arrival.AddMinutes(offset.TimeOffsetStart);
+                        newOrder.EndOfService = offset.Flight.Arrival.AddMinutes(offset.TimeOffsetEnd);
+                    }
+
+                    newOrders.Add(newOrder);
+                }
+                await this._context.AddRangeAsync(newOrders);
+                this._context.SaveChanges();
+
+                return Ok(newOrders);
+            }
+
+            return NotFound("Offset data not found!");
+
+        }
+
+
         [HttpDelete("{id}")]
         public async Task<ActionResult<Order>> DeleteOrder(int id)
         {

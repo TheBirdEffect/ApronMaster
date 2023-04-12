@@ -13,4 +13,15 @@ namespace API.DTOs
         public int FlightId { get; set; }
         public int VehicleTypeId { get; set; }
     }
+
+    public class TransferVehicleOffsetToOrder
+    {
+        public int VehicleTypeId { get; set; }
+        public int TimeOffsetStart { get; set; }
+        public int TimeOffsetEnd { get; set; }
+        public int FuelAmmount { get; set; }
+        public string FuelType { get; set; }
+        public Flight Flight { get; set; }
+        public Position Position { get; set; }
+    }
 }

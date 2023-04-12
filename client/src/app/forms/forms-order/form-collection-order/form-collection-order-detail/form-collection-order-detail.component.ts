@@ -3,8 +3,11 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { stateObservablesEnum } from 'src/app/_enums/stateObservablesEnum';
 import { OrderCollectionFormData } from 'src/app/_models/DTOs/OrderCollectionDto';
+import { Flight } from 'src/app/_models/flight';
+import { position } from 'src/app/_models/position';
 import { turnarroundVehicleTimeOffset } from 'src/app/_models/turnarroundVehicleTimeOffset';
 import { vehicleType } from 'src/app/_models/vehicleType';
+import { OrderService } from 'src/app/_service/order.service';
 import { StateService } from 'src/app/_service/state.service';
 import { TurnarroundPresetService } from 'src/app/_service/turnarround-preset.service';
 import { VehicleTimeOffsetService } from 'src/app/_service/vehicle-time-offset.service';
@@ -22,11 +25,18 @@ export class FormCollectionOrderDetailComponent implements OnInit, OnDestroy {
       tvtoId: ['', Validators.nullValidator],
       vehicleTypeId: ['', Validators.required],
       timeOffsetStart: ['', Validators.required],
-      timeOffsetEnd: ['', Validators.required]
+      timeOffsetEnd: ['', Validators.required],
+      fuelAmmount: ['', Validators.nullValidator],
+      flight: ['', Validators.nullValidator],
+      position: ['', Validators.nullValidator]
     })
   ]);
 
   vehicleArray = new Array<vehicleType>()
+  flight: Flight;
+  position: position;
+  fuelAmmount: number;
+  fuelType: string;
 
   orderCollectionFormData$: Observable<OrderCollectionFormData | null>;
   stateOffsetDataLoaded$: Observable<boolean>;
@@ -38,7 +48,8 @@ export class FormCollectionOrderDetailComponent implements OnInit, OnDestroy {
     , private turnarroundPresetsService: TurnarroundPresetService
     , private vehicleTimeOffsetService: VehicleTimeOffsetService
     , private vehicleTypeService: VehicleService
-    , private stateService: StateService) { }
+    , private stateService: StateService
+    , private orderService: OrderService) { }
 
   ngOnInit(): void {
     this.orderCollectionFormData$ = this.turnarroundPresetsService.loadOrderCollectionFormData();
@@ -54,10 +65,12 @@ export class FormCollectionOrderDetailComponent implements OnInit, OnDestroy {
     this.orderCollectionFormData$.subscribe({
       next: (response) => {
         console.log('Response: ', response);
-
+        
         if (response) {
           this.vehicleOffsetArray.clear();
           this.vehicleArray = [];
+          this.flight = response.flight;
+          this.position = response.position;          
           response.turnarroundPreset.turnarroundVehicleTimeOffsets
             .forEach((vehicleOffset: turnarroundVehicleTimeOffset, index) => {
               this.vehicleTypeService.GetVehicleType(
@@ -69,6 +82,8 @@ export class FormCollectionOrderDetailComponent implements OnInit, OnDestroy {
             })
 
           if (response.fuel !== 'NULL') {
+            this.fuelAmmount = response.fuelAmmount;
+            this.fuelType = response.fuel;
             this.vehicleTimeOffsetService.GetRefulingTimeOffset().subscribe((response) => {
               this.vehicleTypeService.GetVehicleType(
                 response.vehicleTypeId
@@ -106,7 +121,7 @@ export class FormCollectionOrderDetailComponent implements OnInit, OnDestroy {
             this.stateService.setStateObservable(
               stateObservablesEnum.ORDER_COLLECTION_TIME_OFFSET_LOADED, true
             )
-          }, 500)
+          }, 200)
         }
       }
     });
@@ -127,21 +142,39 @@ export class FormCollectionOrderDetailComponent implements OnInit, OnDestroy {
       tvtoId: ['', Validators.nullValidator],
       vehicleTypeId: ['', Validators.required],
       timeOffsetStart: ['', Validators.required],
-      timeOffsetEnd: ['', Validators.required]
+      timeOffsetEnd: ['', Validators.required],
+      fuelAmmount: ['', Validators.nullValidator],
+      fuelType: ['', Validators.nullValidator],
+      flight: ['', Validators.nullValidator],
+      position: ['', Validators.nullValidator]
     }) as FormGroup;
 
+    form.get('flight')?.setValue(this.flight);
+    form.get('position')?.setValue(this.position);
+    if(offsetData.vehicleTypeId == 9) {
+      form.get('fuelAmmount')?.setValue(this.fuelAmmount);
+      form.get('fuelType')?.setValue(this.fuelType);
+    } else {
+      form.get('fuelAmmount')?.setValue(0);
+      form.get('fuelType')?.setValue(0);
+    }
+    
     form.patchValue(offsetData);
     this.vehicleOffsetArray.push(form);
   }
 
   onSubmit() {
-    let finalVehicleOffsetArrray = new Array<turnarroundVehicleTimeOffset>();
+    let finalVehicleOffsetArrray = new Array();
     for (let offset of this.vehicleOffsetArray.controls) {
       if (offset instanceof FormGroup) {
-        let vehicleTimeOffset = new turnarroundVehicleTimeOffset();
-        vehicleTimeOffset.vehicleTypeId = offset.value.vehicleTypeId?
+        if(offset.value.vehicleTypeId){
+          finalVehicleOffsetArrray.push(offset.value);
+        }
       }
     }
+    console.log(finalVehicleOffsetArrray);    
+    this.orderService.SetOrderCollection(finalVehicleOffsetArrray)
+      .subscribe();
   }
 
 }

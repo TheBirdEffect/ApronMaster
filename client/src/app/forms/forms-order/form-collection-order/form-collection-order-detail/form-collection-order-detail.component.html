@@ -13,13 +13,13 @@
     <div *ngFor="let offset of vehicleOffsetArray.controls let i = index">
         <div [formGroup]="offset">
             <div class="row accent-grey pt-1 my-1 rounded">
-                <div class="col" *ngIf="vehicleArray.length == vehicleOffsetArray.length">
+                <div class="col-4" *ngIf="vehicleArray.length == vehicleOffsetArray.length">
                     {{vehicleArray[i].name}}
                 </div>
-                <div class="col">
+                <div class="col-sm">
                     <input type="number" class="form-control" formControlName="timeOffsetStart">
                 </div>
-                <div class="col">
+                <div class="col-sm">
                     <input type="number" class="form-control" formControlName="timeOffsetEnd">
                 </div>
             </div>

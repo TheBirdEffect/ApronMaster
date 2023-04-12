@@ -46,6 +46,14 @@ export class OrderService {
     )
   }
 
+  SetOrderCollection(offset: any) {
+    return this.http.post(this.basicApiPath + "/Order/transfer/fromVehicleOffsets", offset).pipe(
+      map( response => {
+        return response;
+      })
+    )
+  }
+
   UpdateOrder(order: order): Observable<order> {
     return this.http.post<order>(this.basicApiPath + "/order/update", order).pipe(
       map(response => {
