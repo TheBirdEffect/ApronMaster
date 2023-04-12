@@ -9,6 +9,7 @@ import { Flight } from 'src/app/_models/flight';
 import { position } from 'src/app/_models/position';
 import { AircraftTypesService } from 'src/app/_service/aircraft-types.service';
 import { FlightsService } from 'src/app/_service/flights.service';
+import { ModalService } from 'src/app/_service/modal.service';
 import { PositionService } from 'src/app/_service/position.service';
 import { StateService } from 'src/app/_service/state.service';
 import { TurnarroundPresetService } from 'src/app/_service/turnarround-preset.service';
@@ -19,7 +20,7 @@ import { TurnarroundPresetService } from 'src/app/_service/turnarround-preset.se
   styleUrls: ['./form-collection-order.component.scss']
 })
 export class FormCollectionOrderComponent implements OnInit {
-  @Output() closeModal = new EventEmitter();
+  //@Output() closeModal = new EventEmitter();
 
   collectionForm: FormGroup;
 
@@ -34,6 +35,7 @@ export class FormCollectionOrderComponent implements OnInit {
     private positionService: PositionService,
     private aircraftTypeService: AircraftTypesService,
     private turnarroundPresetsService: TurnarroundPresetService,
+    private modalService: ModalService
   ) { }
 
   ngOnInit(): void {
@@ -101,7 +103,11 @@ export class FormCollectionOrderComponent implements OnInit {
     this.turnarroundPresetsService.SetOrderCollectionFormData(this.collectionForm.value);    
   }
 
-  cancel() {
-    this.closeModal.emit(true)
+  // cancel() {
+  //   this.closeModal.emit(true)
+  // }
+  
+  closeModal() {
+    this.modalService.closeModal();
   }
 }

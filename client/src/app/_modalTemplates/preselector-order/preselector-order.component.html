@@ -15,11 +15,25 @@
             belonging flight just press the "Add single order"-Button</div>
     </div>
 </div>
+
 <div class="row">
     <div class="col">
-        <button class="btn btn-primary"  (click)="navigateToCollection(true)">Add order collection</button>
+        <button class="btn btn-primary"  (click)="openTemplateOnModal(addOrderCollectionTemplate)">Add order collection</button>
     </div>
     <div class="col">
-        <button class="btn btn-primary" (click)="navigateToCollection(false)">Add single order</button>
+        <button class="btn btn-primary" (click)="openTemplateOnModal(addSingleOrderTemplate)">Add single order</button>
     </div>
 </div>
+
+<ng-template #addOrderCollectionTemplate>
+    <div class="modal-body text-center bg-light">
+      <app-form-collection-order></app-form-collection-order>
+    </div>
+  </ng-template>
+  
+  <ng-template #addSingleOrderTemplate>
+    <div class="modal-body text-center bg-light">
+      <app-form-single-order></app-form-single-order>
+    </div>
+  </ng-template>
+  

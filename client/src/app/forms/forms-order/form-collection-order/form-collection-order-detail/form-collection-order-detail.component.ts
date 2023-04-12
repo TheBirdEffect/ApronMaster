@@ -7,6 +7,7 @@ import { Flight } from 'src/app/_models/flight';
 import { position } from 'src/app/_models/position';
 import { turnarroundVehicleTimeOffset } from 'src/app/_models/turnarroundVehicleTimeOffset';
 import { vehicleType } from 'src/app/_models/vehicleType';
+import { ModalService } from 'src/app/_service/modal.service';
 import { OrderService } from 'src/app/_service/order.service';
 import { StateService } from 'src/app/_service/state.service';
 import { TurnarroundPresetService } from 'src/app/_service/turnarround-preset.service';
@@ -49,7 +50,8 @@ export class FormCollectionOrderDetailComponent implements OnInit, OnDestroy {
     , private vehicleTimeOffsetService: VehicleTimeOffsetService
     , private vehicleTypeService: VehicleService
     , private stateService: StateService
-    , private orderService: OrderService) { }
+    , private orderService: OrderService
+    , private modalService: ModalService) { }
 
   ngOnInit(): void {
     this.orderCollectionFormData$ = this.turnarroundPresetsService.loadOrderCollectionFormData();
@@ -175,6 +177,7 @@ export class FormCollectionOrderDetailComponent implements OnInit, OnDestroy {
     console.log(finalVehicleOffsetArrray);    
     this.orderService.SetOrderCollection(finalVehicleOffsetArrray)
       .subscribe();
+    this.modalService.closeModal();
   }
 
 }
