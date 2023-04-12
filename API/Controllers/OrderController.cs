@@ -110,22 +110,6 @@ namespace API.Controllers
                 var _data = data;
                 List<Order> newOrders = new List<Order>();
 
-                // var index = 1;
-                // foreach (var items in _data)
-                // {
-                //     Console.WriteLine($"Offset Number {index}");
-                //     Console.WriteLine("FlightId: " + items.Flight.FlightId + " FlightNo.: " + items.Flight.FlightNumber
-                //                         + " Arrival: " + items.Flight.Arrival + " Departure: " + items.Flight.Departure);
-                //     Console.WriteLine("Vehicle Type ID: " + items.VehicleTypeId);
-                //     Console.WriteLine("Time offset start: " + items.TimeOffsetStart + " Time offset end: " + items.TimeOffsetEnd);
-                //     if (items.VehicleTypeId == 9)
-                //     {
-                //         Console.WriteLine("Fuel type: " + items.FuelType + " Fuel ammount: " + items.FuelAmmount);
-                //     }
-                //     Console.WriteLine("-------------------------------------");
-                //     index++;
-                // }
-
                 foreach (var offset in _data)
                 {
                     var newOrder = new Order
@@ -155,7 +139,15 @@ namespace API.Controllers
                     newOrders.Add(newOrder);
                 }
                 await this._context.AddRangeAsync(newOrders);
+
                 this._context.SaveChanges();
+
+                foreach (var order in newOrders)
+                {
+                    order.Flight = await _context.Flights.FindAsync(order.FlightId);
+                    order.Position = await _context.Positions.FindAsync(order.PositionId);
+                    order.VehicleType = await _context.VehicleTypes.FindAsync(order.VehicleTypeId);
+                }
 
                 return Ok(newOrders);
             }

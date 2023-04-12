@@ -3,6 +3,10 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { Flight } from '../_models/flight';
 import { order } from '../_models/order';
+import { FlightsService } from './flights.service';
+import { vehicleType } from '../_models/vehicleType';
+import { VehicleService } from './vehicle.service';
+import { PositionService } from './position.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +19,10 @@ export class OrderService {
   private _ordersOfFlight = new BehaviorSubject<order[] | null>(null);
   currentOrdersOfFlight$ = this._ordersOfFlight.asObservable();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient
+              , private flightService: FlightsService
+              , private vehicleTypeService: VehicleService
+              , private positionService: PositionService) { }
 
   GetOrders():Observable<order[]> {
     return this.http.get<order[]>(this.basicApiPath + "/order").pipe(
@@ -46,9 +53,10 @@ export class OrderService {
     )
   }
 
-  SetOrderCollection(offset: any) {
-    return this.http.post(this.basicApiPath + "/Order/transfer/fromVehicleOffsets", offset).pipe(
+  SetOrderCollection(offset: any): Observable<order[]> {
+    return this.http.post<order[]>(this.basicApiPath + "/Order/transfer/fromVehicleOffsets", offset).pipe(
       map( response => {
+        this.AddCollectionToObservableArray(response);
         return response;
       })
     )
@@ -85,6 +93,16 @@ export class OrderService {
       orders.push(order)
     }
     this._ordersSource.next(orders);
+  }
+
+  AddCollectionToObservableArray(orders: order[]) {
+    const currentOrders = this._ordersOfFlight.getValue();
+    if(currentOrders != null) {
+      orders.forEach(order => {
+        currentOrders.push(order);
+      })
+      this._ordersOfFlight.next(currentOrders);
+    }
   }
   /*
     Getter and setter to set BehaviorSubjects
