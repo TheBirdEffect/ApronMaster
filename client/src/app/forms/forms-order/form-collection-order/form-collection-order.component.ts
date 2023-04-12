@@ -86,6 +86,7 @@ export class FormCollectionOrderComponent implements OnInit {
     if (aircraftType) {
       aTandPos.aircraftTypeId = aircraftType.aircraftTypeId;
       aTandPos.utilizeGangways = position.isGate;
+      //aTandPos.aircraftType = aircraftType; TODO: UNCOMMENT if database table TEMPLATES extended by unitLoad option
       this.turnarroundPresetsService
         .GetTempForAircraftTypeFilteredByPosCharacteristics(aTandPos).subscribe({
           next: response => console.log(response)
@@ -93,19 +94,9 @@ export class FormCollectionOrderComponent implements OnInit {
     }
   }
 
-
-
-  onSubmit(form: FormGroup) {
-
-  }
-
   onCalculate() {
     this.turnarroundPresetsService.SetOrderCollectionFormData(this.collectionForm.value);    
   }
-
-  // cancel() {
-  //   this.closeModal.emit(true)
-  // }
   
   closeModal() {
     this.modalService.closeModal();

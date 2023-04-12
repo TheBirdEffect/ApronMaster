@@ -53,11 +53,6 @@ export class FormSingleOrderComponent implements OnInit {
     this.flight$ = this.flightService.loadFlight();
   }
 
-  onSubmit() {
-    console.log(this.formArray.value);
-    console.log(this.formArray.valid);
-  }
-
   newSingleForm() {
     const form = this.formBuilder.group({
       flight: ['', Validators.required],
@@ -70,9 +65,17 @@ export class FormSingleOrderComponent implements OnInit {
     }) as FormGroup
     this.formArray.push(form);
   }
+  
+  onSubmit() {
+    // let finalFormArray = new Array();
+    // for(let order of this.formArray.controls) {
+    //   if(order instanceof FormGroup) {
 
-  updateAircraftTypeByFlight() {
-
+    //   }
+    // }
+    
+    console.log(this.formArray.value);
+    console.log(this.formArray.valid);
   }
   
   closeModal() {
