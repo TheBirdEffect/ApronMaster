@@ -6,6 +6,8 @@ import { Flight } from 'src/app/_models/flight';
 import { position } from 'src/app/_models/position';
 import { vehicleType } from 'src/app/_models/vehicleType';
 import { FlightsService } from 'src/app/_service/flights.service';
+import { ModalService } from 'src/app/_service/modal.service';
+import { OrderService } from 'src/app/_service/order.service';
 import { PositionService } from 'src/app/_service/position.service';
 import { VehicleService } from 'src/app/_service/vehicle.service';
 
@@ -15,7 +17,6 @@ import { VehicleService } from 'src/app/_service/vehicle.service';
   styleUrls: ['./form-single-order.component.scss']
 })
 export class FormSingleOrderComponent implements OnInit {
-  @Output() closeModal = new EventEmitter();
 
   formArray = new FormArray([
     this.formBuilder.group({
@@ -40,6 +41,8 @@ export class FormSingleOrderComponent implements OnInit {
     , private vehicleTypeService: VehicleService
     , private positionService: PositionService
     , private formBuilder: FormBuilder
+    , private modalService: ModalService
+    , private orderService: OrderService
   ) { }
 
   ngOnInit(): void {
@@ -50,11 +53,6 @@ export class FormSingleOrderComponent implements OnInit {
     this.flights$ = this.flightService.loadFlights();
     this.positions$ = this.positionService.loadPositions();
     this.flight$ = this.flightService.loadFlight();
-  }
-
-  onSubmit() {
-    console.log(this.formArray.value);
-    console.log(this.formArray.valid);
   }
 
   newSingleForm() {
@@ -69,13 +67,21 @@ export class FormSingleOrderComponent implements OnInit {
     }) as FormGroup
     this.formArray.push(form);
   }
-
-  updateAircraftTypeByFlight() {
-
+  
+  onSubmit() {
+    let finalFormArray = new Array();
+    for(let order of this.formArray.controls) {
+      if(order instanceof FormGroup) {
+        finalFormArray.push(order.value);
+      }
+    }
+    this.orderService.SetSingleOrders(finalFormArray)
+      .subscribe();
+    console.log(finalFormArray);
   }
-
-  cancel() {
-    this.closeModal.emit(true)
+  
+  closeModal() {
+    this.modalService.closeModal();
   }
 
 }

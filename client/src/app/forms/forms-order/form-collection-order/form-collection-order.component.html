@@ -3,7 +3,7 @@
 </div>
 <hr>
 <div class="container mb-3">
-    <form [formGroup]="collectionForm" (ngSubmit)="onSubmit(collectionForm)">
+    <form [formGroup]="collectionForm">
         <div class="row accent-grey pt-1 my-1 rounded">
             <div class="col">
                 <label for="setFlight" class="form-label">
@@ -139,7 +139,10 @@
         <div class="mt-3">
             <button class="btn btn-outline-success me-2" [disabled]="collectionForm.invalid" name="btnCalculate"
                 type="button" (click)="onCalculate()">Calculate</button>
-            <button class="btn btn-danger" type="button" name="btnCancel" (click)="cancel()">Cancel</button>
+            <button class="btn btn-danger" type="button" name="btnCancel" (click)="closeModal()">Cancel</button>
         </div>
     </form>
+    <div class="mt-3">
+        <app-form-collection-order-detail></app-form-collection-order-detail>
+    </div>
 </div>

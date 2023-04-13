@@ -3,11 +3,13 @@
     <app-table-orders-group ></app-table-orders-group>
   </div>
   <div class="col-7">
-    <app-table-orders-detail (toggleModalState)="openModal(true, addOrderPreselection)"></app-table-orders-detail>
+    <!-- <app-table-orders-detail (toggleModalState)="openModal(true, addOrderPreselection)"></app-table-orders-detail> -->
+    <app-table-orders-detail (toggleModalState)="openPreselectionModal(addOrderPreselection)"></app-table-orders-detail>
+
   </div>
 </div>
 
-<ng-template #addOrderPreselection>
+<!-- <ng-template #addOrderPreselection>
   <div class="modal-body text-center bg-light">
     <app-preselector-order 
     (collectionSelected)="preselectRouter(
@@ -15,18 +17,10 @@
       )">
   </app-preselector-order>
   </div>
-</ng-template>
+</ng-template> -->
 
-<ng-template #addOrderCollectionTemplate>
+<ng-template #addOrderPreselection>
   <div class="modal-body text-center bg-light">
-    <app-form-collection-order (closeModal)="closeModal()"></app-form-collection-order>
+    <app-preselector-order></app-preselector-order>
   </div>
 </ng-template>
-
-<ng-template #addSingleOrderTemplate>
-  <div class="modal-body text-center bg-light">
-    <app-form-single-order (closeModal)="closeModal()"></app-form-single-order>
-  </div>
-</ng-template>
-
-

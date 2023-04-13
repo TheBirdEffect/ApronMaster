@@ -6,5 +6,5 @@ export class aircraftTurnarroundPreset
     name: string;
     utilizeGangways: boolean;
     descriptionNotes: string;
-    turnarroundVehicleOffsets: turnarroundVehicleTimeOffset[]; 
+    turnarroundVehicleTimeOffsets: turnarroundVehicleTimeOffset[]; 
 }

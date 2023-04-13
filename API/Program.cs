@@ -8,7 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers()
-        .AddNewtonsoftJson();
+        .AddNewtonsoftJson(options => {
+            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+        });
 
 //Add Database Context
 builder.Services.AddDbContext<DataContext>(opt => 

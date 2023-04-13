@@ -30,7 +30,7 @@ export class TableOrdersDetailComponent {
       this.className = "active";
     }
 
-    console.log(this.className);
+    //console.log(this.className);
     
   }
 

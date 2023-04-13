@@ -58,8 +58,8 @@ namespace API.Controllers
             return new TurnarroundVehicleTimeOffset
             {
                 VehicleTypeId = 1,
-                TimeOffsetStart = 40,
-                TimeOffsetEnd = 60  
+                TimeOffsetStart = -20,
+                TimeOffsetEnd = -5  
             };
         }
     }

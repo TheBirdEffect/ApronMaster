@@ -1,7 +1,7 @@
-import { FormatWidth, NgSwitchCase } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { stateObservablesEnum } from 'src/app/_enums/stateObservablesEnum';
 import { AircraftTypeIdAndPosCaracteristics } from 'src/app/_models/DTOs/OrderCollectionDto';
 import { aircraftTurnarroundPreset } from 'src/app/_models/aircraftTurnarroundPreset';
 import { AircraftType } from 'src/app/_models/aircraftType';
@@ -9,7 +9,9 @@ import { Flight } from 'src/app/_models/flight';
 import { position } from 'src/app/_models/position';
 import { AircraftTypesService } from 'src/app/_service/aircraft-types.service';
 import { FlightsService } from 'src/app/_service/flights.service';
+import { ModalService } from 'src/app/_service/modal.service';
 import { PositionService } from 'src/app/_service/position.service';
+import { StateService } from 'src/app/_service/state.service';
 import { TurnarroundPresetService } from 'src/app/_service/turnarround-preset.service';
 
 @Component({
@@ -18,11 +20,9 @@ import { TurnarroundPresetService } from 'src/app/_service/turnarround-preset.se
   styleUrls: ['./form-collection-order.component.scss']
 })
 export class FormCollectionOrderComponent implements OnInit {
-  @Output() closeModal = new EventEmitter();
+  //@Output() closeModal = new EventEmitter();
 
   collectionForm: FormGroup;
-  vehicleOffsetUpdateForm: FormGroup;
-  vehicleOffsetArray: FormArray;
 
   flights$: Observable<Flight[] | null>;
   aircraftType$: Observable<AircraftType | null>;
@@ -34,7 +34,8 @@ export class FormCollectionOrderComponent implements OnInit {
     private flightService: FlightsService,
     private positionService: PositionService,
     private aircraftTypeService: AircraftTypesService,
-    private turnarroundPresetsService: TurnarroundPresetService
+    private turnarroundPresetsService: TurnarroundPresetService,
+    private modalService: ModalService
   ) { }
 
   ngOnInit(): void {
@@ -54,16 +55,6 @@ export class FormCollectionOrderComponent implements OnInit {
       fuel: ['NULL', Validators.nullValidator],
       fuelAmmount: ['', Validators.nullValidator]
     })
-
-    this.vehicleOffsetUpdateForm = this.formBuilder.group({
-      vehicleType: ['', Validators.nullValidator],
-      TimeOffsetStart: ['', Validators.required],
-      TimeOffsetEnd: ['', Validators.required] 
-    }) as FormGroup;
-    
-    this.vehicleOffsetArray = this.formBuilder.array([
-      
-    ])
 
   }
 
@@ -95,6 +86,7 @@ export class FormCollectionOrderComponent implements OnInit {
     if (aircraftType) {
       aTandPos.aircraftTypeId = aircraftType.aircraftTypeId;
       aTandPos.utilizeGangways = position.isGate;
+      //aTandPos.aircraftType = aircraftType; TODO: UNCOMMENT if database table TEMPLATES extended by unitLoad option
       this.turnarroundPresetsService
         .GetTempForAircraftTypeFilteredByPosCharacteristics(aTandPos).subscribe({
           next: response => console.log(response)
@@ -102,17 +94,11 @@ export class FormCollectionOrderComponent implements OnInit {
     }
   }
 
-
-
-  onSubmit(form: FormGroup) {
-
-  }
-
   onCalculate() {
-    console.log(this.collectionForm.value);
+    this.turnarroundPresetsService.SetOrderCollectionFormData(this.collectionForm.value);    
   }
-
-  cancel() {
-    this.closeModal.emit(true)
+  
+  closeModal() {
+    this.modalService.closeModal();
   }
 }

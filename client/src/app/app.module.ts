@@ -31,6 +31,7 @@ import { AircraftsTabComponent } from './tabs/aircrafts-tab/aircrafts-tab.compon
 import { PreselectorOrderComponent } from './_modalTemplates/preselector-order/preselector-order.component';
 import { FormCollectionOrderComponent } from './forms/forms-order/form-collection-order/form-collection-order.component';
 import { FormSingleOrderComponent } from './forms/forms-order/form-single-order/form-single-order.component';
+import { FormCollectionOrderDetailComponent } from './forms/forms-order/form-collection-order/form-collection-order-detail/form-collection-order-detail.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { FormSingleOrderComponent } from './forms/forms-order/form-single-order/
     PreselectorOrderComponent,
     FormCollectionOrderComponent,
     FormSingleOrderComponent,
+    FormCollectionOrderDetailComponent,
   ],
   imports: [
     BrowserModule,
