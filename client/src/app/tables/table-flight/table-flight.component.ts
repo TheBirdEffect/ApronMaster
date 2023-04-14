@@ -15,6 +15,7 @@ export class TableFlightComponent implements OnInit {
   @Input() editMode = true;
 
   title = 'flights'
+  rowClicked: any;
 
   registerMode = false;
   modalRef?: BsModalRef;
@@ -94,6 +95,18 @@ export class TableFlightComponent implements OnInit {
   cancelFormMode(event: boolean) {
     this.registerMode = event;
     this.closeModal()
+  }
+
+  changeRowColor(index: any) {
+    if(this.rowClicked === index)
+    {
+      this.rowClicked = -1;
+    } else {
+      this.rowClicked = index;
+    }
+    console.log('Index: ', index);
+    console.log('RowClicked: ', this.rowClicked);
+    
   }
 
   transmitChosenFlightForOrders(flight: Flight) {
