@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { stateObservablesEnum } from 'src/app/_enums/stateObservablesEnum';
-import { OrderCollectionFormData } from 'src/app/_models/DTOs/OrderCollectionDto';
+import { OrderCollectionFormData, vehicleOrderTimeSet } from 'src/app/_models/DTOs/OrderCollectionDto';
 import { Flight } from 'src/app/_models/flight';
 import { position } from 'src/app/_models/position';
 import { turnarroundVehicleTimeOffset } from 'src/app/_models/turnarroundVehicleTimeOffset';
@@ -25,10 +25,10 @@ export class FormCollectionOrderDetailComponent implements OnInit, OnDestroy {
     this.formBuilder.group({
       tvtoId: ['', Validators.nullValidator],
       vehicleTypeId: ['', Validators.required],
-      timeOffsetStart: ['', Validators.required],
-      timeOffsetEnd: ['', Validators.required],
+      timeOffsetStart: [0, Validators.required],
+      timeOffsetEnd: [0, Validators.required],
       fuelAmmount: ['', Validators.nullValidator],
-      flight: ['', Validators.nullValidator],
+      flight: [new Flight(), Validators.nullValidator],
       position: ['', Validators.nullValidator]
     })
   ]);
@@ -41,7 +41,8 @@ export class FormCollectionOrderDetailComponent implements OnInit, OnDestroy {
 
   orderCollectionFormData$: Observable<OrderCollectionFormData | null>;
   stateOffsetDataLoaded$: Observable<boolean>;
-  arrivalTime$: Observable<OrderCollectionFormData | null>;
+
+
 
   __orderCollectionFormData: Subscription;
   __stateOffsetData: Subscription;
@@ -67,6 +68,42 @@ export class FormCollectionOrderDetailComponent implements OnInit, OnDestroy {
     //this.vehicleOffsetArray = this.formBuilder.array([])
 
     //Get orderCollectionData from 'form-collection-order-component after pressing generate button
+    this.generateOffsetList();
+  }
+
+  ngOnDestroy(): void {
+    this.vehicleOffsetArray.clear();
+    this.stateService.setStateObservable(
+      stateObservablesEnum.ORDER_COLLECTION_TIME_OFFSET_LOADED, false
+    )
+    this.turnarroundPresetsService.ClearOrderCollectionFormData();
+    this.__orderCollectionFormData.unsubscribe;
+    this.__stateOffsetData.unsubscribe;
+  }
+
+  detectChange(index: any) {
+    let flight = new Flight();
+    let timeOffsetStart : number;
+    let timeOffsetEnd : number;
+
+    flight = this.vehicleOffsetArray.at(index).value.flight!;
+    let arrival = flight.arrival as Date;
+    let departure = flight.departure as Date;
+
+    //Convert UNIX DateTime to TypeScript DateTime Object
+    const arrivalTime = new Date(arrival);
+    const departureTime = new Date(departure);
+
+    timeOffsetStart = this.vehicleOffsetArray.at(index).value.timeOffsetStart!;
+    timeOffsetEnd = this.vehicleOffsetArray.at(index).value.timeOffsetEnd!;
+
+    arrivalTime.setMinutes(arrivalTime.getMinutes() + timeOffsetStart);
+    departureTime.setMinutes(departureTime.getMinutes() + timeOffsetEnd);
+
+    //show departure and arrival time to the order it belongs anyway!!!
+  }
+
+  generateOffsetList() {
     this.orderCollectionFormData$.subscribe({
       next: (response) => {
         console.log('Response: ', response);
@@ -132,16 +169,6 @@ export class FormCollectionOrderDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
-    this.vehicleOffsetArray.clear();
-    this.stateService.setStateObservable(
-      stateObservablesEnum.ORDER_COLLECTION_TIME_OFFSET_LOADED, false
-    )
-    this.turnarroundPresetsService.ClearOrderCollectionFormData();
-    this.__orderCollectionFormData.unsubscribe;
-    this.__stateOffsetData.unsubscribe;
-  }
-
   newVehicleOffsetForm(offsetData: turnarroundVehicleTimeOffset) {
     let form = this.formBuilder.group({
       tvtoId: ['', Validators.nullValidator],
@@ -167,6 +194,8 @@ export class FormCollectionOrderDetailComponent implements OnInit, OnDestroy {
     form.patchValue(offsetData);
     this.vehicleOffsetArray.push(form);
   }
+
+  
 
   onSubmit() {
     let finalVehicleOffsetArrray = new Array();

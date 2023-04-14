@@ -20,3 +20,8 @@ export class OrderCollectionFormData {
     fuel: string;
     fuelAmmount: number;
 }
+
+export class vehicleOrderTimeSet {
+    arrivalTime: Date;
+    departureTime: Date;
+}

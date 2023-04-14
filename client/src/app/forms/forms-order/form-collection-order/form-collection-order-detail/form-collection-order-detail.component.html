@@ -17,13 +17,13 @@
                     {{vehicleArray[i].name}}
                 </div>
                 <div class="col-sm">
-                    <input type="number" class="form-control" formControlName="timeOffsetStart">
+                    <input type="number" class="form-control" formControlName="timeOffsetStart" (ngModelChange)="detectChange(i)">
                     <div *ngIf="orderCollectionFormData$ | async">
                         {{(orderCollectionFormData$ | async)?.flight?.arrival | date:'dd. MMM yyyy HH:mm' }}
                     </div>
                 </div>
                 <div class="col-sm">
-                    <input type="number" class="form-control" formControlName="timeOffsetEnd">
+                    <input type="number" class="form-control" formControlName="timeOffsetEnd" (ngModelChange)="detectChange(i)">
                     <div *ngIf="orderCollectionFormData$ | async">
                         {{(orderCollectionFormData$ | async)?.flight?.departure | date:'dd. MMM yyyy HH:mm' }}
                     </div>
