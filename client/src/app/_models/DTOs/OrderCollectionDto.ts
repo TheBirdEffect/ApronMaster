@@ -22,6 +22,6 @@ export class OrderCollectionFormData {
 }
 
 export class vehicleOrderTimeSet {
-    arrivalTime: Date;
-    departureTime: Date;
+    startTime: Date;
+    endTime: Date;
 }

@@ -27,6 +27,8 @@ export class FormCollectionOrderDetailComponent implements OnInit, OnDestroy {
       vehicleTypeId: ['', Validators.required],
       timeOffsetStart: [0, Validators.required],
       timeOffsetEnd: [0, Validators.required],
+      timeStart: [new Date(), Validators.nullValidator],
+      timeEnd: [new Date(), Validators.nullValidator],
       fuelAmmount: ['', Validators.nullValidator],
       flight: [new Flight(), Validators.nullValidator],
       position: ['', Validators.nullValidator]
@@ -81,26 +83,30 @@ export class FormCollectionOrderDetailComponent implements OnInit, OnDestroy {
     this.__stateOffsetData.unsubscribe;
   }
 
-  detectChange(index: any) {
+  detectChange(form: FormGroup, index: any) {
     let flight = new Flight();
-    let timeOffsetStart : number;
-    let timeOffsetEnd : number;
+    flight = form.get('flight')?.value
 
-    flight = this.vehicleOffsetArray.at(index).value.flight!;
-    let arrival = flight.arrival as Date;
-    let departure = flight.departure as Date;
+    let latestTimeStart = new Date(flight.arrival) ;
+    let latestTimeEnd = new Date(flight.departure);
 
-    //Convert UNIX DateTime to TypeScript DateTime Object
-    const arrivalTime = new Date(arrival);
-    const departureTime = new Date(departure);
+    let timeOffsetStart = form.get('timeOffsetStart')?.value as number;
+    let timeOffsetEnd = form.get('timeOffsetEnd')?.value as number;
 
-    timeOffsetStart = this.vehicleOffsetArray.at(index).value.timeOffsetStart!;
-    timeOffsetEnd = this.vehicleOffsetArray.at(index).value.timeOffsetEnd!;
+    let currentTimeStart = latestTimeStart.setMinutes(
+      latestTimeStart.getMinutes() + timeOffsetStart
+    )
 
-    arrivalTime.setMinutes(arrivalTime.getMinutes() + timeOffsetStart);
-    departureTime.setMinutes(departureTime.getMinutes() + timeOffsetEnd);
+    let currentTimeEnd = latestTimeStart.setMinutes(
+      (latestTimeStart.getMinutes() + timeOffsetEnd) - timeOffsetStart
+    )
 
-    //show departure and arrival time to the order it belongs anyway!!!
+    const returnedStart = new Date(currentTimeStart) 
+    const returnedEnd = new Date(currentTimeEnd) 
+
+    let newForm = this.vehicleOffsetArray.at(index);
+    newForm?.get('timeStart')?.setValue(returnedStart);
+    newForm?.get('timeEnd')?.setValue(returnedEnd);
   }
 
   generateOffsetList() {
@@ -169,12 +175,37 @@ export class FormCollectionOrderDetailComponent implements OnInit, OnDestroy {
     });
   }
 
+  setStartAndEndTime(givenFlight: Flight, timeOffsetStart: number, timeOffsetEnd: number): vehicleOrderTimeSet {
+    let flight = new Flight();
+    let timeSet = new vehicleOrderTimeSet();
+
+    flight = givenFlight;
+    let arrival = flight.arrival as Date;
+
+    //Convert UNIX DateTime to TypeScript DateTime Object
+    const timeStart = new Date(arrival);
+    const timeEnd = new Date(arrival);
+
+    timeOffsetStart = timeOffsetStart
+    timeOffsetEnd = timeOffsetEnd;
+
+    timeStart.setMinutes(timeStart.getMinutes() + timeOffsetStart);
+    timeEnd.setMinutes(timeStart.getMinutes() + timeOffsetEnd);
+
+    timeSet.startTime = timeStart;
+    timeSet.endTime = timeEnd;
+
+    return timeSet;
+  }
+
   newVehicleOffsetForm(offsetData: turnarroundVehicleTimeOffset) {
     let form = this.formBuilder.group({
       tvtoId: ['', Validators.nullValidator],
       vehicleTypeId: ['', Validators.required],
       timeOffsetStart: ['', Validators.required],
       timeOffsetEnd: ['', Validators.required],
+      timeStart: [new Date(), Validators.nullValidator],
+      timeEnd: [new Date(), Validators.nullValidator],
       fuelAmmount: ['', Validators.nullValidator],
       fuelType: ['', Validators.nullValidator],
       flight: ['', Validators.nullValidator],
@@ -190,12 +221,26 @@ export class FormCollectionOrderDetailComponent implements OnInit, OnDestroy {
       form.get('fuelAmmount')?.setValue(0);
       form.get('fuelType')?.setValue(0);
     }
+
+    // this.setStartAndEndTime(
+    //   form.get('flight')?.value
+    //   , form.get('timeOffsetStart')?.value
+    //   , form.get('timeOffsetEnd')?.value 
+    //   )
+
+    let timeSets = this.setStartAndEndTime( 
+      this.flight
+      , offsetData.timeOffsetStart
+      , offsetData.timeOffsetEnd
+    );
+
+    form.get('timeStart')?.setValue(timeSets.startTime);
+    form.get('timeEnd')?.setValue(timeSets.endTime);
     
     form.patchValue(offsetData);
+    
     this.vehicleOffsetArray.push(form);
   }
-
-  
 
   onSubmit() {
     let finalVehicleOffsetArrray = new Array();
