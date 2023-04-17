@@ -117,10 +117,10 @@ namespace API.Controllers
                         FlightId = singleOrder.flight.FlightId,
                         PositionId = singleOrder.position.PositionId,
                         VehicleTypeId = singleOrder.vehicleType.VehicleTypeId,
+                        fuelType = singleOrder.fuel,
                         QtyFuel = (int)singleOrder.fuelAmmount,
                         StartOfService = singleOrder.startOfService,
                         EndOfService = singleOrder.endOfService
-                        //TODO: Add property for fuelType if database is extended 
                     };
                     newOrders.Add(newOrder);
                 }
@@ -159,6 +159,7 @@ namespace API.Controllers
                         FlightId = offset.Flight.FlightId,
                         PositionId = offset.Position.PositionId,
                         VehicleTypeId = offset.VehicleTypeId,
+                        fuelType = offset.FuelType,
                         QtyFuel = offset.FuelAmmount
                     };
 

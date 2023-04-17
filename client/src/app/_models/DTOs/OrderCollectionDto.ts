@@ -6,7 +6,6 @@ import { position } from "../position";
 export class AircraftTypeIdAndPosCaracteristics
 {
     aircraftTypeId: number;
-    //aircraftType: AircraftType; TODO: UNCOMMENT if database table TEMPLATES extended by unitLoad option
     utilizeGangways: boolean;
 }
 

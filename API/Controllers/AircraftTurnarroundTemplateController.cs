@@ -62,7 +62,6 @@ namespace API.Controllers
                               from templates in __templates.DefaultIfEmpty()
 
                               where att.AircraftTypeId == collection.aircraftTypeId
-                              //TODO: Insert WHERE clause to filter templates by unitLoad-option
                               && templates.utilizeGangways == collection.utilizeGangways
 
                               select new AircraftTurnarroundPreset
