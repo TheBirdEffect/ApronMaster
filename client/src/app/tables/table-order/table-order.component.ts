@@ -2,7 +2,9 @@ import { Component, OnChanges, OnInit, SimpleChanges, TemplateRef } from '@angul
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Observable } from 'rxjs';
 import { stateObservablesEnum } from 'src/app/_enums/stateObservablesEnum';
+import { order } from 'src/app/_models/order';
 import { ModalService } from 'src/app/_service/modal.service';
+import { OrderService } from 'src/app/_service/order.service';
 import { StateService } from 'src/app/_service/state.service';
 
 @Component({
@@ -11,10 +13,12 @@ import { StateService } from 'src/app/_service/state.service';
   styleUrls: ['./table-order.component.scss'],
 })
 export class TableOrderComponent implements OnInit, OnChanges {
+  ordersOfFlight$: Observable<order[] | null>;
 
   constructor(private modalService: BsModalService
     , private stateService: StateService
-    , private customModalService: ModalService) {
+    , private customModalService: ModalService
+    , public orderService: OrderService) {
   }
 
 
@@ -33,6 +37,8 @@ export class TableOrderComponent implements OnInit, OnChanges {
     this.stateService.getStateObservable(
       stateObservablesEnum.ORDER_DETAIL_PRESELECTOR_IS_OPEN
     ).subscribe(response => this.modalIsOpen = response);
+
+    this.ordersOfFlight$ = this.orderService.loadOrdersOfFlight();
   }
 
   ngOnChanges(changes: SimpleChanges): void {

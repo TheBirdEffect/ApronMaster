@@ -5,19 +5,11 @@
   <div class="col-7">
     <!-- <app-table-orders-detail (toggleModalState)="openModal(true, addOrderPreselection)"></app-table-orders-detail> -->
     <app-table-orders-detail (toggleModalState)="openPreselectionModal(addOrderPreselection)"></app-table-orders-detail>
-
+    <p class="text-center text-secondary" *ngIf="!(ordersOfFlight$ | async)">
+      <b>Please choose any flight to display its orders</b>
+    </p>
   </div>
 </div>
-
-<!-- <ng-template #addOrderPreselection>
-  <div class="modal-body text-center bg-light">
-    <app-preselector-order 
-    (collectionSelected)="preselectRouter(
-      $event, addOrderCollectionTemplate, addSingleOrderTemplate
-      )">
-  </app-preselector-order>
-  </div>
-</ng-template> -->
 
 <ng-template #addOrderPreselection>
   <div class="modal-body text-center bg-light">
