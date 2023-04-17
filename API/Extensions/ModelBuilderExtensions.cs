@@ -190,6 +190,7 @@ namespace API.Data.Migrations
                     OrderId = 8,
                     StartOfService = new DateTime(2023, 04, 18, 12, 03, 00),
                     EndOfService = new DateTime(2023, 04, 18, 12, 18, 00),
+                    fuelType = "JetA1",
                     QtyFuel = 12000,
                     PositionId = 3,
                     FlightId = 1,
@@ -274,6 +275,7 @@ namespace API.Data.Migrations
                     OrderId = 17,
                     StartOfService = new DateTime(2023, 04, 18, 14, 00, 00),
                     EndOfService = new DateTime(2023, 04, 18, 14, 20, 00),
+                    fuelType = "JetA1",
                     QtyFuel = 30000,
                     PositionId = 11,
                     FlightId = 2,
@@ -358,6 +360,7 @@ namespace API.Data.Migrations
                     OrderId = 26,
                     StartOfService = new DateTime(2023, 04, 18, 14, 32, 00),
                     EndOfService = new DateTime(2023, 04, 18, 14, 45, 00),
+                    fuelType = "JetA1",
                     QtyFuel = 15000,
                     PositionId = 3,
                     FlightId = 3,
@@ -379,34 +382,60 @@ namespace API.Data.Migrations
                     TemplateId = 1,
                     Name = "A3x / 37x, PAX < 100 @Gate",
                     utilizeGangways = true,
+                    hasUnitLoadOption = false,
                     DescriptionNotes = "Aircraft turnarrund preset for all Aircrafts of the Airbus A3x series and all Boeing 73x Series. This preset is used for turnarounds that utilize gangways for boarding LESS than 100 passengers.",
                 },
                 new AircraftTurnarroundPreset {
                     TemplateId = 2,
                     Name = "A3x / 37x, PAX > 100 @Gate",
                     utilizeGangways = true,
+                    hasUnitLoadOption = false,
                     DescriptionNotes = "Aircraft turnarrund preset for all Aircrafts of the Airbus A3x series and all Boeing 73x Series. This preset is used for turnarounds that utilize gangways for boarding MORE than 100 passengers.",
                 },
                 new AircraftTurnarroundPreset {
                     TemplateId = 3,
                     Name = "A3x / 37x, PAX > 100 NOT @Gate",
                     utilizeGangways = false,
+                    hasUnitLoadOption = false,
                     DescriptionNotes = "Aircraft turnarrund preset for all Aircrafts of the Airbus A3x series and all Boeing 73x Series. This preset is NOT used for turnarounds that utilize gangways for boarding MORE than 100 passengers.",
                 },
                 new AircraftTurnarroundPreset {
                     TemplateId = 4,
                     Name = "ATR-42/-72/-82/-92 NOT @Gate",
                     utilizeGangways = false,
+                    hasUnitLoadOption = false,
                     DescriptionNotes = "Aircraft turnarrund preset for all Aircrafts of the ATR Manufacturer. This preset is NOT used for turnarounds that utilize gangways for boarding.",
                 },
                 new AircraftTurnarroundPreset {
                     TemplateId = 5,
                     Name = "Dash-Q8",
                     utilizeGangways = false,
+                    hasUnitLoadOption = false,
                     DescriptionNotes = "Aircraft turnarrund preset for all Aircrafts De Havilland Dash-Q8 without unit load system. This preset is not used for turnarounds that utilize gangways for boarding.",
+                },
+                new AircraftTurnarroundPreset {
+                    TemplateId = 100,
+                    Name = "A3x / 37x, PAX < 100 @Gate",
+                    utilizeGangways = true,
+                    hasUnitLoadOption = true,
+                    DescriptionNotes = "Aircraft turnarrund preset for all Aircrafts of the Airbus A3x series and all Boeing 73x Series. This preset is used for turnarounds that utilize gangways for boarding LESS than 100 passengers.",
+                },
+                new AircraftTurnarroundPreset {
+                    TemplateId = 101,
+                    Name = "A3x / 37x, PAX > 100 @Gate",
+                    utilizeGangways = true,
+                    hasUnitLoadOption = true,
+                    DescriptionNotes = "Aircraft turnarrund preset for all Aircrafts of the Airbus A3x series and all Boeing 73x Series. This preset is used for turnarounds that utilize gangways for boarding MORE than 100 passengers.",
+                },
+                new AircraftTurnarroundPreset {
+                    TemplateId = 102,
+                    Name = "A3x / 37x, PAX > 100 NOT @Gate",
+                    utilizeGangways = false,
+                    hasUnitLoadOption = true,
+                    DescriptionNotes = "Aircraft turnarrund preset for all Aircrafts of the Airbus A3x series and all Boeing 73x Series. This preset is NOT used for turnarounds that utilize gangways for boarding MORE than 100 passengers.",
                 }
             );
-
+            
             modelBuilder.Entity<TurnarroundVehicleTimeOffset>().HasData(
                 new TurnarroundVehicleTimeOffset {
                     TvtoId = 1,
@@ -553,7 +582,132 @@ namespace API.Data.Migrations
                     TimeOffsetEnd = 40,
                     VehicleTypeId = 10, //GPU
                     AircraftTurnarroundTemplateId = 5 //Small!@Gate
-                }            
+                },
+
+                //Preset 100 w UL
+                new TurnarroundVehicleTimeOffset {
+                    TvtoId = 21,
+                    TimeOffsetStart = 0,
+                    TimeOffsetEnd = 40,
+                    VehicleTypeId = 6, //High loader
+                    AircraftTurnarroundTemplateId = 100 //Small
+                },
+                new TurnarroundVehicleTimeOffset {
+                    TvtoId = 22,
+                    TimeOffsetStart = 0,
+                    TimeOffsetEnd = 35,
+                    VehicleTypeId = 11, //luggage truck
+                    AircraftTurnarroundTemplateId = 100 //Small
+                },
+                new TurnarroundVehicleTimeOffset {
+                    TvtoId = 23,
+                    TimeOffsetStart = 0,
+                    TimeOffsetEnd = 25,
+                    VehicleTypeId = 3, //air stairs for service
+                    AircraftTurnarroundTemplateId = 100 //Small
+                },
+
+                //Preset 101 w UL
+                new TurnarroundVehicleTimeOffset {
+                    TvtoId = 24,
+                    TimeOffsetStart = 0,
+                    TimeOffsetEnd = 35,
+                    VehicleTypeId = 6, //High loader
+                    AircraftTurnarroundTemplateId = 101 //Big@Gate
+                },
+                new TurnarroundVehicleTimeOffset {
+                    TvtoId = 25,
+                    TimeOffsetStart = 10,
+                    TimeOffsetEnd = 20,
+                    VehicleTypeId = 5, //Belt
+                    AircraftTurnarroundTemplateId = 101 //Big@Gate
+                },
+                new TurnarroundVehicleTimeOffset {
+                    TvtoId = 26,
+                    TimeOffsetStart = 0,
+                    TimeOffsetEnd = 35,
+                    VehicleTypeId = 11, //containter truck
+                    AircraftTurnarroundTemplateId = 101 //Big@Gate
+                },
+                new TurnarroundVehicleTimeOffset {
+                    TvtoId = 27,
+                    TimeOffsetStart = 5,
+                    TimeOffsetEnd = 40,
+                    VehicleTypeId = 11, //container truck
+                    AircraftTurnarroundTemplateId = 101 //Big@Gate
+                },
+                new TurnarroundVehicleTimeOffset {
+                    TvtoId = 28,
+                    TimeOffsetStart = 0,
+                    TimeOffsetEnd = 35,
+                    VehicleTypeId = 3, //air stairs for service
+                    AircraftTurnarroundTemplateId = 101 //Big@Gate
+                },
+
+                //Preset 102 w UL
+                new TurnarroundVehicleTimeOffset {
+                    TvtoId = 29,
+                    TimeOffsetStart = 0,
+                    TimeOffsetEnd = 35,
+                    VehicleTypeId = 6, //High loader
+                    AircraftTurnarroundTemplateId = 102 //Big!@Gate
+                },
+                new TurnarroundVehicleTimeOffset {
+                    TvtoId = 30,
+                    TimeOffsetStart = 10,
+                    TimeOffsetEnd = 20,
+                    VehicleTypeId = 5, //Belt
+                    AircraftTurnarroundTemplateId = 102 //Big!@Gate
+                },
+                new TurnarroundVehicleTimeOffset {
+                    TvtoId = 31,
+                    TimeOffsetStart = 0,
+                    TimeOffsetEnd = 35,
+                    VehicleTypeId = 11, //container truck
+                    AircraftTurnarroundTemplateId = 102 //Big!@Gate
+                },
+                new TurnarroundVehicleTimeOffset {
+                    TvtoId = 32,
+                    TimeOffsetStart = 10,
+                    TimeOffsetEnd = 40,
+                    VehicleTypeId = 11, //container truck
+                    AircraftTurnarroundTemplateId = 102 //Big!@Gate
+                },
+                new TurnarroundVehicleTimeOffset {
+                    TvtoId = 33,
+                    TimeOffsetStart = 5,
+                    TimeOffsetEnd = 30,
+                    VehicleTypeId = 4, //Apron Bus
+                    AircraftTurnarroundTemplateId = 102 //Big!@Gate
+                },
+                new TurnarroundVehicleTimeOffset {
+                    TvtoId = 34,
+                    TimeOffsetStart = 15,
+                    TimeOffsetEnd = 45,
+                    VehicleTypeId = 4, //Apron Bus
+                    AircraftTurnarroundTemplateId = 102 //Big!@Gate
+                },
+                new TurnarroundVehicleTimeOffset {
+                    TvtoId = 35,
+                    TimeOffsetStart = 0,
+                    TimeOffsetEnd = 30,
+                    VehicleTypeId = 3, //air stairs for service
+                    AircraftTurnarroundTemplateId = 102 //Big!@Gate
+                },
+                new TurnarroundVehicleTimeOffset {
+                    TvtoId = 36,
+                    TimeOffsetStart = 0,
+                    TimeOffsetEnd = 40,
+                    VehicleTypeId = 3, //air stairs for service
+                    AircraftTurnarroundTemplateId = 102 //Big!@Gate
+                },
+                new TurnarroundVehicleTimeOffset {
+                    TvtoId = 37,
+                    TimeOffsetStart = 0,
+                    TimeOffsetEnd = 50,
+                    VehicleTypeId = 10, //GPU
+                    AircraftTurnarroundTemplateId = 102 //Big!@Gate
+                }      
             );
             modelBuilder.Entity<AircraftType_ATT>().HasData(
                 new AircraftType_ATT {
@@ -566,11 +720,11 @@ namespace API.Data.Migrations
                 },
                 new AircraftType_ATT {
                     AircraftTypeId = 1,
-                    aircraftTurnarroundTemplateId = 1
+                    aircraftTurnarroundTemplateId = 100
                 },
                 new AircraftType_ATT {
                     AircraftTypeId = 3,
-                    aircraftTurnarroundTemplateId = 1
+                    aircraftTurnarroundTemplateId = 100
                 },
                 new AircraftType_ATT {
                     AircraftTypeId = 2,
@@ -582,11 +736,11 @@ namespace API.Data.Migrations
                 },
                 new AircraftType_ATT {
                     AircraftTypeId = 1,
-                    aircraftTurnarroundTemplateId = 2
+                    aircraftTurnarroundTemplateId = 101
                 },
                 new AircraftType_ATT {
                     AircraftTypeId = 3,
-                    aircraftTurnarroundTemplateId = 2
+                    aircraftTurnarroundTemplateId = 101
                 },
                 new AircraftType_ATT {
                     AircraftTypeId = 5,
@@ -606,11 +760,11 @@ namespace API.Data.Migrations
                 },
                 new AircraftType_ATT {
                     AircraftTypeId = 1,
-                    aircraftTurnarroundTemplateId = 3
+                    aircraftTurnarroundTemplateId = 102
                 },
                 new AircraftType_ATT {
                     AircraftTypeId = 3,
-                    aircraftTurnarroundTemplateId = 3
+                    aircraftTurnarroundTemplateId = 102
                 },
                 new AircraftType_ATT {
                     AircraftTypeId = 6,
