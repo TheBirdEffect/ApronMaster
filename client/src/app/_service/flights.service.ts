@@ -14,6 +14,9 @@ export class FlightsService {
   flightsSource = new BehaviorSubject<Flight[] | null>(null);
   currentFlights$ = this.flightsSource.asObservable();
 
+  orderedFlightSource = new BehaviorSubject<Flight[] | null>(null);
+  currentOrderedFlight$ = this.orderedFlightSource.asObservable();
+
   flightSource = new BehaviorSubject<Flight | any>(null);
   currentFlight$ = this.flightSource.asObservable();
 
@@ -27,6 +30,29 @@ export class FlightsService {
         flights = this.sortFlights(flights, SortEnum.increase);
         this.flightsSource.next(flights);
         return response;
+      })
+    );
+  }
+
+  /*
+    Push flight which is equal to chosenFlight on the first array index
+  */
+  getSortedFlightsByChosenFlight(chosenFlight: Flight) {    
+    return this.http.get<Flight[]>(this.basicUrl).pipe(
+      map((response: Flight[]) => {
+        let flights: Flight[] = response;
+        let flightsToBeReturned = new Array<Flight>;
+        let equalFlight = new Flight;
+        flights.forEach((flight) => {
+          if(flight.flightNumber != chosenFlight.flightNumber) {
+            flightsToBeReturned.push(flight)
+          } else {
+            flightsToBeReturned.unshift(flight);
+          }
+        })
+        this.orderedFlightSource.next(flightsToBeReturned);
+        
+        return flightsToBeReturned;
       })
     );
   }
@@ -132,5 +158,13 @@ export class FlightsService {
 
   loadFlights() {
     return this.currentFlights$;
+  }
+
+  loadOrderedFlights() {
+    return this.currentOrderedFlight$;
+  }
+
+  setFlightObservable(flight: Flight) {
+    this.flightSource.next(flight);
   }
 }

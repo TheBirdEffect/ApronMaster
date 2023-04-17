@@ -117,6 +117,10 @@ export class OrderService {
   loadOrdersOfFlight() {
     return this.currentOrdersOfFlight$;
   }
+
+  setOrdersOfFlightSource(order: any) {
+    this._ordersOfFlight.next(order);
+  }
   /*
     Getter and setter to set BehaviorSubjects
   */

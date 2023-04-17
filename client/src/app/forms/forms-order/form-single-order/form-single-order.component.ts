@@ -20,7 +20,7 @@ export class FormSingleOrderComponent implements OnInit {
 
   formArray = new FormArray([
     this.formBuilder.group({
-      flight: ['', Validators.required],
+      flight: [new Flight(), Validators.required],
       vehicleType: ['', Validators.nullValidator],
       position: ['', Validators.required],
       startOfService: ['', Validators.required],
@@ -50,9 +50,12 @@ export class FormSingleOrderComponent implements OnInit {
     this.vehicleTypeService.GetVehicleTypes().subscribe();
 
     this.vehicleTypes$ = this.vehicleTypeService.loadVehicles();
-    this.flights$ = this.flightService.loadFlights();
+    // this.flights$ = this.flightService.loadFlights();
+    this.flights$ = this.flightService.loadOrderedFlights();
     this.positions$ = this.positionService.loadPositions();
     this.flight$ = this.flightService.loadFlight();
+
+    this.setChosenFlightAsSelected();
   }
 
   newSingleForm() {
@@ -68,6 +71,18 @@ export class FormSingleOrderComponent implements OnInit {
     this.formArray.push(form);
   }
   
+  setChosenFlightAsSelected() {
+    this.flights$.subscribe(response => {
+      if(response) {
+        if(response != null) {
+          this.formArray.at(0).get('flight')?.setValue(response.at(0)!);
+        } else {
+          this.flights$ = this.flightService.loadFlights();
+        }
+      }
+    })
+  }
+
   onSubmit() {
     let finalFormArray = new Array();
     for(let order of this.formArray.controls) {

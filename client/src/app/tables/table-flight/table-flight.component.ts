@@ -117,6 +117,7 @@ export class TableFlightComponent implements OnInit {
       error: error => console.log(error)
       
     })
+    this.flightService.getSortedFlightsByChosenFlight(flight).subscribe();
   }
 
 

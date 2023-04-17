@@ -28,6 +28,7 @@ export class FormCollectionOrderComponent implements OnInit {
   aircraftType$: Observable<AircraftType | null>;
   positions$: Observable<position[] | null>;
   presets$: Observable<aircraftTurnarroundPreset[] | null>;
+  testName: string;
 
 
   constructor(private formBuilder: FormBuilder,
@@ -41,8 +42,11 @@ export class FormCollectionOrderComponent implements OnInit {
   ngOnInit(): void {
     this.positionService.getPositions().subscribe();
     this.flights$ = this.flightService.loadFlights();
+    // this.flights$ = this.flightService.loadOrderedFlights();
     this.positions$ = this.positionService.loadPositions()
     this.presets$ = this.turnarroundPresetsService.loadPresets();
+
+    // this.flights$.subscribe(response => testName = response?.at(0)?.flightNumber!)
 
 
     this.collectionForm = this.formBuilder.group({
@@ -56,7 +60,9 @@ export class FormCollectionOrderComponent implements OnInit {
       fuelAmmount: ['', Validators.nullValidator]
     })
 
+    //this.setFirstFlightAsSelected();
   }
+
 
   get turnarroundPreset(): FormControl {
     return this.collectionForm.get('turnarroundPreset') as FormControl;
@@ -64,6 +70,21 @@ export class FormCollectionOrderComponent implements OnInit {
 
   get turnarroundPresetValue(): aircraftTurnarroundPreset {
     return this.collectionForm.value['turnarroundPreset'];
+  }
+
+  setFirstFlightAsSelected() {
+    this.flights$.subscribe(response => {
+      if(response != null) {
+        this.collectionForm.get('flight')?.setValue(response?.at(0))
+        this.aircraftTypeService.GetAircraftType(
+          this.collectionForm.value.flight.aircraftTypeId
+        ).subscribe();
+        this.aircraftType$ = this.aircraftTypeService.loadAircraftType();
+      } else {
+        this.flights$ = this.flightService.loadFlights();
+      }
+
+    })
   }
 
   updateAircraftTypeByFlight() {
