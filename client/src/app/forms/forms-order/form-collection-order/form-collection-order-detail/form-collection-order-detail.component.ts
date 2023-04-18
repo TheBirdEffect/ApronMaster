@@ -296,4 +296,7 @@ export class FormCollectionOrderDetailComponent implements OnInit, OnDestroy {
     this.modalService.closeModal();
   }
 
+  closeModal() {
+    this.modalService.closeModal();
+  }
 }

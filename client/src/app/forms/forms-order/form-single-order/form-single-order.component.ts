@@ -26,12 +26,11 @@ export class FormSingleOrderComponent implements OnInit {
       startOfService: ['', Validators.required],
       endOfService: ['', Validators.required],
       fuel: ['NULL', Validators.nullValidator],
-      fuelAmmount: ['', Validators.nullValidator]
+      fuelAmmount: [0, Validators.nullValidator]
     })
   ]);
 
   flights$: Observable<Flight[] | null>;
-  flight$: Observable<Flight | null>;
   vehicleTypes$: Observable<vehicleType[] | null>;
   positions$: Observable<position[] | null>;
 
@@ -48,12 +47,9 @@ export class FormSingleOrderComponent implements OnInit {
   ngOnInit(): void {
     this.positionService.getPositions().subscribe();
     this.vehicleTypeService.GetVehicleTypes().subscribe();
-
     this.vehicleTypes$ = this.vehicleTypeService.loadVehicles();
-    // this.flights$ = this.flightService.loadFlights();
     this.flights$ = this.flightService.loadOrderedFlights();
     this.positions$ = this.positionService.loadPositions();
-    this.flight$ = this.flightService.loadFlight();
 
     this.setChosenFlightAsSelected(this.formGroupOnArraysFirstPosition);
   }
@@ -70,7 +66,7 @@ export class FormSingleOrderComponent implements OnInit {
       startOfService: ['', Validators.required],
       endOfService: ['', Validators.required],
       fuel: ['NULL', Validators.nullValidator],
-      fuelAmmount: ['', Validators.nullValidator]
+      fuelAmmount: [0, Validators.nullValidator]
     }) as FormGroup
 
     form.get('position')?.setValue(this.formGroupOnArraysFirstPosition.get('position')?.value)
@@ -99,7 +95,7 @@ export class FormSingleOrderComponent implements OnInit {
     }
     this.orderService.SetSingleOrders(finalFormArray)
       .subscribe();
-    console.log(finalFormArray);
+    this.closeModal();
   }
   
   closeModal() {

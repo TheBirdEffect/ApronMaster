@@ -20,13 +20,13 @@
                     <input type="number" class="form-control" formControlName="timeOffsetStart"
                         (ngModelChange)="detectChange(offset, i)">
                     <!-- <label [ngStyle]="{'color': (timeStartBelowArrival(i)) ? 'red' : 'green'}"> -->
-                        {{offset.value['timeStart'] | date:'dd. MMM yyyy HH:mm'}}
+                    {{offset.value['timeStart'] | date:'dd. MMM yyyy HH:mm'}}
                     <!-- </label> -->
                 </div>
                 <div class="col-sm">
                     <input type="number" class="form-control" formControlName="timeOffsetEnd"
                         (ngModelChange)="detectChange(offset, i)">
-                    <label >
+                    <label>
                         {{offset.value['timeEnd'] | date:'dd. MMM yyyy HH:mm'}}
                     </label>
                 </div>
@@ -34,7 +34,8 @@
         </div>
     </div>
     <div class="mt-3">
-        <button class="btn btn-outline-success me-2" [disabled]="vehicleOffsetArray.invalid" name="btnCalculate"
+        <button class="btn btn-outline-success me-2 btn-block" [disabled]="vehicleOffsetArray.invalid" name="btnCalculate"
             type="button" (click)="onSubmit()">Submit Orders</button>
+        <button class="btn btn-danger btn-block" type="button" name="btnCancel" (click)="closeModal()">Cancel</button>
     </div>
 </div>
