@@ -73,6 +73,7 @@ export class FormSingleOrderComponent implements OnInit {
       fuelAmmount: ['', Validators.nullValidator]
     }) as FormGroup
 
+    form.get('position')?.setValue(this.formGroupOnArraysFirstPosition.get('position')?.value)
     this.setChosenFlightAsSelected(form);
     this.formArray.push(form);
   }
@@ -81,6 +82,8 @@ export class FormSingleOrderComponent implements OnInit {
     this.flights$.subscribe(response => {
       if(response != null) {
         formGroup.get('flight')?.setValue(response.at(0)!);
+        formGroup.get('startOfService')?.setValue(response.at(0)?.arrival)
+        formGroup.get('endOfService')?.setValue(response.at(0)?.departure)
       } else {
         this.flights$ = this.flightService.loadFlights();
       }
