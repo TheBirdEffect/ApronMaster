@@ -17,8 +17,8 @@
                 </div>
                 <div class="col-8">
                     <select id="setFlight" formControlName="flight" class="form-select mb-1">
-                        <option disabled="disabled" selected="true" value="">Please select a flight</option>
-                        <option *ngFor="let flight of flights$ | async" [ngValue]="flight">
+                        <option [disabled]="true" [selected]="true" value="">Please select a flight</option>
+                        <option *ngFor="let flight of flights$ | async" [ngValue]="flight" value="flight.flightNumber">
                             {{flight.flightNumber}}
                         </option>
                     </select>

@@ -41,8 +41,8 @@ export class FormCollectionOrderComponent implements OnInit {
 
   ngOnInit(): void {
     this.positionService.getPositions().subscribe();
-    this.flights$ = this.flightService.loadFlights();
-    // this.flights$ = this.flightService.loadOrderedFlights();
+    // this.flights$ = this.flightService.loadFlights();
+    this.flights$ = this.flightService.loadOrderedFlights();
     this.positions$ = this.positionService.loadPositions()
     this.presets$ = this.turnarroundPresetsService.loadPresets();
 
@@ -60,7 +60,7 @@ export class FormCollectionOrderComponent implements OnInit {
       fuelAmmount: ['', Validators.nullValidator]
     })
 
-    //this.setFirstFlightAsSelected();
+    this.setFirstFlightAsSelected();
   }
 
 
