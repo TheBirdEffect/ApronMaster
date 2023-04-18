@@ -1,7 +1,6 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { stateObservablesEnum } from 'src/app/_enums/stateObservablesEnum';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Observable, Subscription } from 'rxjs';
 import { AircraftTypeIdAndPosCaracteristics } from 'src/app/_models/DTOs/OrderCollectionDto';
 import { aircraftTurnarroundPreset } from 'src/app/_models/aircraftTurnarroundPreset';
 import { AircraftType } from 'src/app/_models/aircraftType';
@@ -11,7 +10,6 @@ import { AircraftTypesService } from 'src/app/_service/aircraft-types.service';
 import { FlightsService } from 'src/app/_service/flights.service';
 import { ModalService } from 'src/app/_service/modal.service';
 import { PositionService } from 'src/app/_service/position.service';
-import { StateService } from 'src/app/_service/state.service';
 import { TurnarroundPresetService } from 'src/app/_service/turnarround-preset.service';
 
 @Component({
@@ -19,8 +17,7 @@ import { TurnarroundPresetService } from 'src/app/_service/turnarround-preset.se
   templateUrl: './form-collection-order.component.html',
   styleUrls: ['./form-collection-order.component.scss']
 })
-export class FormCollectionOrderComponent implements OnInit {
-  //@Output() closeModal = new EventEmitter();
+export class FormCollectionOrderComponent implements OnInit, OnDestroy {
 
   collectionForm: FormGroup;
 
@@ -28,8 +25,10 @@ export class FormCollectionOrderComponent implements OnInit {
   aircraftType$: Observable<AircraftType | null>;
   positions$: Observable<position[] | null>;
   presets$: Observable<aircraftTurnarroundPreset[] | null>;
-  testName: string;
-
+  __flights: Subscription;
+  __aircraftTypes: Subscription;
+  __positions: Subscription;
+  __presets: Subscription;
 
   constructor(private formBuilder: FormBuilder,
     private flightService: FlightsService,
@@ -41,13 +40,9 @@ export class FormCollectionOrderComponent implements OnInit {
 
   ngOnInit(): void {
     this.positionService.getPositions().subscribe();
-    // this.flights$ = this.flightService.loadFlights();
     this.flights$ = this.flightService.loadOrderedFlights();
     this.positions$ = this.positionService.loadPositions()
     this.presets$ = this.turnarroundPresetsService.loadPresets();
-
-    // this.flights$.subscribe(response => testName = response?.at(0)?.flightNumber!)
-
 
     this.collectionForm = this.formBuilder.group({
       flight: ['', Validators.required],
@@ -61,6 +56,18 @@ export class FormCollectionOrderComponent implements OnInit {
     })
 
     this.setFirstFlightAsSelected();
+
+    this.__flights = this.flights$.subscribe();
+    this.__aircraftTypes = this.aircraftType$.subscribe();
+    this.__positions = this.positions$.subscribe();
+    this.__presets = this.presets$.subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.__flights.unsubscribe();
+    this.__aircraftTypes.unsubscribe();
+    this.__positions.unsubscribe();
+    this.__presets.unsubscribe();
   }
 
 
