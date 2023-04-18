@@ -60,7 +60,7 @@ export class FormSingleOrderComponent implements OnInit {
 
   newSingleForm() {
     const form = this.formBuilder.group({
-      flight: ['', Validators.required],
+      flight: ["Please select a flight", Validators.required],
       vehicleType: ['', Validators.nullValidator],
       position: ['', Validators.required],
       startOfService: ['', Validators.required],
@@ -73,12 +73,10 @@ export class FormSingleOrderComponent implements OnInit {
   
   setChosenFlightAsSelected() {
     this.flights$.subscribe(response => {
-      if(response) {
-        if(response != null) {
-          this.formArray.at(0).get('flight')?.setValue(response.at(0)!);
-        } else {
-          this.flights$ = this.flightService.loadFlights();
-        }
+      if(response != null) {
+        this.formArray.at(0).get('flight')?.setValue(response.at(0)!);
+      } else {
+        this.flights$ = this.flightService.loadFlights();
       }
     })
   }
