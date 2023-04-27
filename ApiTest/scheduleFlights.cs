@@ -5,7 +5,7 @@ using Microsoft.Data.Sqlite;
 namespace ApiTest;
 
 [TestClass]
-public class SchedulerTest
+public class scheduleFlights
 {
     Scheduler _scheduler;
     Order _order;
@@ -76,23 +76,6 @@ public class SchedulerTest
         _flights.Add(_flight2);
         _flights.Add(_flight3);
         _flights.Add(_flight4);
-    }
-
-    [TestMethod]
-    public void shouldScheduleOrderAndVehicle()
-    {
-        var _expectedSchedule = new VehicleSchedule
-        {
-            OrderId = 1,
-            GroundVehicleId = 1
-        };
-
-        var _schedule = _scheduler.scheduleVehicles(
-            _order, _vehicle
-        );
-
-        Assert.AreEqual(_expectedSchedule.OrderId, _schedule.OrderId);
-        Assert.AreEqual(_expectedSchedule.GroundVehicleId, _schedule.GroundVehicleId);
     }
 
     [TestMethod]
