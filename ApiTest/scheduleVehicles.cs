@@ -132,13 +132,13 @@ namespace ApiTest
         [TestMethod]
         public void shouldSplitOrdersByVehicleType()
         {
-            var splittedOrders = tScheduler.splitOrdersIntoSeperateLists(tOrders).ElementAt(3);
+            var splittedOrdersList = tScheduler.splitOrdersIntoSeperateLists(tOrders).ElementAt(3);
             //The count of list elements equals two because the amount of vehicleTypes with number 3 is two
-            Assert.AreEqual(2, splittedOrders.Count());
+            Assert.AreEqual(2, splittedOrdersList.Count());
 
-            splittedOrders = tScheduler.splitOrdersIntoSeperateLists(tOrders).ElementAt(1);
+            splittedOrdersList = tScheduler.splitOrdersIntoSeperateLists(tOrders).ElementAt(1);
             //The count of list elements equals two because the amount of vehicleTypes with number 3 is one
-            Assert.AreEqual(1, splittedOrders.Count());
+            Assert.AreEqual(1, splittedOrdersList.Count());
 
         }
     }
