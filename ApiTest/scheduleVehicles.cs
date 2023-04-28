@@ -12,7 +12,6 @@ namespace ApiTest
     public class scheduleVehicles
     {
         Scheduler tScheduler;
-        GroundVehicle tVehicle;
 
         Flight tFlight0;
         Flight tFlight1;
@@ -20,16 +19,8 @@ namespace ApiTest
         Flight tFlight3;
 
         Order tOrder0;
-        // Order tOrder1;
-        // Order tOrder2;
-        // Order tOrder3;
-        // Order tOrder4;
-        // Order tOrder5;
-        // Order tOrder6;
-        // Order tOrder7;
-        // Order tOrder8;
-
         List<Order> tOrders;
+        List<GroundVehicle> tGroundVehicles;
 
 
         [TestInitialize]
@@ -38,6 +29,8 @@ namespace ApiTest
             tScheduler = new Scheduler();
 
             tOrders = new List<Order>();
+
+            tGroundVehicles = new List<GroundVehicle>();
 
             tFlight0 = new Flight
             {
@@ -158,6 +151,25 @@ namespace ApiTest
                 PositionId = 9,
                 Flight = tFlight2,
             };
+
+            var tVehicle0 = new GroundVehicle
+            {
+                GroundVehicleId = 0,
+                Name = "Belt1",
+                PositionId = 6,
+                IsIdling = false,
+                VehicleTypeId = 5
+            };
+
+            var tVehicle1 = new GroundVehicle
+            {
+                GroundVehicleId = 1,
+                Name = "Truck1",
+                PositionId = 6,
+                IsIdling = false,
+                VehicleTypeId = 11
+            };
+
             tOrders.Add(tOrder2);
             tOrders.Add(tOrder1);
             tOrders.Add(tOrder0);
@@ -204,6 +216,11 @@ namespace ApiTest
                     _listOfOrderedModels.ElementAt(index).Slack
                     <= _listOfOrderedModels.ElementAt(index + 1).Slack);
             }
+        }
+
+        [TestMethod]
+        public void shouldReturnOrderAssignedToVehicle() {
+
         }
     }
 }

@@ -44,11 +44,26 @@ namespace API.Util
             return model.Slack;
         }
 
-        public ICollection<SchedulingBaseModel> assignOrderToVehicle(ICollection<SchedulingBaseModel> model)
+        public VehicleSchedule assignModelToGroundVehicle(SchedulingBaseModel model, ICollection<GroundVehicle> vehicles)
         {
             //receives a list of preordered orders descending by slack
+            var t_vehicleSchedule = new VehicleSchedule();
+
+            var t_vehicles = vehicles;
+            var t_model = model;
+
             //Assigns a physical vehicle to orders 
-            return new List<SchedulingBaseModel>();
+            foreach(var vehicle in t_vehicles)
+            {
+                if(vehicle.VehicleTypeId == model.Vehicle.VehicleTypeId) 
+                {
+                    t_vehicleSchedule.GroundVehicleId = vehicle.GroundVehicleId;
+                    t_vehicleSchedule.OrderId = model.Order.OrderId;
+                }
+                break;
+            } 
+
+            return t_vehicleSchedule;
         }
 
         public ICollection<List<Order>> splitOrdersIntoSeperateLists(ICollection<Order> orders)
