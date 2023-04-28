@@ -38,7 +38,8 @@ namespace API.Util
             //calculates the slack time of the order
             var remainingTimeToRun = model.Deadline - currentTime;
 
-            model.Slack = model.Deadline.ToOADate() - currentTime.ToOADate() - remainingTimeToRun.TotalDays;
+            model.Slack = model.Deadline.ToOADate() - currentTime.ToOADate() + (model.eSoS.ToOADate()-currentTime.ToOADate()) - (remainingTimeToRun.TotalHours/1440);
+            Console.WriteLine($"Time To Run in minutes: {remainingTimeToRun.TotalMinutes}; Time in decimal: {remainingTimeToRun.TotalMinutes/1440}");
             //returns slack value 
             return model.Slack;
         }
@@ -73,7 +74,8 @@ namespace API.Util
         public ICollection<SchedulingBaseModel> calculateSlackAndMapToSchedulingModel(ICollection<Order> Orders)
         {
             var t_orderedOrders = Orders.OrderBy(o => o.StartOfService);
-            DateTime currentTime = new DateTime(2023, 04, 30, 12, 15, 00);
+            DateTime currentTime = t_orderedOrders.ElementAt(0).StartOfService;
+            // DateTime currentTime = new DateTime(2023, 04, 30, 00, 00, 00);
             var scheduledModels = new List<SchedulingBaseModel>();
             Console.WriteLine("--------------------------- Ordered: ---------------------------");
             for(var index = 0; index < t_orderedOrders.Count(); index++) 
@@ -96,10 +98,10 @@ namespace API.Util
 
             //Order Models acending by slack
             // scheduledModels.Sort((a,b) => a.Slack.CompareTo(b.Slack));
-            scheduledModels.OrderBy(m => m.Order.OrderId).ToList();
+            var test = scheduledModels.OrderBy(m => m.Slack).ToList();
             //returns a List of scheduling base models 
             Console.WriteLine("--------------------------- Ordered: ---------------------------");
-            foreach(var model in scheduledModels) 
+            foreach(var model in test) 
             {
                 Console.WriteLine($"OrderNumber: {model.Order.OrderId}, Slack: {model.Slack}");
             }

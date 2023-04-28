@@ -145,7 +145,7 @@ namespace ApiTest
                 _tSchedulingModel, tOrder0.StartOfService
             );
 
-            Assert.AreEqual(3.2337604816135013E-12, _tSlackTime);
+            Assert.AreEqual(0,027314814818048573, _tSlackTime, $"Current value: {_tSlackTime}");
         }
 
         [TestMethod]
