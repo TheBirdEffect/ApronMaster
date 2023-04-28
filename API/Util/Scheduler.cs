@@ -39,7 +39,7 @@ namespace API.Util
             var remainingTimeToRun = model.Deadline - currentTime;
 
             model.Slack = model.Deadline.ToOADate() - currentTime.ToOADate() + (model.eSoS.ToOADate()-currentTime.ToOADate()) - (remainingTimeToRun.TotalHours/1440);
-            Console.WriteLine($"Time To Run in minutes: {remainingTimeToRun.TotalMinutes}; Time in decimal: {remainingTimeToRun.TotalMinutes/1440}");
+
             //returns slack value 
             return model.Slack;
         }
@@ -74,14 +74,10 @@ namespace API.Util
         public ICollection<SchedulingBaseModel> calculateSlackAndMapToSchedulingModel(ICollection<Order> Orders)
         {
             var t_orderedOrders = Orders.OrderBy(o => o.StartOfService);
-            DateTime currentTime = t_orderedOrders.ElementAt(0).StartOfService;
-            // DateTime currentTime = new DateTime(2023, 04, 30, 00, 00, 00);
-            var scheduledModels = new List<SchedulingBaseModel>();
-            Console.WriteLine("--------------------------- Ordered: ---------------------------");
-            for(var index = 0; index < t_orderedOrders.Count(); index++) 
-            {
-                Console.WriteLine($"OrderNumber: {t_orderedOrders.ElementAt(index).OrderId} eSoS: {t_orderedOrders.ElementAt(index).StartOfService}");
-            }
+            DateTime currentTime = DateTime.Now;
+
+            var listOfModels = new List<SchedulingBaseModel>();
+
             //receives orders of several flights of preordered list
             foreach (var order in t_orderedOrders)
             {
@@ -93,20 +89,21 @@ namespace API.Util
                     t_baseModel, currentTime
                 );
                 t_baseModel.Slack = t_baseModel.Slack;
-                scheduledModels.Add(t_baseModel);
+                listOfModels.Add(t_baseModel);
             }
 
             //Order Models acending by slack
-            // scheduledModels.Sort((a,b) => a.Slack.CompareTo(b.Slack));
-            var test = scheduledModels.OrderBy(m => m.Slack).ToList();
+            var t_scheduledModels = listOfModels.OrderBy(m => m.Slack).ToList();
             //returns a List of scheduling base models 
+            
+            //Debugging output for the case of a test failure
             Console.WriteLine("--------------------------- Ordered: ---------------------------");
-            foreach(var model in test) 
+            foreach(var model in t_scheduledModels) 
             {
                 Console.WriteLine($"OrderNumber: {model.Order.OrderId}, Slack: {model.Slack}");
             }
 
-            return scheduledModels;
+            return t_scheduledModels;
         }
     }
 }
