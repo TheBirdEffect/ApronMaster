@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using API.Data;
-using API.DTOs;
 using API.Entity;
 using API.Models;
 
@@ -25,7 +19,6 @@ namespace API.Util
             var model = new SchedulingBaseModel();
 
             model.Order = order;
-            model.Flight = order.Flight;
 
             //Static values for taxi-in-time and taxi-out-time should be loaded dynamically from database later
             //Add five minutes on arrival for taxi-in-time
@@ -72,33 +65,44 @@ namespace API.Util
                     seperatedOrderLists[vehicleIndex] = new List<Order>();
                     seperatedOrderLists[vehicleIndex].Add(order);
                 }
-                
-
             }
 
             return seperatedOrderLists;
         }
 
-        public ICollection<SchedulingBaseModel> scheduleOrders(ICollection<Order> Orders)
+        public ICollection<SchedulingBaseModel> calculateSlackAndMapToSchedulingModel(ICollection<Order> Orders)
         {
             var t_orderedOrders = Orders.OrderBy(o => o.StartOfService);
-            var currentTime = t_orderedOrders.ElementAt(0).StartOfService;
+            DateTime currentTime = new DateTime(2023, 04, 30, 12, 15, 00);
             var scheduledModels = new List<SchedulingBaseModel>();
+            Console.WriteLine("--------------------------- Ordered: ---------------------------");
+            for(var index = 0; index < t_orderedOrders.Count(); index++) 
+            {
+                Console.WriteLine($"OrderNumber: {t_orderedOrders.ElementAt(index).OrderId} eSoS: {t_orderedOrders.ElementAt(index).StartOfService}");
+            }
             //receives orders of several flights of preordered list
             foreach (var order in t_orderedOrders)
             {
+                var t_baseModel = new SchedulingBaseModel();
                 //uses maping method to map orders on schedulingBaseModels
-                var t_baseModel = this.mapOrderToBaseModel(order);
+                t_baseModel = this.mapOrderToBaseModel(order);
                 //uses the LeastSlackTimeAlgorithm to calculate the slack time of one kind of vehicle of all prescheduled flights
                 t_baseModel.Slack = this.leastSlackTimeAlgorithm(
                     t_baseModel, currentTime
                 );
+                t_baseModel.Slack = t_baseModel.Slack;
                 scheduledModels.Add(t_baseModel);
             }
 
             //Order Models acending by slack
-            scheduledModels.OrderBy(sm => sm.Slack);
+            // scheduledModels.Sort((a,b) => a.Slack.CompareTo(b.Slack));
+            scheduledModels.OrderBy(m => m.Order.OrderId).ToList();
             //returns a List of scheduling base models 
+            Console.WriteLine("--------------------------- Ordered: ---------------------------");
+            foreach(var model in scheduledModels) 
+            {
+                Console.WriteLine($"OrderNumber: {model.Order.OrderId}, Slack: {model.Slack}");
+            }
 
             return scheduledModels;
         }

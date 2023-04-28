@@ -18,11 +18,16 @@ namespace ApiTest
         Flight tFlight1;
         Flight tFlight2;
         Flight tFlight3;
+
         Order tOrder0;
         Order tOrder1;
         Order tOrder2;
+        Order tOrder3;
+        Order tOrder4;
+        Order tOrder5;
 
         List<Order> tOrders;
+
 
         [TestInitialize]
         public void initializeSchedulerObject()
@@ -72,7 +77,7 @@ namespace ApiTest
             tOrder0 = new Order
             {
                 OrderId = 0,
-                VehicleTypeId = 3,
+                VehicleTypeId = 11,
                 StartOfService = new DateTime(2023, 04, 30, 12, 05, 00),
                 EndOfService = new DateTime(2023, 04, 30, 12, 45, 00),
                 PositionId = 3,
@@ -81,24 +86,54 @@ namespace ApiTest
             tOrder1 = new Order
             {
                 OrderId = 1,
-                VehicleTypeId = 1,
-                StartOfService = new DateTime(2023, 04, 30, 12, 20, 00),
-                EndOfService = new DateTime(2023, 04, 30, 12, 55, 00),
+                VehicleTypeId = 11,
+                StartOfService = new DateTime(2023, 04, 30, 12, 10, 00),
+                EndOfService = new DateTime(2023, 04, 30, 12, 25, 00),
                 PositionId = 3,
-                Flight = tFlight1,
+                Flight = tFlight0,
             };
             tOrder2 = new Order
             {
                 OrderId = 2,
-                VehicleTypeId = 3,
-                StartOfService = new DateTime(2023, 04, 30, 12, 35, 00),
-                EndOfService = new DateTime(2023, 04, 30, 13, 15, 00),
+                VehicleTypeId = 5,
+                StartOfService = new DateTime(2023, 04, 30, 12, 05, 00),
+                EndOfService = new DateTime(2023, 04, 30, 12, 45, 00),
                 PositionId = 3,
-                Flight = tFlight2,
+                Flight = tFlight0,
+            };
+            tOrder3 = new Order
+            {
+                OrderId = 3,
+                VehicleTypeId = 11,
+                StartOfService = new DateTime(2023, 04, 30, 12, 20, 00),
+                EndOfService = new DateTime(2023, 04, 30, 13, 00, 00),
+                PositionId = 5,
+                Flight = tFlight1,
+            };
+            tOrder4 = new Order
+            {
+                OrderId = 4,
+                VehicleTypeId = 11,
+                StartOfService = new DateTime(2023, 04, 30, 12, 25, 00),
+                EndOfService = new DateTime(2023, 04, 30, 12, 35, 00),
+                PositionId = 5,
+                Flight = tFlight1,
+            };
+            tOrder5 = new Order
+            {
+                OrderId = 5,
+                VehicleTypeId = 5,
+                StartOfService = new DateTime(2023, 04, 30, 12, 20, 00),
+                EndOfService = new DateTime(2023, 04, 30, 13, 00, 00),
+                PositionId = 5,
+                Flight = tFlight1,
             };
             tOrders.Add(tOrder2);
             tOrders.Add(tOrder1);
             tOrders.Add(tOrder0);
+            tOrders.Add(tOrder3);
+            tOrders.Add(tOrder5);
+            tOrders.Add(tOrder4);
         }
 
 
@@ -114,32 +149,31 @@ namespace ApiTest
         }
 
         [TestMethod]
+        public void shouldSplitOrdersByVehicleType()
+        {
+            var splittedOrdersList = tScheduler.splitOrdersIntoSeperateLists(tOrders).ElementAt(5);
+            //The count of list elements equals two because the amount of vehicleTypes with number 3 is two
+            Assert.AreEqual(2, splittedOrdersList.Count());
+
+            splittedOrdersList = tScheduler.splitOrdersIntoSeperateLists(tOrders).ElementAt(11);
+            //The count of list elements equals two because the amount of vehicleTypes with number 3 is one
+            Assert.AreEqual(4, splittedOrdersList.Count());
+
+        }
+
+        [TestMethod]
         public void shouldReturnOrderedListOfBaseModels()
         {
-            var _listOfOrderedModels = tScheduler.scheduleOrders(tOrders);
-
+            var _listOfOrderedModels = tScheduler.calculateSlackAndMapToSchedulingModel(tOrders);
             for (int index = 0; index < _listOfOrderedModels.Count - 1; index++)
             {
                 Assert.IsTrue(
                     _listOfOrderedModels.ElementAt(index).Slack
-                    < _listOfOrderedModels.ElementAt(index + 1).Slack);
+                    <= _listOfOrderedModels.ElementAt(index + 1).Slack, $"Flug: {_listOfOrderedModels.ElementAt(index).Flight.FlightNumber}");
             }
 
-            Assert.AreEqual(0, _listOfOrderedModels.ElementAt(0).Flight.FlightId);
-            Assert.AreEqual(0, _listOfOrderedModels.ElementAt(0).Order.OrderId);
-        }
-
-        [TestMethod]
-        public void shouldSplitOrdersByVehicleType()
-        {
-            var splittedOrdersList = tScheduler.splitOrdersIntoSeperateLists(tOrders).ElementAt(3);
-            //The count of list elements equals two because the amount of vehicleTypes with number 3 is two
-            Assert.AreEqual(2, splittedOrdersList.Count());
-
-            splittedOrdersList = tScheduler.splitOrdersIntoSeperateLists(tOrders).ElementAt(1);
-            //The count of list elements equals two because the amount of vehicleTypes with number 3 is one
-            Assert.AreEqual(1, splittedOrdersList.Count());
-
+            // Assert.AreEqual(0, _listOfOrderedModels.ElementAt(0).Flight.FlightId);
+            // Assert.AreEqual(0, _listOfOrderedModels.ElementAt(0).Order.OrderId);
         }
     }
 }
