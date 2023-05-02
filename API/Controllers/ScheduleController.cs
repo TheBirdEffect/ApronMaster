@@ -31,11 +31,19 @@ namespace API.Controllers
 
             foreach (var model in baseModels)
             {
-                var totalVehicles = await _context.GroundVehicles
-                    .Where(gV => gV.VehicleTypeId == model.Order.VehicleTypeId
+                var availableVehicles = new List<VehicleSchedule>();
+
+                var totalSchedules = await _context.VehicleSchedules
+                    .Where(gV => gV.Order.VehicleTypeId == model.Order.VehicleTypeId
                     ).ToListAsync();
 
-                    
+                foreach(var schedule in totalSchedules)
+                {
+                    availableVehicles.Add(
+                        await _context.GroundVehicles
+                            .Where(schedule.GroundVehicleId != )
+                    );
+                }
 
                 Console.WriteLine($"Length: {totalVehicles.Count()}; TypeId: {model.Order.VehicleTypeId}");
 
