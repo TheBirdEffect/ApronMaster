@@ -39,10 +39,9 @@ namespace API.Controllers
 
                 foreach(var schedule in totalSchedules)
                 {
-                    availableVehicles.Add(
-                        await _context.GroundVehicles
-                            .Where(schedule.GroundVehicleId != )
-                    );
+                    availableVehicles =  await _context.GroundVehicles
+                            .Where(v => v.GroundVehicleId != schedule.GroundVehicleId);
+
                 }
 
                 Console.WriteLine($"Length: {totalVehicles.Count()}; TypeId: {model.Order.VehicleTypeId}");
