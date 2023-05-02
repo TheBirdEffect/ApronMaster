@@ -19,8 +19,18 @@ namespace ApiTest
         Flight tFlight3;
 
         Order tOrder0;
+        Order tOrder2;
+        Order tOrder5;
+        Order tOrder8;
+        GroundVehicle tVehicle0;
+        // GroundVehicle tVehicle1;
+        // GroundVehicle tVehicle2;
+        GroundVehicle tVehicle3;
+        VehicleSchedule tSchedule0;
+        VehicleSchedule tSchedule1;
         List<Order> tOrders;
         List<GroundVehicle> tGroundVehicles;
+        List<VehicleSchedule> tSchedules;
 
 
         [TestInitialize]
@@ -28,9 +38,18 @@ namespace ApiTest
         {
             tScheduler = new Scheduler();
 
+            tOrder0 = new Order();
+
+            tVehicle0 = new GroundVehicle();
+            // tVehicle1 = new GroundVehicle();
+            // tVehicle2 = new GroundVehicle();
+            tVehicle3 = new GroundVehicle();
+
             tOrders = new List<Order>();
 
             tGroundVehicles = new List<GroundVehicle>();
+
+            tSchedules = new List<VehicleSchedule>();
 
             tFlight0 = new Flight
             {
@@ -88,7 +107,7 @@ namespace ApiTest
                 PositionId = 3,
                 Flight = tFlight0,
             };
-            var tOrder2 = new Order
+            tOrder2 = new Order
             {
                 OrderId = 2,
                 VehicleTypeId = 5,
@@ -115,7 +134,7 @@ namespace ApiTest
                 PositionId = 5,
                 Flight = tFlight1,
             };
-            var tOrder5 = new Order
+            tOrder5 = new Order
             {
                 OrderId = 5,
                 VehicleTypeId = 5,
@@ -128,8 +147,8 @@ namespace ApiTest
             {
                 OrderId = 6,
                 VehicleTypeId = 11,
-                StartOfService = new DateTime(2023, 04, 30, 12, 35, 00),
-                EndOfService = new DateTime(2023, 04, 30, 13, 15, 00),
+                StartOfService = new DateTime(2023, 04, 30, 12, 50, 00),
+                EndOfService = new DateTime(2023, 04, 30, 13, 30, 00),
                 PositionId = 9,
                 Flight = tFlight2,
             };
@@ -137,37 +156,69 @@ namespace ApiTest
             {
                 OrderId = 7,
                 VehicleTypeId = 11,
-                StartOfService = new DateTime(2023, 04, 30, 12, 40, 00),
-                EndOfService = new DateTime(2023, 04, 30, 12, 50, 00),
+                StartOfService = new DateTime(2023, 04, 30, 13, 00, 00),
+                EndOfService = new DateTime(2023, 04, 30, 13, 20, 00),
                 PositionId = 9,
                 Flight = tFlight2,
             };
-            var tOrder8 = new Order
+            tOrder8 = new Order
             {
                 OrderId = 8,
                 VehicleTypeId = 5,
-                StartOfService = new DateTime(2023, 04, 30, 12, 20, 00),
-                EndOfService = new DateTime(2023, 04, 30, 13, 15, 00),
+                StartOfService = new DateTime(2023, 04, 30, 12, 50, 00),
+                EndOfService = new DateTime(2023, 04, 30, 13, 45, 00),
                 PositionId = 9,
                 Flight = tFlight2,
             };
 
-            var tVehicle0 = new GroundVehicle
+            tVehicle0 = new GroundVehicle
             {
                 GroundVehicleId = 0,
-                Name = "Belt1",
+                Name = "LuggageTruck0",
                 PositionId = 6,
                 IsIdling = false,
-                VehicleTypeId = 5
+                VehicleTypeId = 11
             };
 
             var tVehicle1 = new GroundVehicle
             {
                 GroundVehicleId = 1,
-                Name = "Truck1",
+                Name = "Belt0",
                 PositionId = 6,
-                IsIdling = false,
-                VehicleTypeId = 11
+                IsIdling = true,
+                VehicleTypeId = 5
+            };
+
+            var tVehicle2 = new GroundVehicle
+            {
+                GroundVehicleId = 2,
+                Name = "Belt1",
+                PositionId = 6,
+                IsIdling = true,
+                VehicleTypeId = 5
+            };
+
+            tVehicle3 = new GroundVehicle
+            {
+                GroundVehicleId = 3,
+                Name = "Belt2",
+                PositionId = 6,
+                IsIdling = true,
+                VehicleTypeId = 5
+            };
+
+            tSchedule0 = new VehicleSchedule 
+            {
+                ScheduleId = 0,
+                GroundVehicle = tVehicle1,
+                Order = tOrder2
+            };
+
+            tSchedule1 = new VehicleSchedule 
+            {
+                ScheduleId = 1,
+                GroundVehicle = tVehicle2,
+                Order = tOrder5
             };
 
             tOrders.Add(tOrder2);
@@ -179,6 +230,12 @@ namespace ApiTest
             tOrders.Add(tOrder7);
             tOrders.Add(tOrder8);
             tOrders.Add(tOrder6);
+
+            tGroundVehicles.Add(tVehicle1);
+            tGroundVehicles.Add(tVehicle2);
+
+            tSchedules.Add(tSchedule0);
+            tSchedules.Add(tSchedule1);
         }
 
         [TestMethod]
@@ -192,6 +249,8 @@ namespace ApiTest
 
             Assert.AreEqual(1.0258680555523219, _tSlackTime, $"Current value: {_tSlackTime}");
         }
+
+        
 
         // [TestMethod]
         // public void shouldSplitOrdersByVehicleType()
@@ -219,8 +278,32 @@ namespace ApiTest
         }
 
         [TestMethod]
-        public void shouldReturnOrderAssignedToVehicle() {
+        public void shouldReturnOrderAssignedToVehicle()
+        {
+            var _tSchedulingModel = tScheduler.mapOrderToBaseModel(tOrder0);
+            var _tVehicleSchedule = tScheduler.assignModelToGroundVehicle(
+                _tSchedulingModel, tVehicle0
+            );
 
+            Assert.AreEqual(0, _tVehicleSchedule.OrderId);
+            Assert.AreEqual(0, _tVehicleSchedule.GroundVehicleId);
+        }
+
+        [TestMethod]
+        public void shouldReturnGroundVehicleWhichHasFreeSchedule() 
+        {
+            var _listOfOrders = new List<Order>();
+            _listOfOrders.Add(tOrder8);
+
+            var _listOfModels = tScheduler.calculateSlackAndMapToSchedulingModel(_listOfOrders);
+
+            ICollection<GroundVehicle> resultVehicle = new List<GroundVehicle>();
+
+            resultVehicle = tScheduler.returnAvailableGroundVehicles(
+                _listOfModels.ElementAt(0), tSchedules
+            );
+
+            Assert.AreEqual(1, resultVehicle.ElementAt(0).GroundVehicleId);
         }
     }
 }

@@ -38,53 +38,74 @@ namespace API.Util
             //calculates the slack time of the order
             var remainingTimeToRun = model.Deadline - currentTime;
 
-            model.Slack = model.Deadline.ToOADate() - currentTime.ToOADate() + (model.eSoS.ToOADate()-currentTime.ToOADate()) - (remainingTimeToRun.TotalHours/1440);
+            model.Slack = model.Deadline.ToOADate() - currentTime.ToOADate() + (model.eSoS.ToOADate() - currentTime.ToOADate()) - (remainingTimeToRun.TotalHours / 1440);
 
             //returns slack value 
             return model.Slack;
         }
 
-        public VehicleSchedule assignModelToGroundVehicle(SchedulingBaseModel model, ICollection<GroundVehicle> vehicles)
+        public ICollection<GroundVehicle> returnAvailableGroundVehicles(SchedulingBaseModel model, ICollection<VehicleSchedule> schedVehicle)
+        {
+            var eSoS = model.eSoS;
+            var Deadline = model.Deadline;
+
+            List<GroundVehicle> availableVehicles = new List<GroundVehicle>();
+
+            foreach (var schedule in schedVehicle)
+            {
+                //check if vehicle can be scheduled before currently existent vehicle scheduling
+                if (Deadline <= (schedule.Order.StartOfService.AddMinutes(-5)))
+                {
+                    Console.WriteLine($"Deadline of new Order: {Deadline}; Estimated start of Sevice existent scheduling: {schedule.Order.StartOfService.AddMinutes(-5)}");
+                    availableVehicles.Add(schedule.GroundVehicle);
+                }
+                else if (eSoS >= schedule.Order.EndOfService.AddMinutes(5))
+                {
+                    Console.WriteLine($"Deadline of new Order: {eSoS}; Estimated start of Sevice existent scheduling: {schedule.Order.EndOfService.AddMinutes(5)}");
+                    availableVehicles.Add(schedule.GroundVehicle);
+                }
+            }
+
+            return availableVehicles;
+        }
+
+        public VehicleSchedule assignModelToGroundVehicle(SchedulingBaseModel model, GroundVehicle vehicle)
         {
             //receives a list of preordered orders descending by slack
             var t_vehicleSchedule = new VehicleSchedule();
+            var t_vehicles = new GroundVehicle();
+            var t_model = new SchedulingBaseModel();
 
-            var t_vehicles = vehicles;
-            var t_model = model;
+            t_vehicles = vehicle;
+            t_model = model;
 
-            //Assigns a physical vehicle to orders 
-            foreach(var vehicle in t_vehicles)
-            {
-                if(vehicle.VehicleTypeId == model.Vehicle.VehicleTypeId) 
-                {
-                    t_vehicleSchedule.GroundVehicleId = vehicle.GroundVehicleId;
-                    t_vehicleSchedule.OrderId = model.Order.OrderId;
-                }
-                break;
-            } 
+            t_vehicleSchedule.GroundVehicleId = vehicle.GroundVehicleId;
+            t_vehicleSchedule.OrderId = model.Order.OrderId;
 
             return t_vehicleSchedule;
         }
 
-        public ICollection<List<Order>> splitOrdersIntoSeperateLists(ICollection<Order> orders)
-        {
-            //Receive list of orders for different vehicles of different flights
-            var seperatedOrderLists = new List<Order>[12];
-            //split orders by vehicletype and store it into a list
-            foreach (var order in orders)
-            {
-                var vehicleIndex = order.VehicleTypeId;
-                if (seperatedOrderLists[vehicleIndex] != null)
-                {
-                    seperatedOrderLists[vehicleIndex].Add(order);
-                } else {
-                    seperatedOrderLists[vehicleIndex] = new List<Order>();
-                    seperatedOrderLists[vehicleIndex].Add(order);
-                }
-            }
+        // public ICollection<List<Order>> splitOrdersIntoSeperateLists(ICollection<Order> orders)
+        // {
+        //     //Receive list of orders for different vehicles of different flights
+        //     var seperatedOrderLists = new List<Order>[12];
+        //     //split orders by vehicletype and store it into a list
+        //     foreach (var order in orders)
+        //     {
+        //         var vehicleIndex = order.VehicleTypeId;
+        //         if (seperatedOrderLists[vehicleIndex] != null)
+        //         {
+        //             seperatedOrderLists[vehicleIndex].Add(order);
+        //         }
+        //         else
+        //         {
+        //             seperatedOrderLists[vehicleIndex] = new List<Order>();
+        //             seperatedOrderLists[vehicleIndex].Add(order);
+        //         }
+        //     }
 
-            return seperatedOrderLists;
-        }
+        //     return seperatedOrderLists;
+        // }
 
         public ICollection<SchedulingBaseModel> calculateSlackAndMapToSchedulingModel(ICollection<Order> Orders)
         {
@@ -97,8 +118,10 @@ namespace API.Util
             foreach (var order in t_orderedOrders)
             {
                 var t_baseModel = new SchedulingBaseModel();
+
                 //uses maping method to map orders on schedulingBaseModels
                 t_baseModel = this.mapOrderToBaseModel(order);
+
                 //uses the LeastSlackTimeAlgorithm to calculate the slack time of one kind of vehicle of all prescheduled flights
                 t_baseModel.Slack = this.leastSlackTimeAlgorithm(
                     t_baseModel, currentTime
@@ -110,10 +133,10 @@ namespace API.Util
             //Order Models acending by slack
             var t_scheduledModels = listOfModels.OrderBy(m => m.Slack).ToList();
             //returns a List of scheduling base models 
-            
+
             //Debugging output for the case of a test failure
             Console.WriteLine("--------------------------- Ordered: ---------------------------");
-            foreach(var model in t_scheduledModels) 
+            foreach (var model in t_scheduledModels)
             {
                 Console.WriteLine($"OrderNumber: {model.Order.OrderId}, Slack: {model.Slack}");
             }
