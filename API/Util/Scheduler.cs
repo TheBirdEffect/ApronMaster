@@ -61,12 +61,12 @@ namespace API.Util
                 }
                 else if (eSoS >= schedule.Order.EndOfService.AddMinutes(5))
                 {
-                    Console.WriteLine($"Deadline of new Order: {eSoS}; Estimated start of Sevice existent scheduling: {schedule.Order.EndOfService.AddMinutes(5)}");
+                    Console.WriteLine($"eSoS of new Order: {eSoS}; Deadline existent scheduling: {schedule.Order.EndOfService.AddMinutes(5)}");
                     availableVehicles.Add(schedule.GroundVehicle);
                 }
             }
 
-            return availableVehicles;
+            return availableVehicles.ToList();
         }
 
         public VehicleSchedule assignModelToGroundVehicle(SchedulingBaseModel model, GroundVehicle vehicle)

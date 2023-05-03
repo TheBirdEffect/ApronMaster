@@ -96,7 +96,7 @@ namespace API.Controllers
                 FlightId = order.FlightId,
                 VehicleTypeId = order.VehicleTypeId
             };
-
+            
             await _context.AddAsync(newOrderDto);
             await _context.SaveChangesAsync();
             return Ok(newOrderDto);

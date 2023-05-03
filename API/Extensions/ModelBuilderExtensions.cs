@@ -374,6 +374,15 @@ namespace API.Data.Migrations
                     PositionId = 3,
                     FlightId = 3,
                     VehicleTypeId = 9
+                },
+                new Order
+                {
+                    OrderId = 9999,
+                    StartOfService = new DateTime(2000, 01, 01, 00, 00, 00),
+                    EndOfService = new DateTime(2000, 01, 01, 00, 01, 00),
+                    PositionId = 1,
+                    FlightId = 1,
+                    VehicleTypeId = 1
                 }
             );
 
@@ -771,6 +780,11 @@ namespace API.Data.Migrations
                     aircraftTurnarroundTemplateId = 4
                 }
             );
+            // modelBuilder.Entity<VehicleSchedule>().HasData(
+            //     new VehicleSchedule {
+
+            //     }
+            // );
         }
 
         public static void configureDbRelationships(this ModelBuilder modelBuilder)
