@@ -13,7 +13,6 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { NgApexchartsModule } from 'ng-apexcharts';
-import { ChartFlightsComponent } from './charts/dashboard/chart-flights/chart-flights.component';
 import { DatePipe } from '@angular/common';
 import { TableOrderComponent } from './tables/table-order/table-order.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -32,6 +31,9 @@ import { PreselectorOrderComponent } from './_modalTemplates/preselector-order/p
 import { FormCollectionOrderComponent } from './forms/forms-order/form-collection-order/form-collection-order.component';
 import { FormSingleOrderComponent } from './forms/forms-order/form-single-order/form-single-order.component';
 import { FormCollectionOrderDetailComponent } from './forms/forms-order/form-collection-order/form-collection-order-detail/form-collection-order-detail.component';
+import { GroundVehicleScheduleComponent } from './charts/dashboard/ground-vehicle-schedule/ground-vehicle-schedule.component';
+import { GoogleChartsModule } from 'angular-google-charts';
+import { Ng2GoogleChartsModule } from 'ng2-google-charts';
 
 @NgModule({
   declarations: [
@@ -39,7 +41,6 @@ import { FormCollectionOrderDetailComponent } from './forms/forms-order/form-col
     NavigationComponent,
     DashboardComponent,
     FormsFlightComponent,
-    ChartFlightsComponent,
     TableOrderComponent,
     TableFlightComponent,
     AirportDataComponent,
@@ -56,6 +57,7 @@ import { FormCollectionOrderDetailComponent } from './forms/forms-order/form-col
     FormCollectionOrderComponent,
     FormSingleOrderComponent,
     FormCollectionOrderDetailComponent,
+    GroundVehicleScheduleComponent,
   ],
   imports: [
     BrowserModule,
@@ -68,6 +70,7 @@ import { FormCollectionOrderDetailComponent } from './forms/forms-order/form-col
     TabsModule.forRoot(),
     PopoverModule.forRoot(),
     NgApexchartsModule,
+    Ng2GoogleChartsModule,    
     BrowserAnimationsModule,
   ],
   providers: [DatePipe],
