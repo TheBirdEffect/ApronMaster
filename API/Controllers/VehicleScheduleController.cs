@@ -46,6 +46,8 @@ namespace API.Controllers
                 on vS.Order.FlightId equals f.FlightId into __flights
                 from flight in __flights.DefaultIfEmpty()
 
+                where order.OrderId != 9999 //Seed!
+
                 select new VehicleSchedule
                 {
                     ScheduleId = vS.ScheduleId,
