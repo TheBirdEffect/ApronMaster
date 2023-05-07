@@ -11,18 +11,22 @@ export class SchedulingTableService {
   private basicApiPath = "https://localhost:5001/api/VehicleSchedule";
 
   private schedulingTableDataSource = new BehaviorSubject<vehicleSchedule[] | null>(null);
-  currentSchedulingTableData = this.schedulingTableDataSource.asObservable();
+  currentSchedulingTableData$ = this.schedulingTableDataSource.asObservable();
 
   constructor(
     public http: HttpClient
     ) { }
 
-  getExtendedVehicleScheduling(): Observable<vehicleSchedule[]> {
+  public getExtendedVehicleScheduling(): Observable<vehicleSchedule[]> {
     return this.http.get<vehicleSchedule[]>(this.basicApiPath + "/extended").pipe(
       map( response => {
         this.schedulingTableDataSource.next(response);
         return response;
       })
     )
+  }
+
+  public loadSchedulingTableData() {
+    return this.currentSchedulingTableData$;
   }
 }

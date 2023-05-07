@@ -27,7 +27,7 @@ export class ModalService {
       this.modalRefArray.at(this.modalRefArray.length - 2)?.hide();
       this.modalRefArray.splice(0, this.modalRefArray.length-1);
     }
-    console.log('Open Modal', this.modalRefArray);
+    //console.log('Open Modal', this.modalRefArray);
   }
 
   closeModal() {
@@ -36,7 +36,7 @@ export class ModalService {
       modal.hide();
     })
     this.modalRefArray = [];
-    console.log('Close Modal', this.modalRefArray);
+    //console.log('Close Modal', this.modalRefArray);
     
   }
 
