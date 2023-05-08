@@ -19,6 +19,7 @@ namespace API.Controllers
         public async Task<ActionResult<IEnumerable<VehicleSchedule>>> InitializeSchedule()
         {
             var totalSchedules = await _context.VehicleSchedules.ToListAsync();
+            var vehicles = totalSchedules;
             var schedulesToBeReturned = new List<VehicleSchedule>();
 
             if (!totalSchedules.Any())
@@ -29,6 +30,10 @@ namespace API.Controllers
                 var order = new Order
                 {
                     OrderId = 0,
+                    Flight = new Flight {
+                                    Arrival = new DateTime(2000, 01, 01, 00, 00, 00),
+                                    Departure = new DateTime(2000, 01, 01, 00, 00, 00)
+                                },
                     StartOfService = DateTime.UtcNow,
                     EndOfService = DateTime.UtcNow
                 };
@@ -69,23 +74,47 @@ namespace API.Controllers
                         on vS.GroundVehicleId equals v.GroundVehicleId into __groundVehicleIds
                         from vehicle in __groundVehicleIds.DefaultIfEmpty()
 
+                        join o in _context.Orders
+                        on vS.OrderId equals o.OrderId into __orders
+                        from order in __orders.DefaultIfEmpty()
+
+                        join f in _context.Flights
+                        on vS.Order.FlightId equals f.FlightId into __flights
+                        from flight in __flights.DefaultIfEmpty()
+
                         where vS.GroundVehicle.VehicleTypeId == model.Order.VehicleTypeId
                         select new VehicleSchedule
                         {
                             OrderId = vS.OrderId,
-                            Order = vS.Order,
-                            GroundVehicleId = vehicle.GroundVehicleId,
-                            GroundVehicle = new GroundVehicle
+                            Order = new Order
                             {
+                                OrderId = order.OrderId,
+                                StartOfService = order.StartOfService,
+                                EndOfService = order.EndOfService,
+                                FlightId = flight.FlightId,
+                                Flight = new Flight
+                                {
+                                    FlightId = flight.FlightId,
+                                    FlightNumber = flight.FlightNumber,
+                                    Arrival = flight.Arrival,
+                                    Departure = flight.Departure,
+                                    AircraftTypeId = flight.AircraftTypeId,
+                                    Destination = flight.Destination
+                                },
+                            },
                                 GroundVehicleId = vehicle.GroundVehicleId,
-                                VehicleType = vehicle.VehicleType,
-                                Position = vehicle.Position,
-                                VehicleTypeId = vehicle.VehicleTypeId
+                                GroundVehicle = new GroundVehicle
+                                {
+                                    GroundVehicleId = vehicle.GroundVehicleId,
+                                    VehicleType = vehicle.VehicleType,
+                                    Position = vehicle.Position,
+                                    VehicleTypeId = vehicle.VehicleTypeId
+                                }
                             }
-                        }
                     ).ToListAsync();
 
                     var availableGV = scheduler.returnAvailableGroundVehicles(model, schedulesOrdered);
+
                     if (availableGV.Any())
                     {
                         var schedule = scheduler.assignModelToGroundVehicle(model, availableGV.ElementAt(0));
@@ -97,7 +126,7 @@ namespace API.Controllers
                     }
                 }
             }
-            
+
             return schedulesToBeReturned;
         }
     }

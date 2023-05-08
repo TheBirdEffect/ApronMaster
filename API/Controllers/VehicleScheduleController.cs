@@ -90,7 +90,19 @@ namespace API.Controllers
                 }
             ).ToListAsync();
 
-            return Ok(query);
+            var orderedQuery = query.OrderBy(q => q.GroundVehicle.GroundVehicleId);
+
+            return Ok(orderedQuery);
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> deleteAllSchedules() {
+            var totalSchedules = await _context.VehicleSchedules.ToListAsync();
+
+            _context.VehicleSchedules.RemoveRange(totalSchedules);
+            await _context.SaveChangesAsync();
+
+            return Ok("Schedules removed!");
         }
     }
 }

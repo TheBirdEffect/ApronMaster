@@ -51,7 +51,51 @@ namespace API.Util
 
             List<GroundVehicle> availableVehicles = new List<GroundVehicle>();
 
+            ICollection<VehicleSchedule> preFilteredSchedules = new List<VehicleSchedule>();
+            var listOfUnavailableVehicles = new List<GroundVehicle>();
+
             foreach (var schedule in schedVehicle)
+            {
+                if (
+                    schedule.Order.StartOfService.AddMinutes(-5) <= eSoS
+                    && Deadline <= schedule.Order.EndOfService.AddMinutes(5)
+                )
+                {
+                    listOfUnavailableVehicles.Add(schedule.GroundVehicle);
+                }
+                else if (schedule.Order.StartOfService.AddMinutes(-5) <= eSoS
+                    && Deadline <= schedule.Order.Flight.Departure)
+                {
+                    listOfUnavailableVehicles.Add(schedule.GroundVehicle);
+                }
+                // else if (schedule.Order.Flight.Arrival <= eSoS
+                //     && Deadline <= schedule.Order.EndOfService.AddMinutes(5)
+                // )
+                // {
+                //     listOfUnavailableVehicles.Add(schedule.GroundVehicle);
+                // }
+            }
+
+            if (listOfUnavailableVehicles.Any())
+            {
+                foreach (var schedule in schedVehicle)
+                {
+                    foreach (var unavailableVehicle in listOfUnavailableVehicles)
+                    {
+                        if (schedule.GroundVehicle.GroundVehicleId != unavailableVehicle.GroundVehicleId)
+                        {
+                            preFilteredSchedules.Add(schedule);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                preFilteredSchedules = schedVehicle;
+            }
+
+
+            foreach (var schedule in preFilteredSchedules)
             {
                 //check if vehicle can be scheduled before currently existent vehicle scheduling
                 if (Deadline <= (schedule.Order.StartOfService.AddMinutes(-5)))
