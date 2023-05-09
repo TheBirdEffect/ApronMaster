@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -5,5 +6,13 @@ import { Injectable } from '@angular/core';
 })
 export class SchedulingService {
 
-  constructor() { }
+  private basicApiPath = "https://localhost:5001/api/Schedule";
+
+  constructor(public http:HttpClient) { }
+
+
+
+  public initializeScheduling() {
+    return this.http.get(this.basicApiPath + "/inititialize").subscribe();
+  }
 }

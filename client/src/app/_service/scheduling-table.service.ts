@@ -26,6 +26,10 @@ export class SchedulingTableService {
     )
   }
 
+  public deleteSchedules() {
+    return this.http.delete(this.basicApiPath + "/all").subscribe();
+  }
+
   public loadSchedulingTableData() {
     return this.currentSchedulingTableData$;
   }

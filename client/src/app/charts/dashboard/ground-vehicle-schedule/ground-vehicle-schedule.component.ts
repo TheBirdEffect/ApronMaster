@@ -1,26 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { GoogleChartInterface } from 'ng2-google-charts';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { vehicleScheduleChartData } from 'src/app/_models/DTOs/vehicleScheduleChartData';
 import { vehicleSchedule } from 'src/app/_models/vehicleSchedule';
 import { SchedulingTableService } from 'src/app/_service/scheduling-table.service';
+import { SchedulingService } from 'src/app/_service/scheduling.service';
 
 @Component({
   selector: 'app-ground-vehicle-schedule',
   templateUrl: './ground-vehicle-schedule.component.html',
   styleUrls: ['./ground-vehicle-schedule.component.scss']
 })
-export class GroundVehicleScheduleComponent implements OnInit {
+export class GroundVehicleScheduleComponent implements OnInit, OnDestroy {
+  title = "Schedules";
 
   vehicleSchedules$: Observable<vehicleSchedule[] | null>;
   public timeLineChartData: any;
 
-  constructor(private scheduleService: SchedulingTableService) { }
+  constructor(private scheduleTableService: SchedulingTableService
+            , private scheduleService: SchedulingService) { }
 
   ngOnInit(): void {
-    this.vehicleSchedules$ = this.scheduleService.loadSchedulingTableData();
+    //this.scheduleTableService.deleteSchedules();  
+    //this.scheduleService.initializeScheduling();
+    this.vehicleSchedules$ = this.scheduleTableService.loadSchedulingTableData();
     this.timeLineChartData = this.initializeChartData();
-    //console.log(this.timeLineChartData);
+  }
+
+  ngOnDestroy(): void {
 
   }
 

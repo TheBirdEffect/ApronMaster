@@ -1,3 +1,13 @@
-<google-chart *ngIf="vehicleSchedules$ | async" class="chart"
-[data]="timeLineChartData"
-></google-chart>
+<div class="text-center">
+    <ng-template [ngIf]="vehicleSchedules$ | async">
+        <google-chart class="chart" [data]="timeLineChartData"></google-chart>
+    </ng-template>
+
+    <ng-template [ngIf]="!(vehicleSchedules$ | async)">
+        <div class="spinner-border custom-spinner mt-5" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+        <p>Loading {{title}}...</p>
+    </ng-template>
+
+</div>

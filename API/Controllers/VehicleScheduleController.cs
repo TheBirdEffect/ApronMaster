@@ -95,7 +95,7 @@ namespace API.Controllers
             return Ok(orderedQuery);
         }
 
-        [HttpDelete]
+        [HttpDelete("all")]
         public async Task<ActionResult> deleteAllSchedules() {
             var totalSchedules = await _context.VehicleSchedules.ToListAsync();
 
