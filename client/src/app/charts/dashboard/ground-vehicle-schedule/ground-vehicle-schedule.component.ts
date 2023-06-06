@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { GoogleChartInterface } from 'ng2-google-charts';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, isObservable } from 'rxjs';
 import { vehicleScheduleChartData } from 'src/app/_models/DTOs/vehicleScheduleChartData';
 import { vehicleSchedule } from 'src/app/_models/vehicleSchedule';
 import { SchedulingTableService } from 'src/app/_service/scheduling-table.service';
@@ -15,7 +15,7 @@ export class GroundVehicleScheduleComponent implements OnInit, OnDestroy {
   title = "Schedules";
 
   vehicleSchedules$: Observable<vehicleSchedule[] | null>;
-  public timeLineChartData: any;
+  public timeLineChartData: GoogleChartInterface;
 
   constructor(private scheduleTableService: SchedulingTableService
             , private scheduleService: SchedulingService) { }
@@ -31,12 +31,35 @@ export class GroundVehicleScheduleComponent implements OnInit, OnDestroy {
 
   }
 
+  public initializeBackend() {
+    this.scheduleService.initiateScheduling();
+  }
+
+  public deleteData() {
+    this.scheduleTableService.deleteSchedules();
+  }
+
+  public updateScheduling() {
+    this.scheduleService.updateScheduling().subscribe();
+    this.vehicleSchedules$ = this.scheduleTableService.loadSchedulingTableData();
+    this.redrawChart();
+  }
+
+  public redrawChart() {
+    let chartComponent = this.timeLineChartData.component!;
+    let chartWrapper = chartComponent.wrapper;
+
+    //force a redraw
+    chartComponent.draw();
+  }
+
   public initializeChartData() {
     let timeLineChartData: GoogleChartInterface = {
       chartType: 'Timeline',
       dataTable: this.mapSchedulingDataOnChart(),
       options: {
-        height: 1000
+        height: 1000,
+        isObservable: true
       }
     }
     return timeLineChartData;

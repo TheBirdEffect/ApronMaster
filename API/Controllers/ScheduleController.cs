@@ -1,7 +1,9 @@
+using System.Linq;
 using API.Data;
 using API.Entity;
 using API.Util;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
@@ -144,10 +146,12 @@ namespace API.Controllers
                                     if (schedule.GroundVehicleId != vehicle.GroundVehicleId)
                                     {
                                         availableVehicles.Add(vehicle);
-                                    } 
+                                    }
                                 }
                             }
-                        } else {
+                        }
+                        else
+                        {
                             availableVehicles.AddRange(groundVehicles);
                         }
 
@@ -241,6 +245,105 @@ namespace API.Controllers
             }
 
             return schedulesToBeReturned;
+        }
+
+        [HttpGet("schedule")]
+        public async Task<ActionResult<IEnumerable<VehicleSchedule>>> InitiateSchedule()
+        {
+
+            var orders = await _context.Orders.ToListAsync();
+            if (!orders.Count.Equals(0))
+            {
+                //Intanciate Scheduler
+                var scheduler = new Scheduler();
+
+                //Calculate Slack and map to ScheduleBaseModel
+                var calculatedBaseModels = scheduler.calculateSlackAndMapToSchedulingModel(orders);
+
+                foreach (var baseModel in calculatedBaseModels)
+                {
+                    //Check how much vehicles exist of orders vehicle type
+                    var vehicles = await _context.GroundVehicles
+                        .Where(v => v.VehicleTypeId == baseModel.Order.VehicleTypeId)
+                        .ToListAsync();
+
+                    //Check if there are Schedules in Database which VehicleType equals BaseModel´s VehicleType
+                    var schedules = await _context.VehicleSchedules
+                        .Where(s => s.GroundVehicle.VehicleTypeId == baseModel.Order.VehicleTypeId)
+                        .ToListAsync();
+
+                    //If no schedules have been found the order can be assinged and added directly
+                    if (schedules.Count().Equals(0))
+                    {
+                        var newVehicleSchedule = scheduler.assignModelToGroundVehicle(baseModel, vehicles.ElementAt(0));
+                        Console.WriteLine($"Order: {newVehicleSchedule.OrderId}; Vehicle: {newVehicleSchedule.GroundVehicleId}");
+                        await _context.VehicleSchedules.AddAsync(newVehicleSchedule);
+                        await _context.SaveChangesAsync();
+                    }
+                    //If count of schedules is less-than or equal to the total amount of vehicles 
+                    // -> Check which vehicle isn´t scheduled yet -> schedule that vehicle
+                    else if (schedules.Count() < vehicles.Count())
+                    {
+                        // var availableVehicles = new List<GroundVehicle>();
+
+                        //Extract Ground Vehicles from each schedule
+                        var extractedGroundVehicles = new List<GroundVehicle>();
+                        foreach (var schedule in schedules) {
+                            extractedGroundVehicles.Add(schedule.GroundVehicle);
+                        }
+
+                        //Save vehicles of scheduling except already scheduled vehicles
+                        var availableVehicles = vehicles.Except(extractedGroundVehicles);
+
+                        var newVehicleSchedule = scheduler.assignModelToGroundVehicle(baseModel, availableVehicles.ElementAt(0));
+                        Console.WriteLine($"Order: {newVehicleSchedule.OrderId}; Vehicle: {newVehicleSchedule.GroundVehicleId}");
+                        await _context.VehicleSchedules.AddAsync(newVehicleSchedule);
+                        await _context.SaveChangesAsync();
+
+                        // //Return available vehicles which not been scheduled yet
+                        // foreach (var schedule in schedules)
+                        // {
+                        //     //Check which vehicles are not scheduled yet and temporarily save them to vehicleList
+                        //     var availableVehicles = vehicles.FindAll(v => v.GroundVehicleId != schedule.GroundVehicleId);
+                        //     if (schedule != null)
+                        //     {
+                        //         var newVehicleSchedule = scheduler.assignModelToGroundVehicle(baseModel, availableVehicles.ElementAt(0));
+                        //         Console.WriteLine($"Order: {newVehicleSchedule.OrderId}; Vehicle: {newVehicleSchedule.GroundVehicleId}");
+                        //         await _context.VehicleSchedules.AddAsync(newVehicleSchedule);
+                        //         await _context.SaveChangesAsync();
+                        //     }
+                        // }
+                    }
+
+                    //else take method of uml
+                }
+
+
+
+            }
+            else
+            {
+                return NotFound();
+            }
+
+            var allSchedules = await _context.VehicleSchedules.ToListAsync();
+
+            return allSchedules;
+        }
+
+        [HttpGet("updateSchedule")]
+        public async Task<ActionResult<IEnumerable<VehicleSchedule>>> UpdateSchedule()
+        {
+            var totalSchedules = await _context.VehicleSchedules.ToListAsync();
+
+            if (!totalSchedules.Equals(null))
+            {
+                _context.VehicleSchedules.RemoveRange(totalSchedules);
+                await _context.SaveChangesAsync();
+            }
+
+
+            return await InitiateSchedule();
         }
 
         private object List<T>()

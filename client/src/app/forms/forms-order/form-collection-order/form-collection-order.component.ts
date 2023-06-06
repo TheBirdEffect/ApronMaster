@@ -10,6 +10,7 @@ import { AircraftTypesService } from 'src/app/_service/aircraft-types.service';
 import { FlightsService } from 'src/app/_service/flights.service';
 import { ModalService } from 'src/app/_service/modal.service';
 import { PositionService } from 'src/app/_service/position.service';
+import { SchedulingService } from 'src/app/_service/scheduling.service';
 import { TurnarroundPresetService } from 'src/app/_service/turnarround-preset.service';
 
 @Component({

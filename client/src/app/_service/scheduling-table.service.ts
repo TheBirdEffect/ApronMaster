@@ -30,6 +30,10 @@ export class SchedulingTableService {
     return this.http.delete(this.basicApiPath + "/all").subscribe();
   }
 
+  public setSchedulingDataSource(schedule: vehicleSchedule[]){
+    this.schedulingTableDataSource.next(schedule);
+  }
+
   public loadSchedulingTableData() {
     return this.currentSchedulingTableData$;
   }

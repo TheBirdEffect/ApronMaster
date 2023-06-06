@@ -38,7 +38,7 @@ namespace API.Data.Migrations
 
                     b.HasKey("TemplateId");
 
-                    b.ToTable("AircraftTurnarroundTemplates");
+                    b.ToTable("AircraftTurnarroundTemplates", (string)null);
 
                     b.HasData(
                         new
@@ -122,7 +122,7 @@ namespace API.Data.Migrations
 
                     b.HasKey("AircraftTypeId");
 
-                    b.ToTable("AircraftTypes");
+                    b.ToTable("AircraftTypes", (string)null);
 
                     b.HasData(
                         new
@@ -175,7 +175,7 @@ namespace API.Data.Migrations
 
                     b.HasIndex("AircraftTypeId");
 
-                    b.ToTable("AircraftType_ATTs");
+                    b.ToTable("AircraftType_ATTs", (string)null);
 
                     b.HasData(
                         new
@@ -282,7 +282,7 @@ namespace API.Data.Migrations
 
                     b.HasIndex("AircraftTypeId");
 
-                    b.ToTable("Flights");
+                    b.ToTable("Flights", (string)null);
 
                     b.HasData(
                         new
@@ -357,7 +357,7 @@ namespace API.Data.Migrations
 
                     b.HasIndex("VehicleTypeId");
 
-                    b.ToTable("GroundVehicles");
+                    b.ToTable("GroundVehicles", (string)null);
 
                     b.HasData(
                         new
@@ -597,7 +597,7 @@ namespace API.Data.Migrations
 
                     b.HasIndex("VehicleTypeId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
 
                     b.HasData(
                         new
@@ -900,7 +900,7 @@ namespace API.Data.Migrations
 
                     b.HasKey("PositionId");
 
-                    b.ToTable("Positions");
+                    b.ToTable("Positions", (string)null);
 
                     b.HasData(
                         new
@@ -1037,7 +1037,7 @@ namespace API.Data.Migrations
 
                     b.HasIndex("VehicleTypeId");
 
-                    b.ToTable("TurnarroundVehicleTimeOffsets");
+                    b.ToTable("TurnarroundVehicleTimeOffsets", (string)null);
 
                     b.HasData(
                         new
@@ -1356,7 +1356,7 @@ namespace API.Data.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("VehicleSchedules");
+                    b.ToTable("VehicleSchedules", (string)null);
                 });
 
             modelBuilder.Entity("API.Entity.VehicleType", b =>
@@ -1371,7 +1371,7 @@ namespace API.Data.Migrations
 
                     b.HasKey("VehicleTypeId");
 
-                    b.ToTable("VehicleTypes");
+                    b.ToTable("VehicleTypes", (string)null);
 
                     b.HasData(
                         new

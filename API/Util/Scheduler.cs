@@ -1,4 +1,5 @@
 using API.Entity;
+using API.Extensions;
 using API.Models;
 
 namespace API.Util
@@ -34,7 +35,7 @@ namespace API.Util
 
         public double leastSlackTimeAlgorithm(SchedulingBaseModel model, DateTime currentTime)
         {
-            //Receives SchedulingBaseModel and eSoS of the flight n-1
+            //Receives SchedulingBaseModel and currentTime which is the timestamp of the moment of Schedule initialization
             //calculates the slack time of the order
             var remainingTimeToRun = model.Deadline - currentTime;
 
@@ -86,6 +87,7 @@ namespace API.Util
                         {
                             preFilteredSchedules.Add(schedule);
                         }
+                        //Hier muss ein weiter Zweig implementiert werden, der im Falle von zu wenig ressourcen, fahrzeuge hinten anstellt.
                     }
                 }
             }

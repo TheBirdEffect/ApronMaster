@@ -9,6 +9,7 @@ import { turnarroundVehicleTimeOffset } from 'src/app/_models/turnarroundVehicle
 import { vehicleType } from 'src/app/_models/vehicleType';
 import { ModalService } from 'src/app/_service/modal.service';
 import { OrderService } from 'src/app/_service/order.service';
+import { SchedulingService } from 'src/app/_service/scheduling.service';
 import { StateService } from 'src/app/_service/state.service';
 import { TurnarroundPresetService } from 'src/app/_service/turnarround-preset.service';
 import { VehicleTimeOffsetService } from 'src/app/_service/vehicle-time-offset.service';
@@ -57,7 +58,8 @@ export class FormCollectionOrderDetailComponent implements OnInit, OnDestroy {
     , private vehicleTypeService: VehicleService
     , private stateService: StateService
     , private orderService: OrderService
-    , private modalService: ModalService) {
+    , private modalService: ModalService
+    ) {
   }
 
   timeStartBelowArrival(index: number): boolean{
