@@ -1,11 +1,9 @@
-using System.Linq;
 using API.Data;
 using API.Entity;
+using API.Models;
 using API.Util;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace API.Controllers
 {
@@ -288,7 +286,8 @@ namespace API.Controllers
 
                         //Extract Ground Vehicles from each schedule
                         var extractedGroundVehicles = new List<GroundVehicle>();
-                        foreach (var schedule in schedules) {
+                        foreach (var schedule in schedules)
+                        {
                             extractedGroundVehicles.Add(schedule.GroundVehicle);
                         }
 
@@ -299,27 +298,53 @@ namespace API.Controllers
                         Console.WriteLine($"Order: {newVehicleSchedule.OrderId}; Vehicle: {newVehicleSchedule.GroundVehicleId}");
                         await _context.VehicleSchedules.AddAsync(newVehicleSchedule);
                         await _context.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        var newVehicleSchedule = new VehicleSchedule();
+                        //Check if the baseModel can be scheduled before or after any existing schedule
+                        //Calculate time differences to schedule efficency
+                        var timeDifferences = new List<SchedulingTimeDifference>();
+                        foreach (var schedule in schedules)
+                        {
+                            var timeDifference = new SchedulingTimeDifference();
 
-                        // //Return available vehicles which not been scheduled yet
+                            if (schedule.Order.StartOfService > baseModel.Deadline.AddMinutes(5))
+                            {
+                                timeDifference.duration = schedule.Order.StartOfService - baseModel.Deadline;
+                                timeDifference.schedule = schedule;
+                                timeDifference.timeSpanBefore = true;
+                                timeDifferences.Add(timeDifference);
+                                newVehicleSchedule = scheduler.assignModelToGroundVehicle(baseModel, schedule.GroundVehicle);
+                            }
+                            else if (schedule.Order.EndOfService.AddMinutes(5) < baseModel.eSoS)
+                            {
+                                timeDifference.duration = baseModel.eSoS - schedule.Order.EndOfService;
+                                timeDifference.schedule = schedule;
+                                timeDifference.timeSpanBefore = false;
+                                timeDifferences.Add(timeDifference);
+                                newVehicleSchedule = scheduler.assignModelToGroundVehicle(baseModel, schedule.GroundVehicle);
+                            }
+                        }
+
+                        // if (timeDifferences.Count() > 0)
+                        // {
+                        //     timeDifferences.Sort((s1, s2) => s1.duration.CompareTo(s2.duration));
+                        //     newVehicleSchedule = scheduler.assignModelToGroundVehicle(baseModel, timeDifferences.Last().schedule.GroundVehicle);
+                        // }
+
+                        
+                        Console.WriteLine($"Order: {newVehicleSchedule.OrderId}; Vehicle: {newVehicleSchedule.GroundVehicleId}");
+                        await _context.VehicleSchedules.AddAsync(newVehicleSchedule);
+                        await _context.SaveChangesAsync();
+
                         // foreach (var schedule in schedules)
                         // {
-                        //     //Check which vehicles are not scheduled yet and temporarily save them to vehicleList
-                        //     var availableVehicles = vehicles.FindAll(v => v.GroundVehicleId != schedule.GroundVehicleId);
-                        //     if (schedule != null)
-                        //     {
-                        //         var newVehicleSchedule = scheduler.assignModelToGroundVehicle(baseModel, availableVehicles.ElementAt(0));
-                        //         Console.WriteLine($"Order: {newVehicleSchedule.OrderId}; Vehicle: {newVehicleSchedule.GroundVehicleId}");
-                        //         await _context.VehicleSchedules.AddAsync(newVehicleSchedule);
-                        //         await _context.SaveChangesAsync();
-                        //     }
+                        //     var duration = schedule.Order.EndOfService - schedule.Order.StartOfService;
+                        //     var partOfDuration = duration / 5;
                         // }
                     }
-
-                    //else take method of uml
                 }
-
-
-
             }
             else
             {
