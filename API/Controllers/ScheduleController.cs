@@ -308,41 +308,48 @@ namespace API.Controllers
                         foreach (var schedule in schedules)
                         {
                             var timeDifference = new SchedulingTimeDifference();
+                            var timeParts = new List<TimeSpan>();
 
-                            if (schedule.Order.StartOfService > baseModel.Deadline.AddMinutes(5))
+                            if (schedule.Order.StartOfService >= baseModel.Deadline.AddMinutes(5))
                             {
-                                timeDifference.duration = schedule.Order.StartOfService - baseModel.Deadline;
-                                timeDifference.schedule = schedule;
-                                timeDifference.timeSpanBefore = true;
-                                timeDifferences.Add(timeDifference);
+                                // timeDifference.duration = schedule.Order.StartOfService - baseModel.Deadline;
+                                // timeDifference.schedule = schedule;
+                                // timeDifferences.Add(timeDifference);
                                 newVehicleSchedule = scheduler.assignModelToGroundVehicle(baseModel, schedule.GroundVehicle);
                             }
-                            else if (schedule.Order.EndOfService.AddMinutes(5) < baseModel.eSoS)
+                            else if (schedule.Order.EndOfService.AddMinutes(5) <= baseModel.eSoS)
                             {
-                                timeDifference.duration = baseModel.eSoS - schedule.Order.EndOfService;
-                                timeDifference.schedule = schedule;
-                                timeDifference.timeSpanBefore = false;
-                                timeDifferences.Add(timeDifference);
+                                // timeDifference.duration = baseModel.eSoS - schedule.Order.EndOfService;
+                                // timeDifference.schedule = schedule;
+                                // timeDifferences.Add(timeDifference);
                                 newVehicleSchedule = scheduler.assignModelToGroundVehicle(baseModel, schedule.GroundVehicle);
+                            }
+                            else
+                            {
+                                var delay = baseModel.eSoS - schedule.Order.EndOfService;
+                                timeDifference.duration = delay;
+                                timeDifference.schedule = schedule;
+                                timeDifferences.Add(timeDifference);
                             }
                         }
 
-                        // if (timeDifferences.Count() > 0)
-                        // {
-                        //     timeDifferences.Sort((s1, s2) => s1.duration.CompareTo(s2.duration));
-                        //     newVehicleSchedule = scheduler.assignModelToGroundVehicle(baseModel, timeDifferences.Last().schedule.GroundVehicle);
-                        // }
+                        if (timeDifferences.Count() > 0)
+                        {
+                            timeDifferences.Sort((s1, s2) => s1.duration.CompareTo(s2.duration));
+                            var chosenSchedule = timeDifferences.First().schedule;
+                            var newBaseModel = baseModel;
+                            newBaseModel.eSoS = chosenSchedule.Order.EndOfService.AddMinutes(5);
+                            newBaseModel.Deadline = newBaseModel.eSoS + newBaseModel.timeToRun;
+                            newVehicleSchedule = scheduler.assignModelToGroundVehicle(newBaseModel, chosenSchedule.GroundVehicle);
+                            var test = scheduler.UpdateOrderTimeOfService(newBaseModel, _context);
+                        }
 
-                        
+
                         Console.WriteLine($"Order: {newVehicleSchedule.OrderId}; Vehicle: {newVehicleSchedule.GroundVehicleId}");
                         await _context.VehicleSchedules.AddAsync(newVehicleSchedule);
                         await _context.SaveChangesAsync();
 
-                        // foreach (var schedule in schedules)
-                        // {
-                        //     var duration = schedule.Order.EndOfService - schedule.Order.StartOfService;
-                        //     var partOfDuration = duration / 5;
-                        // }
+
                     }
                 }
             }

@@ -1,6 +1,10 @@
+using API.Data;
 using API.Entity;
 using API.Extensions;
 using API.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Util
 {
@@ -129,6 +133,21 @@ namespace API.Util
             t_vehicleSchedule.OrderId = model.Order.OrderId;
 
             return t_vehicleSchedule;
+        }
+
+        public async Task<ActionResult<Order>> UpdateOrderTimeOfService(SchedulingBaseModel model, DataContext context)
+        {
+            var order = await context.Orders.SingleAsync(o => o.OrderId.Equals(model.Order.OrderId));
+            if (!order.Equals(null))
+            {
+                order.StartOfService = model.eSoS;
+                order.EndOfService = model.Deadline;
+
+                await context.SaveChangesAsync();
+                return order;
+            } else {
+                return null;
+            }
         }
 
         // public ICollection<List<Order>> splitOrdersIntoSeperateLists(ICollection<Order> orders)
