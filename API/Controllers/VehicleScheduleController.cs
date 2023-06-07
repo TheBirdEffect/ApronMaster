@@ -76,6 +76,7 @@ namespace API.Controllers
                         },
                         StartOfService = order.StartOfService,
                         EndOfService = order.EndOfService,
+                        Delay = order.Delay,
                         fuelType = order.fuelType,
                         QtyFuel = order.QtyFuel,
                         PositionId = order.PositionId,
@@ -89,6 +90,16 @@ namespace API.Controllers
 
                 }
             ).ToListAsync();
+
+            //Calculate new SoS and EoS if Delay is set
+            //query all orders which have a delay from list query
+            foreach(var order in query) {
+                if(!order.Order.Delay.Equals(null))
+                {
+                    order.Order.StartOfService = (DateTime)(order.Order.StartOfService + order.Order.Delay);
+                    order.Order.EndOfService = (DateTime)(order.Order.EndOfService + order.Order.Delay);
+                }
+            }
 
             var orderedQuery = query.OrderBy(q => q.GroundVehicle.GroundVehicleId);
 

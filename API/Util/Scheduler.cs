@@ -135,20 +135,38 @@ namespace API.Util
             return t_vehicleSchedule;
         }
 
-        public async Task<ActionResult<Order>> UpdateOrderTimeOfService(SchedulingBaseModel model, DataContext context)
+        public async Task<ActionResult<Order>> SetOrderDelay(SchedulingBaseModel model, DataContext context)
         {
             var order = await context.Orders.SingleAsync(o => o.OrderId.Equals(model.Order.OrderId));
             if (!order.Equals(null))
             {
-                order.StartOfService = model.eSoS;
-                order.EndOfService = model.Deadline;
+                order.Delay = model.eSoS - order.StartOfService;
 
                 await context.SaveChangesAsync();
                 return order;
-            } else {
+            }
+            else
+            {
                 return null;
             }
         }
+
+        public async Task<ActionResult<Order>> ClearOrderDelay(SchedulingBaseModel model, DataContext context)
+        {
+            var order = await context.Orders.SingleAsync(o => o.OrderId.Equals(model.Order.OrderId));
+            if (!order.Equals(null))
+            {
+                order.Delay = null;
+
+                await context.SaveChangesAsync();
+                return order;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
 
         // public ICollection<List<Order>> splitOrdersIntoSeperateLists(ICollection<Order> orders)
         // {

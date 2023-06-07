@@ -273,6 +273,7 @@ namespace API.Controllers
                     //If no schedules have been found the order can be assinged and added directly
                     if (schedules.Count().Equals(0))
                     {
+                        await scheduler.ClearOrderDelay(baseModel, _context);
                         var newVehicleSchedule = scheduler.assignModelToGroundVehicle(baseModel, vehicles.ElementAt(0));
                         Console.WriteLine($"Order: {newVehicleSchedule.OrderId}; Vehicle: {newVehicleSchedule.GroundVehicleId}");
                         await _context.VehicleSchedules.AddAsync(newVehicleSchedule);
@@ -294,6 +295,7 @@ namespace API.Controllers
                         //Save vehicles of scheduling except already scheduled vehicles
                         var availableVehicles = vehicles.Except(extractedGroundVehicles);
 
+                        await scheduler.ClearOrderDelay(baseModel, _context);
                         var newVehicleSchedule = scheduler.assignModelToGroundVehicle(baseModel, availableVehicles.ElementAt(0));
                         Console.WriteLine($"Order: {newVehicleSchedule.OrderId}; Vehicle: {newVehicleSchedule.GroundVehicleId}");
                         await _context.VehicleSchedules.AddAsync(newVehicleSchedule);
@@ -305,43 +307,60 @@ namespace API.Controllers
                         //Check if the baseModel can be scheduled before or after any existing schedule
                         //Calculate time differences to schedule efficency
                         var timeDifferences = new List<SchedulingTimeDifference>();
+                        //var soretedSchedules = schedules.OrderByDescending(s => s.ScheduleId).ToList();
                         foreach (var schedule in schedules)
                         {
                             var timeDifference = new SchedulingTimeDifference();
                             var timeParts = new List<TimeSpan>();
 
-                            if (schedule.Order.StartOfService >= baseModel.Deadline.AddMinutes(5))
+                            if (schedule.Order.StartOfService >= baseModel.Deadline.AddMinutes(5) && timeDifferences.Count() == 0)
                             {
-                                // timeDifference.duration = schedule.Order.StartOfService - baseModel.Deadline;
-                                // timeDifference.schedule = schedule;
-                                // timeDifferences.Add(timeDifference);
+                                //The delay has to be cleared. So in case of a new scheduling cycle the delay will be calculated new
+                                await scheduler.ClearOrderDelay(baseModel, _context);
                                 newVehicleSchedule = scheduler.assignModelToGroundVehicle(baseModel, schedule.GroundVehicle);
                             }
-                            else if (schedule.Order.EndOfService.AddMinutes(5) <= baseModel.eSoS)
+                            else if (schedule.Order.EndOfService.AddMinutes(5) <= baseModel.eSoS && timeDifferences.Count() == 0)
                             {
-                                // timeDifference.duration = baseModel.eSoS - schedule.Order.EndOfService;
-                                // timeDifference.schedule = schedule;
-                                // timeDifferences.Add(timeDifference);
+                                //The delay has to be cleared. So in case of a new scheduling cycle the delay will be calculated new
+                                await scheduler.ClearOrderDelay(baseModel, _context);
                                 newVehicleSchedule = scheduler.assignModelToGroundVehicle(baseModel, schedule.GroundVehicle);
                             }
+                            //If the flight couldn´t be scheduled before or after already scheduled flights
+                            //the order gets an delay and will be scheduled after regurarely orders
                             else
                             {
+                                //Calculate Delay and store delay + schedule object to timeDifference object
                                 var delay = baseModel.eSoS - schedule.Order.EndOfService;
                                 timeDifference.duration = delay;
                                 timeDifference.schedule = schedule;
+                                //Add time differences of between base model and schedule
                                 timeDifferences.Add(timeDifference);
                             }
                         }
 
+                        //If the flight can be scheduled before or after existent schedules the time differences
+                        //list is empty. Following actions are only for flights which get an delay
                         if (timeDifferences.Count() > 0)
                         {
+                            //Sort the list ascending = the smallest delay should be chosen
                             timeDifferences.Sort((s1, s2) => s1.duration.CompareTo(s2.duration));
                             var chosenSchedule = timeDifferences.First().schedule;
                             var newBaseModel = baseModel;
-                            newBaseModel.eSoS = chosenSchedule.Order.EndOfService.AddMinutes(5);
+                            //If the chosen schedule has already a delay it has to be added to the following delay else not
+                            if (!chosenSchedule.Order.Delay.Equals(null))
+                            {
+                                newBaseModel.eSoS = (DateTime)(chosenSchedule.Order.EndOfService.AddMinutes(5) + chosenSchedule.Order.Delay);
+                            }
+                            else
+                            {
+                                newBaseModel.eSoS = chosenSchedule.Order.EndOfService.AddMinutes(5);
+                            }
+                            //Set new baseModel´s Start of Service (inclusive delays)
                             newBaseModel.Deadline = newBaseModel.eSoS + newBaseModel.timeToRun;
+                            //Assing new baseModel to its vehicle
                             newVehicleSchedule = scheduler.assignModelToGroundVehicle(newBaseModel, chosenSchedule.GroundVehicle);
-                            var test = scheduler.UpdateOrderTimeOfService(newBaseModel, _context);
+                            //Set delay to orders database entry
+                            var test = scheduler.SetOrderDelay(newBaseModel, _context);
                         }
 
 
