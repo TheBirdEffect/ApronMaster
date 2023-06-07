@@ -313,13 +313,14 @@ namespace API.Controllers
                             var timeDifference = new SchedulingTimeDifference();
                             var timeParts = new List<TimeSpan>();
 
-                            if (schedule.Order.StartOfService >= baseModel.Deadline.AddMinutes(5) && timeDifferences.Count() == 0)
-                            {
-                                //The delay has to be cleared. So in case of a new scheduling cycle the delay will be calculated new
-                                await scheduler.ClearOrderDelay(baseModel, _context);
-                                newVehicleSchedule = scheduler.assignModelToGroundVehicle(baseModel, schedule.GroundVehicle);
-                            }
-                            else if (schedule.Order.EndOfService.AddMinutes(5) <= baseModel.eSoS && timeDifferences.Count() == 0)
+                            // if (schedule.Order.StartOfService >= baseModel.Deadline.AddMinutes(5)
+                            // && timeDifferences.Count() == 0)
+                            // {
+                            //     //The delay has to be cleared. So in case of a new scheduling cycle the delay will be calculated new
+                            //     await scheduler.ClearOrderDelay(baseModel, _context);
+                            //     newVehicleSchedule = scheduler.assignModelToGroundVehicle(baseModel, schedule.GroundVehicle);
+                            // }
+                            if (schedule.Order.EndOfService.AddMinutes(5) <= baseModel.eSoS)
                             {
                                 //The delay has to be cleared. So in case of a new scheduling cycle the delay will be calculated new
                                 await scheduler.ClearOrderDelay(baseModel, _context);
@@ -344,7 +345,7 @@ namespace API.Controllers
                         {
                             //Sort the list ascending = the smallest delay should be chosen
                             timeDifferences.Sort((s1, s2) => s1.duration.CompareTo(s2.duration));
-                            var chosenSchedule = timeDifferences.First().schedule;
+                            var chosenSchedule = timeDifferences.Last().schedule;
                             var newBaseModel = baseModel;
                             //If the chosen schedule has already a delay it has to be added to the following delay else not
                             if (!chosenSchedule.Order.Delay.Equals(null))
@@ -367,7 +368,6 @@ namespace API.Controllers
                         Console.WriteLine($"Order: {newVehicleSchedule.OrderId}; Vehicle: {newVehicleSchedule.GroundVehicleId}");
                         await _context.VehicleSchedules.AddAsync(newVehicleSchedule);
                         await _context.SaveChangesAsync();
-
 
                     }
                 }

@@ -1,6 +1,8 @@
-<button type="button" class="btn btn-success" (click)="initializeBackend()">initialize</button>
-<button type="button" class="btn btn-primary" (click)="updateScheduling()">Update</button>
-<button type="button" class="btn btn-danger" (click)="deleteData()">delete</button>
+<div class="row mb-2 centerButtons">
+    <button type="button" class="btn btn-success" (click)="initializeBackend()">initialize</button>
+    <button type="button" class="btn btn-primary" (click)="updateScheduling()">Update</button>
+    <button type="button" class="btn btn-danger" (click)="deleteData()">delete</button>
+</div>
 <div class="text-center">
     <ng-template [ngIf]="vehicleSchedules$ | async">
         <google-chart class="chart" [data]="timeLineChartData"></google-chart>

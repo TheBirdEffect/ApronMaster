@@ -54,6 +54,7 @@ namespace API.Controllers
                               OrderId = o.OrderId,
                               StartOfService = o.StartOfService,
                               EndOfService = o.EndOfService,
+                              Delay = o.Delay,
                               QtyFuel = o.QtyFuel,
                               PositionId = o.PositionId,
                               Position = new Position

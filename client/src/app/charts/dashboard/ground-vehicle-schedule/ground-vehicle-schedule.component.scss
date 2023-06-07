@@ -2,3 +2,20 @@
     width: 100%;
     height: 100%;
 }
+
+button {
+    align-content: center;
+    width: 20%
+}
+
+.centerButtons {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+}
+
+.centerButtons>* {
+    width: 30%;
+    margin: 10px;
+}
