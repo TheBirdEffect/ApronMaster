@@ -15,236 +15,6 @@ namespace API.Controllers
             _context = context;
         }
 
-        [HttpGet("inititialize")]
-        public async Task<ActionResult<IEnumerable<VehicleSchedule>>> InitializeSchedule()
-        {
-            var totalSchedules = await _context.VehicleSchedules.ToListAsync();
-            var vehicles = totalSchedules;
-            var schedulesToBeReturned = new List<VehicleSchedule>();
-
-            if (!totalSchedules.Any())
-            {
-                //     var groundVehicles = await _context.GroundVehicles.ToListAsync();
-                //     var scheduleSeed = new List<VehicleSchedule>();
-
-                //     var order = new Order
-                //     {
-                //         OrderId = 0,
-                //         Flight = new Flight {
-                //                         Arrival = new DateTime(2000, 01, 01, 00, 00, 00),
-                //                         Departure = new DateTime(2000, 01, 01, 00, 00, 00)
-                //                     },
-                //         StartOfService = DateTime.UtcNow,
-                //         EndOfService = DateTime.UtcNow
-                //     };
-
-                //     foreach (var vehicle in groundVehicles)
-                //     {
-                //         scheduleSeed.Add(
-                //             new VehicleSchedule
-                //             {
-                //                 OrderId = 9999,
-                //                 GroundVehicleId = vehicle.GroundVehicleId
-                //             }
-                //         );
-                //     }
-
-                //     await _context.VehicleSchedules.AddRangeAsync(scheduleSeed);
-                //     await _context.SaveChangesAsync();
-
-                //     return Ok("Schedules are Initialized");
-
-                var scheduler = new Scheduler();
-                var currentOrders = await this._context.Orders.ToListAsync();
-
-                var baseModels = scheduler.calculateSlackAndMapToSchedulingModel(currentOrders);
-
-                foreach (var baseModel in baseModels)
-                {
-                    var totalVehicles = _context.GroundVehicles
-                        .Where(v => v.VehicleTypeId == baseModel.Order.VehicleTypeId)
-                        .Count();
-
-                    var schedules = await _context.VehicleSchedules
-                        .Where(s => s.GroundVehicle.VehicleTypeId == baseModel.Order.VehicleTypeId)
-                        .ToListAsync();
-
-                    if (schedules.Count() == totalVehicles)
-                    {
-                        var schedulesOrdered = await (
-                        from vS in _context.VehicleSchedules
-                        join v in _context.GroundVehicles
-                        on vS.GroundVehicleId equals v.GroundVehicleId into __groundVehicleIds
-                        from vehicle in __groundVehicleIds.DefaultIfEmpty()
-
-                        join o in _context.Orders
-                        on vS.OrderId equals o.OrderId into __orders
-                        from order in __orders.DefaultIfEmpty()
-
-                        join f in _context.Flights
-                        on vS.Order.FlightId equals f.FlightId into __flights
-                        from flight in __flights.DefaultIfEmpty()
-
-                        where vS.GroundVehicle.VehicleTypeId == baseModel.Order.VehicleTypeId
-                        select new VehicleSchedule
-                        {
-                            OrderId = vS.OrderId,
-                            Order = new Order
-                            {
-                                OrderId = order.OrderId,
-                                StartOfService = order.StartOfService,
-                                EndOfService = order.EndOfService,
-                                FlightId = flight.FlightId,
-                                Flight = new Flight
-                                {
-                                    FlightId = flight.FlightId,
-                                    FlightNumber = flight.FlightNumber,
-                                    Arrival = flight.Arrival,
-                                    Departure = flight.Departure,
-                                    AircraftTypeId = flight.AircraftTypeId,
-                                    Destination = flight.Destination
-                                },
-                            },
-                            GroundVehicleId = vehicle.GroundVehicleId,
-                            GroundVehicle = new GroundVehicle
-                            {
-                                GroundVehicleId = vehicle.GroundVehicleId,
-                                VehicleType = vehicle.VehicleType,
-                                Position = vehicle.Position,
-                                VehicleTypeId = vehicle.VehicleTypeId
-                            }
-                        }
-                    ).ToListAsync();
-
-                        var availableGV = scheduler.returnAvailableGroundVehicles(baseModel, schedulesOrdered);
-
-                        if (availableGV.Any())
-                        {
-                            var schedule = scheduler.assignModelToGroundVehicle(baseModel, availableGV.ElementAt(0));
-                            Console.WriteLine($"Order: {schedule.OrderId}; Vehicle: {schedule.GroundVehicleId}");
-                            await _context.VehicleSchedules.AddAsync(schedule);
-                            await _context.SaveChangesAsync();
-
-                            schedulesToBeReturned.Add(schedule);
-                        }
-                    }
-                    else
-                    {
-                        var groundVehicles = await _context.GroundVehicles
-                            .Where(gV => gV.VehicleTypeId == baseModel.Order.VehicleTypeId).ToListAsync();
-
-                        var availableVehicles = new List<GroundVehicle>();
-
-                        if (schedules.Any())
-                        {
-                            foreach (var schedule in schedules)
-                            {
-                                foreach (var vehicle in groundVehicles)
-                                {
-                                    if (schedule.GroundVehicleId != vehicle.GroundVehicleId)
-                                    {
-                                        availableVehicles.Add(vehicle);
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            availableVehicles.AddRange(groundVehicles);
-                        }
-
-
-                        if (availableVehicles.Any())
-                        {
-                            var schedule = scheduler.assignModelToGroundVehicle(baseModel, availableVehicles.ElementAt(0));
-                            Console.WriteLine($"Order: {schedule.OrderId}; Vehicle: {schedule.GroundVehicleId}");
-                            await _context.VehicleSchedules.AddAsync(schedule);
-                            await _context.SaveChangesAsync();
-
-                            schedulesToBeReturned.Add(schedule);
-                        }
-                    }
-
-
-                }
-
-            }
-            else
-            {
-                var scheduler = new Scheduler();
-                var currentOrders = await this._context.Orders.ToListAsync();
-
-                var baseModels = scheduler.calculateSlackAndMapToSchedulingModel(currentOrders);
-
-                foreach (var model in baseModels)
-                {
-                    // var schedulesOrdered = await this._context.VehicleSchedules
-                    //     .Where(s =>
-                    //     s.GroundVehicle.VehicleTypeId == model.Order.VehicleTypeId)
-                    //     .ToListAsync();
-
-                    var schedulesOrdered = await (
-                        from vS in _context.VehicleSchedules
-                        join v in _context.GroundVehicles
-                        on vS.GroundVehicleId equals v.GroundVehicleId into __groundVehicleIds
-                        from vehicle in __groundVehicleIds.DefaultIfEmpty()
-
-                        join o in _context.Orders
-                        on vS.OrderId equals o.OrderId into __orders
-                        from order in __orders.DefaultIfEmpty()
-
-                        join f in _context.Flights
-                        on vS.Order.FlightId equals f.FlightId into __flights
-                        from flight in __flights.DefaultIfEmpty()
-
-                        where vS.GroundVehicle.VehicleTypeId == model.Order.VehicleTypeId
-                        select new VehicleSchedule
-                        {
-                            OrderId = vS.OrderId,
-                            Order = new Order
-                            {
-                                OrderId = order.OrderId,
-                                StartOfService = order.StartOfService,
-                                EndOfService = order.EndOfService,
-                                FlightId = flight.FlightId,
-                                Flight = new Flight
-                                {
-                                    FlightId = flight.FlightId,
-                                    FlightNumber = flight.FlightNumber,
-                                    Arrival = flight.Arrival,
-                                    Departure = flight.Departure,
-                                    AircraftTypeId = flight.AircraftTypeId,
-                                    Destination = flight.Destination
-                                },
-                            },
-                            GroundVehicleId = vehicle.GroundVehicleId,
-                            GroundVehicle = new GroundVehicle
-                            {
-                                GroundVehicleId = vehicle.GroundVehicleId,
-                                VehicleType = vehicle.VehicleType,
-                                Position = vehicle.Position,
-                                VehicleTypeId = vehicle.VehicleTypeId
-                            }
-                        }
-                    ).ToListAsync();
-
-                    var availableGV = scheduler.returnAvailableGroundVehicles(model, schedulesOrdered);
-
-                    if (availableGV.Any())
-                    {
-                        var schedule = scheduler.assignModelToGroundVehicle(model, availableGV.ElementAt(0));
-                        Console.WriteLine($"Order: {schedule.OrderId}; Vehicle: {schedule.GroundVehicleId}");
-                        await _context.VehicleSchedules.AddAsync(schedule);
-                        await _context.SaveChangesAsync();
-
-                        schedulesToBeReturned.Add(schedule);
-                    }
-                }
-            }
-
-            return schedulesToBeReturned;
-        }
-
         [HttpGet("schedule")]
         public async Task<ActionResult<IEnumerable<VehicleSchedule>>> InitiateSchedule()
         {
@@ -280,7 +50,6 @@ namespace API.Controllers
                         await _context.SaveChangesAsync();
                     }
                     //If count of schedules is less-than or equal to the total amount of vehicles 
-                    // -> Check which vehicle isn´t scheduled yet -> schedule that vehicle
                     else if (schedules.Count() < vehicles.Count())
                     {
                         // var availableVehicles = new List<GroundVehicle>();
@@ -304,48 +73,44 @@ namespace API.Controllers
                     else
                     {
                         var newVehicleSchedule = new VehicleSchedule();
-                        //Check if the baseModel can be scheduled before or after any existing schedule
                         //Calculate time differences to schedule efficency
                         var timeDifferences = new List<SchedulingTimeDifference>();
-                        //var soretedSchedules = schedules.OrderByDescending(s => s.ScheduleId).ToList();
                         foreach (var schedule in schedules)
                         {
                             var timeDifference = new SchedulingTimeDifference();
                             var timeParts = new List<TimeSpan>();
 
-                            // if (schedule.Order.StartOfService >= baseModel.Deadline.AddMinutes(5)
-                            // && timeDifferences.Count() == 0)
-                            // {
-                            //     //The delay has to be cleared. So in case of a new scheduling cycle the delay will be calculated new
-                            //     await scheduler.ClearOrderDelay(baseModel, _context);
-                            //     newVehicleSchedule = scheduler.assignModelToGroundVehicle(baseModel, schedule.GroundVehicle);
-                            // }
-                            if (schedule.Order.EndOfService.AddMinutes(5) <= baseModel.eSoS)
-                            {
-                                //The delay has to be cleared. So in case of a new scheduling cycle the delay will be calculated new
-                                await scheduler.ClearOrderDelay(baseModel, _context);
-                                newVehicleSchedule = scheduler.assignModelToGroundVehicle(baseModel, schedule.GroundVehicle);
-                            }
-                            //If the flight couldn´t be scheduled before or after already scheduled flights
                             //the order gets an delay and will be scheduled after regurarely orders
-                            else
-                            {
-                                //Calculate Delay and store delay + schedule object to timeDifference object
-                                var delay = baseModel.eSoS - schedule.Order.EndOfService;
-                                timeDifference.duration = delay;
-                                timeDifference.schedule = schedule;
-                                //Add time differences of between base model and schedule
-                                timeDifferences.Add(timeDifference);
-                            }
+                            //Calculate Delay and store delay + schedule object to timeDifference object
+                            var delay = baseModel.eSoS - schedule.Order.EndOfService;
+                            timeDifference.duration = delay;
+                            timeDifference.schedule = schedule;
+                            //Add time differences of between base model and schedule
+                            timeDifferences.Add(timeDifference);
                         }
 
                         //If the flight can be scheduled before or after existent schedules the time differences
                         //list is empty. Following actions are only for flights which get an delay
                         if (timeDifferences.Count() > 0)
                         {
-                            //Sort the list ascending = the smallest delay should be chosen
-                            timeDifferences.Sort((s1, s2) => s1.duration.CompareTo(s2.duration));
-                            var chosenSchedule = timeDifferences.Last().schedule;
+                            var chosenSchedule = new VehicleSchedule();
+                            //Sort the list ascending = the latest EoS-Time should be chosen
+                            timeDifferences.Sort((s1, s2) => s1.schedule.Order.EndOfService.CompareTo(s2.schedule.Order.EndOfService));
+                            //Store schedules which share same resource
+                            var listOfDuplicatesOnResource = timeDifferences.Where(d => d.schedule.GroundVehicleId == timeDifferences.First().schedule.GroundVehicleId);
+                            //If there are schedules which share resource take the scheduling with the latest EoS
+                            if (listOfDuplicatesOnResource.Count() > 1)
+                            {
+                                var scheduleWithoutDuplicate = timeDifferences.Except(listOfDuplicatesOnResource);
+                                var listOfDuplicatesSorted = listOfDuplicatesOnResource.OrderByDescending(o => o.schedule.Order.EndOfService);
+                                scheduleWithoutDuplicate.Append(listOfDuplicatesSorted.First());
+                                //The chosen schedule has the absolut minimum of EoS of the amount of schedules
+                                chosenSchedule = scheduleWithoutDuplicate.OrderBy(o => o.schedule.Order.EndOfService).First().schedule;
+                            }
+                            else
+                            {
+                                chosenSchedule = timeDifferences.First().schedule;
+                            }
                             var newBaseModel = baseModel;
                             //If the chosen schedule has already a delay it has to be added to the following delay else not
                             if (!chosenSchedule.Order.Delay.Equals(null))
@@ -363,9 +128,6 @@ namespace API.Controllers
                             //Set delay to orders database entry
                             var test = scheduler.SetOrderDelay(newBaseModel, _context);
                         }
-
-
-                        Console.WriteLine($"Order: {newVehicleSchedule.OrderId}; Vehicle: {newVehicleSchedule.GroundVehicleId}");
                         await _context.VehicleSchedules.AddAsync(newVehicleSchedule);
                         await _context.SaveChangesAsync();
 
