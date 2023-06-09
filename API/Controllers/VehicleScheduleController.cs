@@ -46,6 +46,8 @@ namespace API.Controllers
                 on vS.Order.FlightId equals f.FlightId into __flights
                 from flight in __flights.DefaultIfEmpty()
 
+                where order.OrderId != 9999 //Seed!
+
                 select new VehicleSchedule
                 {
                     ScheduleId = vS.ScheduleId,
@@ -74,6 +76,7 @@ namespace API.Controllers
                         },
                         StartOfService = order.StartOfService,
                         EndOfService = order.EndOfService,
+                        Delay = order.Delay,
                         fuelType = order.fuelType,
                         QtyFuel = order.QtyFuel,
                         PositionId = order.PositionId,
@@ -88,7 +91,29 @@ namespace API.Controllers
                 }
             ).ToListAsync();
 
-            return Ok(query);
+            //Calculate new SoS and EoS if Delay is set
+            //query all orders which have a delay from list query
+            foreach(var order in query) {
+                if(!order.Order.Delay.Equals(null))
+                {
+                    order.Order.StartOfService = (DateTime)(order.Order.StartOfService + order.Order.Delay);
+                    order.Order.EndOfService = (DateTime)(order.Order.EndOfService + order.Order.Delay);
+                }
+            }
+
+            var orderedQuery = query.OrderBy(q => q.GroundVehicle.GroundVehicleId);
+
+            return Ok(orderedQuery);
+        }
+
+        [HttpDelete("all")]
+        public async Task<ActionResult> deleteAllSchedules() {
+            var totalSchedules = await _context.VehicleSchedules.ToListAsync();
+
+            _context.VehicleSchedules.RemoveRange(totalSchedules);
+            await _context.SaveChangesAsync();
+
+            return Ok("Schedules removed!");
         }
     }
 }

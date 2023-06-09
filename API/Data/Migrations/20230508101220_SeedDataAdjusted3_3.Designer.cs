@@ -3,6 +3,7 @@ using System;
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230508101220_SeedDataAdjusted3_3")]
+    partial class SeedDataAdjusted3_3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.3");
@@ -444,7 +447,7 @@ namespace API.Data.Migrations
                         {
                             GroundVehicleId = 11,
                             IsIdling = true,
-                            Name = "Flugzeugtreppe mittel 1",
+                            Name = "Flugzeugtreppe mittel",
                             PositionId = 17,
                             VehicleTypeId = 3
                         },
@@ -452,7 +455,7 @@ namespace API.Data.Migrations
                         {
                             GroundVehicleId = 12,
                             IsIdling = true,
-                            Name = "Flugzeugtreppe mittel 2",
+                            Name = "Flugzeugtreppe mittel",
                             PositionId = 17,
                             VehicleTypeId = 3
                         },
@@ -567,9 +570,6 @@ namespace API.Data.Migrations
                     b.Property<int>("OrderId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
-
-                    b.Property<TimeSpan?>("Delay")
-                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("EndOfService")
                         .HasColumnType("TEXT");

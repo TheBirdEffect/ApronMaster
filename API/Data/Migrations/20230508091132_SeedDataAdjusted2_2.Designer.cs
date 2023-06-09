@@ -3,6 +3,7 @@ using System;
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230508091132_SeedDataAdjusted2_2")]
+    partial class SeedDataAdjusted2_2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.3");
@@ -320,15 +323,6 @@ namespace API.Data.Migrations
                             Departure = new DateTime(2023, 5, 11, 6, 45, 0, 0, DateTimeKind.Unspecified),
                             Destination = "EDDB",
                             FlightNumber = "EZY4903"
-                        },
-                        new
-                        {
-                            FlightId = 5,
-                            AircraftTypeId = 5,
-                            Arrival = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Departure = new DateTime(2000, 1, 1, 0, 1, 0, 0, DateTimeKind.Unspecified),
-                            Destination = "TEST",
-                            FlightNumber = "TESTFLIGHT"
                         });
                 });
 
@@ -444,7 +438,7 @@ namespace API.Data.Migrations
                         {
                             GroundVehicleId = 11,
                             IsIdling = true,
-                            Name = "Flugzeugtreppe mittel 1",
+                            Name = "Flugzeugtreppe mittel",
                             PositionId = 17,
                             VehicleTypeId = 3
                         },
@@ -452,7 +446,7 @@ namespace API.Data.Migrations
                         {
                             GroundVehicleId = 12,
                             IsIdling = true,
-                            Name = "Flugzeugtreppe mittel 2",
+                            Name = "Flugzeugtreppe mittel",
                             PositionId = 17,
                             VehicleTypeId = 3
                         },
@@ -567,9 +561,6 @@ namespace API.Data.Migrations
                     b.Property<int>("OrderId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
-
-                    b.Property<TimeSpan?>("Delay")
-                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("EndOfService")
                         .HasColumnType("TEXT");
@@ -880,7 +871,7 @@ namespace API.Data.Migrations
                         {
                             OrderId = 9999,
                             EndOfService = new DateTime(2000, 1, 1, 0, 1, 0, 0, DateTimeKind.Unspecified),
-                            FlightId = 5,
+                            FlightId = 1,
                             PositionId = 1,
                             QtyFuel = 0,
                             StartOfService = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),

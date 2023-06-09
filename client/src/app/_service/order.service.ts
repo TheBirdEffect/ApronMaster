@@ -12,7 +12,7 @@ import { PositionService } from './position.service';
   providedIn: 'root'
 })
 export class OrderService {
-  private basicApiPath = "https://localhost:5001/api"
+  private basicApiPath = "https://localhost:5001/api";
   _ordersSource = new BehaviorSubject<order[] | null>(null);
   currentOrders$ = this._ordersSource.asObservable();
 

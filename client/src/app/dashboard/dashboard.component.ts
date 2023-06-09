@@ -4,6 +4,8 @@ import { FlightsService } from '../_service/flights.service';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { AlertService } from '../_service/alert.service';
 import { Flight } from '../_models/flight';
+import { vehicleSchedule } from '../_models/vehicleSchedule';
+import { SchedulingTableService } from '../_service/scheduling-table.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,11 +22,13 @@ export class DashboardComponent implements OnInit {
   constructor(public flightService: FlightsService,
     // private modalService: BsModalService,
     // private alertService: AlertService
+    private tableService: SchedulingTableService
   ) { }
 
 
   ngOnInit(): void {
     //this.getFlights();
+    this.tableService.getExtendedVehicleScheduling().subscribe();
   }
 
   // getFlights() {
@@ -60,5 +64,5 @@ export class DashboardComponent implements OnInit {
   //   this.closeModal()
   // }
 
-
+  
 }

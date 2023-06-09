@@ -43,7 +43,7 @@ export class TableFlightComponent implements OnInit {
     return this.flightService.getFlights().subscribe({
       next: response => {
         this.flights = response
-        console.log(this.flights);
+        //console.log(this.flights);
         
       },
       error: error => console.log(error)

@@ -1,5 +1,10 @@
+using API.Data;
 using API.Entity;
+using API.Extensions;
 using API.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Util
 {
@@ -34,7 +39,7 @@ namespace API.Util
 
         public double leastSlackTimeAlgorithm(SchedulingBaseModel model, DateTime currentTime)
         {
-            //Receives SchedulingBaseModel and eSoS of the flight n-1
+            //Receives SchedulingBaseModel and currentTime which is the timestamp of the moment of Schedule initialization
             //calculates the slack time of the order
             var remainingTimeToRun = model.Deadline - currentTime;
 
@@ -51,7 +56,52 @@ namespace API.Util
 
             List<GroundVehicle> availableVehicles = new List<GroundVehicle>();
 
+            ICollection<VehicleSchedule> preFilteredSchedules = new List<VehicleSchedule>();
+            var listOfUnavailableVehicles = new List<GroundVehicle>();
+
             foreach (var schedule in schedVehicle)
+            {
+                if (
+                    schedule.Order.StartOfService.AddMinutes(-5) <= eSoS
+                    && Deadline <= schedule.Order.EndOfService.AddMinutes(5)
+                )
+                {
+                    listOfUnavailableVehicles.Add(schedule.GroundVehicle);
+                }
+                else if (schedule.Order.StartOfService.AddMinutes(-5) <= eSoS
+                    && Deadline <= schedule.Order.Flight.Departure)
+                {
+                    listOfUnavailableVehicles.Add(schedule.GroundVehicle);
+                }
+                // else if (schedule.Order.Flight.Arrival <= eSoS
+                //     && Deadline <= schedule.Order.EndOfService.AddMinutes(5)
+                // )
+                // {
+                //     listOfUnavailableVehicles.Add(schedule.GroundVehicle);
+                // }
+            }
+
+            if (listOfUnavailableVehicles.Any())
+            {
+                foreach (var schedule in schedVehicle)
+                {
+                    foreach (var unavailableVehicle in listOfUnavailableVehicles)
+                    {
+                        if (schedule.GroundVehicle.GroundVehicleId != unavailableVehicle.GroundVehicleId)
+                        {
+                            preFilteredSchedules.Add(schedule);
+                        }
+                        //Hier muss ein weiter Zweig implementiert werden, der im Falle von zu wenig ressourcen, fahrzeuge hinten anstellt.
+                    }
+                }
+            }
+            else
+            {
+                preFilteredSchedules = schedVehicle;
+            }
+
+
+            foreach (var schedule in preFilteredSchedules)
             {
                 //check if vehicle can be scheduled before currently existent vehicle scheduling
                 if (Deadline <= (schedule.Order.StartOfService.AddMinutes(-5)))
@@ -84,6 +134,39 @@ namespace API.Util
 
             return t_vehicleSchedule;
         }
+
+        public async Task<ActionResult<Order>> SetOrderDelay(SchedulingBaseModel model, DataContext context)
+        {
+            var order = await context.Orders.SingleAsync(o => o.OrderId.Equals(model.Order.OrderId));
+            if (!order.Equals(null))
+            {
+                order.Delay = model.eSoS - order.StartOfService;
+
+                await context.SaveChangesAsync();
+                return order;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async Task<ActionResult<Order>> ClearOrderDelay(SchedulingBaseModel model, DataContext context)
+        {
+            var order = await context.Orders.SingleAsync(o => o.OrderId.Equals(model.Order.OrderId));
+            if (!order.Equals(null))
+            {
+                order.Delay = null;
+
+                await context.SaveChangesAsync();
+                return order;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
 
         // public ICollection<List<Order>> splitOrdersIntoSeperateLists(ICollection<Order> orders)
         // {
