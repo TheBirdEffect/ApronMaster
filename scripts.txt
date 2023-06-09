@@ -1,7 +1,8 @@
 Start Backend API
 
 cd .\API
-dotnet watch run --no-hot-reload
+dotnet watch --no-hot-reload
+
 
 Start Frontend client
 
