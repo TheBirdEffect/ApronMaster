@@ -103,7 +103,7 @@ namespace API.Controllers
                             {
                                 var scheduleWithoutDuplicate = timeDifferences.Except(listOfDuplicatesOnResource);
                                 var listOfDuplicatesSorted = listOfDuplicatesOnResource.OrderByDescending(o => o.schedule.Order.EndOfService);
-                                scheduleWithoutDuplicate.Append(listOfDuplicatesSorted.First());
+                                scheduleWithoutDuplicate = scheduleWithoutDuplicate.Append(listOfDuplicatesSorted.First());
                                 //The chosen schedule has the absolut minimum of EoS of the amount of schedules
                                 chosenSchedule = scheduleWithoutDuplicate.OrderBy(o => o.schedule.Order.EndOfService).First().schedule;
                             }

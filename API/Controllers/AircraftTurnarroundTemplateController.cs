@@ -4,10 +4,6 @@ using API.Entity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-/*
-    This Controller provides all api methods to interact of the AircraftTurnaroundTemplate
-
-*/
 namespace API.Controllers
 {
     public class AircraftTurnarroundTemplateController : BaseController

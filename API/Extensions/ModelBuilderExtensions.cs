@@ -117,17 +117,18 @@ namespace API.Data.Migrations
                 new GroundVehicle { GroundVehicleId = 12, Name = "Flugzeugtreppe mittel 2", IsIdling = true, PositionId = 17, VehicleTypeId = 3 },
                 new GroundVehicle { GroundVehicleId = 13, Name = "Flugzeugtreppe groß", IsIdling = true, PositionId = 17, VehicleTypeId = 3 },
                 new GroundVehicle { GroundVehicleId = 14, Name = "Bus 1", IsIdling = true, PositionId = 17, VehicleTypeId = 4 },
-                new GroundVehicle { GroundVehicleId = 15, Name = "Containerzug 1", IsIdling = true, PositionId = 17, VehicleTypeId = 12 },
-                new GroundVehicle { GroundVehicleId = 16, Name = "Containerzug 2", IsIdling = true, PositionId = 17, VehicleTypeId = 12 },
-                new GroundVehicle { GroundVehicleId = 17, Name = "Frischwasserfahrzeug", IsIdling = true, PositionId = 17, VehicleTypeId = 7 },
-                new GroundVehicle { GroundVehicleId = 18, Name = "Entsorgungsfahrzeug", IsIdling = true, PositionId = 17, VehicleTypeId = 8 },
-                new GroundVehicle { GroundVehicleId = 19, Name = "Tank LKW1 JETA1 ", IsIdling = true, PositionId = 18, VehicleTypeId = 9 },
-                new GroundVehicle { GroundVehicleId = 20, Name = "Tank LKW2 JETA1", IsIdling = true, PositionId = 18, VehicleTypeId = 9 },
-                new GroundVehicle { GroundVehicleId = 21, Name = "Tank LKW3 Avgas", IsIdling = true, PositionId = 18, VehicleTypeId = 9 },
-                new GroundVehicle { GroundVehicleId = 22, Name = "GPU 1", IsIdling = true, PositionId = 17, VehicleTypeId = 10 },
-                new GroundVehicle { GroundVehicleId = 23, Name = "GPU 2", IsIdling = true, PositionId = 17, VehicleTypeId = 10 },
+                new GroundVehicle { GroundVehicleId = 15, Name = "Bus 2", IsIdling = true, PositionId = 17, VehicleTypeId = 4 },
+                new GroundVehicle { GroundVehicleId = 16, Name = "Containerzug 1", IsIdling = true, PositionId = 17, VehicleTypeId = 12 },
+                new GroundVehicle { GroundVehicleId = 17, Name = "Containerzug 2", IsIdling = true, PositionId = 17, VehicleTypeId = 12 },
+                new GroundVehicle { GroundVehicleId = 18, Name = "Frischwasserfahrzeug", IsIdling = true, PositionId = 17, VehicleTypeId = 7 },
+                new GroundVehicle { GroundVehicleId = 19, Name = "Entsorgungsfahrzeug", IsIdling = true, PositionId = 17, VehicleTypeId = 8 },
+                new GroundVehicle { GroundVehicleId = 20, Name = "Tank LKW1 JETA1 ", IsIdling = true, PositionId = 18, VehicleTypeId = 9 },
+                new GroundVehicle { GroundVehicleId = 21, Name = "Tank LKW2 JETA1", IsIdling = true, PositionId = 18, VehicleTypeId = 9 },
+                new GroundVehicle { GroundVehicleId = 22, Name = "Tank LKW3 Avgas", IsIdling = true, PositionId = 18, VehicleTypeId = 9 },
+                new GroundVehicle { GroundVehicleId = 23, Name = "GPU 1", IsIdling = true, PositionId = 17, VehicleTypeId = 10 },
                 new GroundVehicle { GroundVehicleId = 24, Name = "GPU 2", IsIdling = true, PositionId = 17, VehicleTypeId = 10 },
-                new GroundVehicle { GroundVehicleId = 25, Name = "High-Loader", IsIdling = true, PositionId = 17, VehicleTypeId = 6 }
+                new GroundVehicle { GroundVehicleId = 25, Name = "GPU 2", IsIdling = true, PositionId = 17, VehicleTypeId = 10 },
+                new GroundVehicle { GroundVehicleId = 26, Name = "High-Loader", IsIdling = true, PositionId = 17, VehicleTypeId = 6 }
             );
 
             modelBuilder.Entity<Order>().HasData(

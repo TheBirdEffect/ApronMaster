@@ -1,15 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using API.Data;
-using API.DTOs;
 using API.Entity;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    /*
+        The controller methods in this class only will return static values which represent
+        Vehicle offsets of dynamic generatable ground vehicles. 
+        This methods don´t consume any Parameters. This methods only return objects of type
+        TurnaroundVehicleTimeOffset.
+    */
     public class VehicleTimeOffsetController : BaseController
     {
         private readonly DataContext _context;

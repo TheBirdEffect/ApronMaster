@@ -1,25 +1,19 @@
 using API.Data;
 using API.Entity;
-using API.Extensions;
 using API.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Util
 {
+    /* 
+        This Class provides several useful methods for the scheduling process
+    */
     public class Scheduler
     {
         public ICollection<SchedulingBaseModel> Schedule { get; set; }
 
-        public ICollection<Flight> preScheduleFlights(ICollection<Flight> flights)
-        {
-            var orderedFlightList = new List<Flight>();
-            orderedFlightList = flights.OrderBy(f => f.Arrival).ToList();
-
-            return orderedFlightList;
-        }
-        public SchedulingBaseModel mapOrderToBaseModel(Order order) //Test passed
+        public SchedulingBaseModel mapOrderToBaseModel(Order order)
         {
             var model = new SchedulingBaseModel();
 
@@ -47,76 +41,6 @@ namespace API.Util
 
             //returns slack value 
             return model.Slack;
-        }
-
-        public ICollection<GroundVehicle> returnAvailableGroundVehicles(SchedulingBaseModel model, ICollection<VehicleSchedule> schedVehicle)
-        {
-            var eSoS = model.eSoS;
-            var Deadline = model.Deadline;
-
-            List<GroundVehicle> availableVehicles = new List<GroundVehicle>();
-
-            ICollection<VehicleSchedule> preFilteredSchedules = new List<VehicleSchedule>();
-            var listOfUnavailableVehicles = new List<GroundVehicle>();
-
-            foreach (var schedule in schedVehicle)
-            {
-                if (
-                    schedule.Order.StartOfService.AddMinutes(-5) <= eSoS
-                    && Deadline <= schedule.Order.EndOfService.AddMinutes(5)
-                )
-                {
-                    listOfUnavailableVehicles.Add(schedule.GroundVehicle);
-                }
-                else if (schedule.Order.StartOfService.AddMinutes(-5) <= eSoS
-                    && Deadline <= schedule.Order.Flight.Departure)
-                {
-                    listOfUnavailableVehicles.Add(schedule.GroundVehicle);
-                }
-                // else if (schedule.Order.Flight.Arrival <= eSoS
-                //     && Deadline <= schedule.Order.EndOfService.AddMinutes(5)
-                // )
-                // {
-                //     listOfUnavailableVehicles.Add(schedule.GroundVehicle);
-                // }
-            }
-
-            if (listOfUnavailableVehicles.Any())
-            {
-                foreach (var schedule in schedVehicle)
-                {
-                    foreach (var unavailableVehicle in listOfUnavailableVehicles)
-                    {
-                        if (schedule.GroundVehicle.GroundVehicleId != unavailableVehicle.GroundVehicleId)
-                        {
-                            preFilteredSchedules.Add(schedule);
-                        }
-                        //Hier muss ein weiter Zweig implementiert werden, der im Falle von zu wenig ressourcen, fahrzeuge hinten anstellt.
-                    }
-                }
-            }
-            else
-            {
-                preFilteredSchedules = schedVehicle;
-            }
-
-
-            foreach (var schedule in preFilteredSchedules)
-            {
-                //check if vehicle can be scheduled before currently existent vehicle scheduling
-                if (Deadline <= (schedule.Order.StartOfService.AddMinutes(-5)))
-                {
-                    Console.WriteLine($"Deadline of new Order: {Deadline}; Estimated start of Sevice existent scheduling: {schedule.Order.StartOfService.AddMinutes(-5)}");
-                    availableVehicles.Add(schedule.GroundVehicle);
-                }
-                else if (eSoS >= schedule.Order.EndOfService.AddMinutes(5))
-                {
-                    Console.WriteLine($"eSoS of new Order: {eSoS}; Deadline existent scheduling: {schedule.Order.EndOfService.AddMinutes(5)}");
-                    availableVehicles.Add(schedule.GroundVehicle);
-                }
-            }
-
-            return availableVehicles.ToList();
         }
 
         public VehicleSchedule assignModelToGroundVehicle(SchedulingBaseModel model, GroundVehicle vehicle)
@@ -167,29 +91,6 @@ namespace API.Util
             }
         }
 
-
-        // public ICollection<List<Order>> splitOrdersIntoSeperateLists(ICollection<Order> orders)
-        // {
-        //     //Receive list of orders for different vehicles of different flights
-        //     var seperatedOrderLists = new List<Order>[12];
-        //     //split orders by vehicletype and store it into a list
-        //     foreach (var order in orders)
-        //     {
-        //         var vehicleIndex = order.VehicleTypeId;
-        //         if (seperatedOrderLists[vehicleIndex] != null)
-        //         {
-        //             seperatedOrderLists[vehicleIndex].Add(order);
-        //         }
-        //         else
-        //         {
-        //             seperatedOrderLists[vehicleIndex] = new List<Order>();
-        //             seperatedOrderLists[vehicleIndex].Add(order);
-        //         }
-        //     }
-
-        //     return seperatedOrderLists;
-        // }
-
         public ICollection<SchedulingBaseModel> calculateSlackAndMapToSchedulingModel(ICollection<Order> Orders)
         {
             var t_orderedOrders = Orders.OrderBy(o => o.StartOfService);
@@ -216,13 +117,6 @@ namespace API.Util
             //Order Models acending by slack
             var t_scheduledModels = listOfModels.OrderBy(m => m.Slack).ToList();
             //returns a List of scheduling base models 
-
-            //Debugging output for the case of a test failure
-            Console.WriteLine("--------------------------- Ordered: ---------------------------");
-            foreach (var model in t_scheduledModels)
-            {
-                Console.WriteLine($"OrderNumber: {model.Order.OrderId}, Slack: {model.Slack}");
-            }
 
             return t_scheduledModels;
         }

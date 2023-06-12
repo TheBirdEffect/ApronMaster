@@ -288,22 +288,5 @@ namespace ApiTest
             Assert.AreEqual(0, _tVehicleSchedule.OrderId);
             Assert.AreEqual(0, _tVehicleSchedule.GroundVehicleId);
         }
-
-        [TestMethod]
-        public void shouldReturnGroundVehicleWhichHasFreeSchedule() 
-        {
-            var _listOfOrders = new List<Order>();
-            _listOfOrders.Add(tOrder8);
-
-            var _listOfModels = tScheduler.calculateSlackAndMapToSchedulingModel(_listOfOrders);
-
-            ICollection<GroundVehicle> resultVehicle = new List<GroundVehicle>();
-
-            resultVehicle = tScheduler.returnAvailableGroundVehicles(
-                _listOfModels.ElementAt(0), tSchedules
-            );
-
-            Assert.AreEqual(1, resultVehicle.ElementAt(0).GroundVehicleId);
-        }
     }
 }
