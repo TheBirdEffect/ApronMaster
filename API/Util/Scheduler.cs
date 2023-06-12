@@ -13,6 +13,12 @@ namespace API.Util
     {
         public ICollection<SchedulingBaseModel> Schedule { get; set; }
 
+        /*
+            Method: mapOrderToBaseModel
+            Description: This method is used to map an order object to an SchedulingBaseModel object
+            Params: Order object which is need to map to an BaseModel
+            Returns: BaseModel object
+        */
         public SchedulingBaseModel mapOrderToBaseModel(Order order)
         {
             var model = new SchedulingBaseModel();
@@ -31,6 +37,12 @@ namespace API.Util
             return model;
         }
 
+        /*
+            Method: leastSlckTimeAlgorithm
+            Description: This mehtod is used to calculate slack time of a SchedulingBaseModel
+            Params: SchedulingBaseModel which contains eSoS(SoS)- and Deadline(EoS) times and currentTime to calculate the Slack of the Order
+            Returns: Calculated Slack
+        */
         public double leastSlackTimeAlgorithm(SchedulingBaseModel model, DateTime currentTime)
         {
             //Receives SchedulingBaseModel and currentTime which is the timestamp of the moment of Schedule initialization
@@ -43,6 +55,12 @@ namespace API.Util
             return model.Slack;
         }
 
+        /*
+            Method: assignModelToGroundVehicle
+            Description: This method assigns the SchedulingBaseModel and GroundVehicle to a VehicleSchedule after the scheduling process
+            Params: SchedulingBaseModel and GroundVehicle which should to be mapped on a VehicleSchedule
+            Returns: Final VehicleSchedule object
+        */
         public VehicleSchedule assignModelToGroundVehicle(SchedulingBaseModel model, GroundVehicle vehicle)
         {
             //receives a list of preordered orders descending by slack
@@ -59,6 +77,11 @@ namespace API.Util
             return t_vehicleSchedule;
         }
 
+        /*
+        Method: SetOrderDelay
+        Description: This method calculates the delay of an order after scheduling algorithm decided that the order has to be scheduled delayed
+        Params: SchedulingBaseModel which has to scheduled delayed and the DataContext to access database 
+        */
         public async Task<ActionResult<Order>> SetOrderDelay(SchedulingBaseModel model, DataContext context)
         {
             var order = await context.Orders.SingleAsync(o => o.OrderId.Equals(model.Order.OrderId));
@@ -75,6 +98,11 @@ namespace API.Util
             }
         }
 
+        /*
+        Method: ClearOrderDelay
+        Description: This method sets the delay in order to null if the scheduling algorithm decided that there is no mehr delay for chosen SchedulingBaseModel
+        Params: SchedulingBaseModel for which the delay should be cleared and DataContext to access database 
+        */
         public async Task<ActionResult<Order>> ClearOrderDelay(SchedulingBaseModel model, DataContext context)
         {
             var order = await context.Orders.SingleAsync(o => o.OrderId.Equals(model.Order.OrderId));
@@ -91,6 +119,12 @@ namespace API.Util
             }
         }
 
+        /*
+        Method: calculateSlackAndMapToSchedulingModel
+        Description: This method is used to map a List of Orders to a List of SchedulingBaseModels. Also every the Slack of every SchedulingBaseModel will be calculated and stored to associated SchedulingBaseModel
+        Params: ICollection (LIST) of orders which should be calculated and mapped
+        Returns: List of calculated and mapped SchedulingBaseModels
+        */
         public ICollection<SchedulingBaseModel> calculateSlackAndMapToSchedulingModel(ICollection<Order> Orders)
         {
             var t_orderedOrders = Orders.OrderBy(o => o.StartOfService);
