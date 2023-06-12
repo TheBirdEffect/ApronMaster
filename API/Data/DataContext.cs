@@ -9,11 +9,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Data
 {
+    /*
+        This class describes the Models of the database
+        On creating the database with command 
+        "dotnet ef database update"
+        this code will executed and the Databse will 
+        be build   
+    */
     public class DataContext : DbContext
     {
-        public DataContext(DbContextOptions options) : base(options)
-        {
-        }
+        public DataContext(DbContextOptions options) : base(options){}        
 
         public DbSet<AircraftType> AircraftTypes { get; set; }
         public DbSet<Position> Positions { get; set; }

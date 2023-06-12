@@ -4,5 +4,5 @@
     "dotnet-test-explorer.testProjectPath": "ApiTest/ApiTest.csproj",
     "workbench.preferredDarkColorTheme": "Default Dark Modern",
     "window.autoDetectColorScheme": true,
-    "workbench.colorTheme": "Default Dark+"
+    "workbench.colorTheme": "Solarized Dark"
 }
