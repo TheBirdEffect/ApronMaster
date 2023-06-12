@@ -250,21 +250,6 @@ namespace ApiTest
             Assert.AreEqual(1.0258680555523219, _tSlackTime, $"Current value: {_tSlackTime}");
         }
 
-        
-
-        // [TestMethod]
-        // public void shouldSplitOrdersByVehicleType()
-        // {
-        //     var splittedOrdersList = tScheduler.splitOrdersIntoSeperateLists(tOrders).ElementAt(5);
-        //     //The count of list elements equals two because the amount of vehicleTypes with number 3 is two
-        //     Assert.AreEqual(2, splittedOrdersList.Count());
-
-        //     splittedOrdersList = tScheduler.splitOrdersIntoSeperateLists(tOrders).ElementAt(11);
-        //     //The count of list elements equals two because the amount of vehicleTypes with number 3 is one
-        //     Assert.AreEqual(4, splittedOrdersList.Count());
-
-        // }
-
         [TestMethod]
         public void shouldReturnOrderedListOfBaseModels()
         {
