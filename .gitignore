@@ -457,5 +457,7 @@ appsettings.json
 
 *.db
 *.sqlite3
-
-/API/ApronDB.db
+y
+API/ApronDB.db
+API/ApronDB.db-shm
+API/ApronDB.db-wal

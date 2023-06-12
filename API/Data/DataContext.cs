@@ -10,11 +10,9 @@ using Microsoft.EntityFrameworkCore;
 namespace API.Data
 {
     /*
-        This class describes the Models of the database
-        On creating the database with command 
-        "dotnet ef database update"
-        this code will executed and the Databse will 
-        be build   
+        This class provides the Models of the database
+        On creating with command "dotnet ef database update" 
+        the database will be instanciated.
     */
     public class DataContext : DbContext
     {

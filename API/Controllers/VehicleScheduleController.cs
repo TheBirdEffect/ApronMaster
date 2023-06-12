@@ -29,6 +29,13 @@ namespace API.Controllers
             return await _context.VehicleSchedules.FindAsync(id);
         }
 
+        /*
+            This controller returns the fully gathered informations of the VehicleSchedule Table.
+            It also calculates the new "Start of Service" and "End of Service" of each order contained in query
+            if a delay is set. The new SoS and EoS will returned to the client but it´ll not be updated in database. 
+            Returns: List of VehicleSchedule-Object which contains GroundVehicle, Orders and Flights 
+
+        */
         [HttpGet("Extended")]
         public async Task<ActionResult<IEnumerable<VehicleSchedule>>> GetExtendedSchedule()
         {
@@ -61,7 +68,7 @@ namespace API.Controllers
                         VehicleTypeId = vehicle.VehicleTypeId,
                         VehicleType = vehicle.VehicleType
                     },
-                    Order = new Order 
+                    Order = new Order
                     {
                         OrderId = order.OrderId,
                         FlightId = flight.FlightId,
@@ -91,10 +98,12 @@ namespace API.Controllers
                 }
             ).ToListAsync();
 
-            //Calculate new SoS and EoS if Delay is set
-            //query all orders which have a delay from list query
-            foreach(var order in query) {
-                if(!order.Order.Delay.Equals(null))
+            /*
+                Calculate new SoS and EoS if Delay is set. 
+            */
+            foreach (var order in query)
+            {
+                if (!order.Order.Delay.Equals(null))
                 {
                     order.Order.StartOfService = (DateTime)(order.Order.StartOfService + order.Order.Delay);
                     order.Order.EndOfService = (DateTime)(order.Order.EndOfService + order.Order.Delay);
@@ -107,7 +116,8 @@ namespace API.Controllers
         }
 
         [HttpDelete("all")]
-        public async Task<ActionResult> deleteAllSchedules() {
+        public async Task<ActionResult> deleteAllSchedules()
+        {
             var totalSchedules = await _context.VehicleSchedules.ToListAsync();
 
             _context.VehicleSchedules.RemoveRange(totalSchedules);

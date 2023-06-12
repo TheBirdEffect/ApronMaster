@@ -1,5 +1,4 @@
 using API.Data;
-using API.DTOs;
 using API.Entity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +18,12 @@ namespace API.Controllers
         {
             return await _context.Flights.ToListAsync();
         }
+
+        /*
+            This controller consumes a flightId and returns a Flight with informations of its belonging AircraftType.
+            Params: Flight id of flight which should returned 
+            Returns: Flight with full AircraftType-Object 
+        */
 
         [HttpGet("full/{id}")]
         public async Task<ActionResult<Flight>> GetFlightFull(int id)

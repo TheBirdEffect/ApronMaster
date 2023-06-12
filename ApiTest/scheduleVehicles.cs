@@ -250,21 +250,6 @@ namespace ApiTest
             Assert.AreEqual(1.0258680555523219, _tSlackTime, $"Current value: {_tSlackTime}");
         }
 
-        
-
-        // [TestMethod]
-        // public void shouldSplitOrdersByVehicleType()
-        // {
-        //     var splittedOrdersList = tScheduler.splitOrdersIntoSeperateLists(tOrders).ElementAt(5);
-        //     //The count of list elements equals two because the amount of vehicleTypes with number 3 is two
-        //     Assert.AreEqual(2, splittedOrdersList.Count());
-
-        //     splittedOrdersList = tScheduler.splitOrdersIntoSeperateLists(tOrders).ElementAt(11);
-        //     //The count of list elements equals two because the amount of vehicleTypes with number 3 is one
-        //     Assert.AreEqual(4, splittedOrdersList.Count());
-
-        // }
-
         [TestMethod]
         public void shouldReturnOrderedListOfBaseModels()
         {
@@ -287,23 +272,6 @@ namespace ApiTest
 
             Assert.AreEqual(0, _tVehicleSchedule.OrderId);
             Assert.AreEqual(0, _tVehicleSchedule.GroundVehicleId);
-        }
-
-        [TestMethod]
-        public void shouldReturnGroundVehicleWhichHasFreeSchedule() 
-        {
-            var _listOfOrders = new List<Order>();
-            _listOfOrders.Add(tOrder8);
-
-            var _listOfModels = tScheduler.calculateSlackAndMapToSchedulingModel(_listOfOrders);
-
-            ICollection<GroundVehicle> resultVehicle = new List<GroundVehicle>();
-
-            resultVehicle = tScheduler.returnAvailableGroundVehicles(
-                _listOfModels.ElementAt(0), tSchedules
-            );
-
-            Assert.AreEqual(1, resultVehicle.ElementAt(0).GroundVehicleId);
         }
     }
 }

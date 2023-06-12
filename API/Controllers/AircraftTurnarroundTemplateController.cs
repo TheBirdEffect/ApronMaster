@@ -30,7 +30,11 @@ namespace API.Controllers
             return preset;
         }
 
-
+        /*
+            This controller consumes an aircrafttype id and returns a List of type AircraftTurnaroundTemplate
+            Params: ID of AircraftType
+            Returns: List of AircraftTurnaroundTemplates which AircraftType equals to consumed AircraftType 
+        */
         [HttpGet("aircraftType/{id}")]
         public async Task<ActionResult<ICollection<AircraftTurnarroundPreset>>> GetTemplatesByAircraftType(int id)
         {
@@ -50,6 +54,12 @@ namespace API.Controllers
             ).ToListAsync();
         }
 
+        /*
+            This controller consumes a DTO of GetTemplateForVehicleTypeDto and returns a list of AircraftTurnaroundVehicles
+            It provides templates to get a collection of Templates of Vehicles a chosen Aircraft needs for the Turnaround  
+            Params: GetTemplateForVehicleTypeDto called collection which includes AircraftTypeId and utilizeGangway.
+            Returns: AircraftTurnaroundPreset which belong to aircrafttype and utilizeGangways.
+        */
         [HttpPost("aircraftType/filteredByPositionCharacteristics")]
         public async Task<ActionResult<ICollection<AircraftTurnarroundPreset>>> GetTemplatesByAircraftTypeAndPositionFiltered(
             GetTemplateForVehicleTypeDto collection)
