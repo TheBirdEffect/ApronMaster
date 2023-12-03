@@ -59,6 +59,12 @@ nav {
     color: $--bs-text-primary !important;
 }
 
+.accent-grey {
+    background-color: $--bs-form-row-bg-primary;
+    align-items: center;
+    justify-content: center;
+}
+
 .underconstruction {
     margin: 30px auto;
     background-image: url($--bs-image-construction);

@@ -1,34 +1,91 @@
 <div class="form-header">
-    <div *ngIf="updateMode">
-        <h3>Edit {{title}}</h3>
+    <h3><i class="bi bi-clipboard-plus icon-color"></i>
+        <div *ngIf="updateMode">Edit Flight</div>
+        <div *ngIf="!updateMode">Add Flight</div>
+    </h3>
+    <hr>
+    <div class="container mb-3">
+        <form [formGroup]="flightForm">
+            <div class="row accent-grey pt-1 my-1 rounded">
+                <div class="col">
+                    <label for="lbSetFlightNumber" class="form-label">
+                        Flight Number
+                    </label>
+                </div>
+                <div class="col-8">
+                    <input 
+                        type="text" 
+                        id="lbSetFlightNumber" 
+                        formControlName="flightNumber" 
+                        class="form-control mb-1"
+                    >
+                </div>
+            </div>
+            <div class="row accent-grey pt-1 my-1 rounded">
+                <div class="col">
+                    <label for="lbSetArrivalDateTime" class="form-label">
+                        Arrival
+                    </label>
+                </div>
+                <div class="col-8">
+                    <input 
+                        type="datetime-local" 
+                        id="lbSetArrivalDateTime" 
+                        formControlName="arrival" 
+                        class="form-control mb-1"
+                    >
+                </div>
+            </div>
+            <div class="row accent-grey pt-1 my-1 rounded">
+                <div class="col">
+                    <label for="lbSetDepartureTime" class="form-label">
+                        Departure
+                    </label>
+                </div>
+                <div class="col-8">
+                    <input 
+                        type="datetime-local" 
+                        id="lbSetDepartureTime" 
+                        formControlName="departure" 
+                        class="form-control mb-1"
+                    >
+                </div>
+            </div>
+        </form>
     </div>
-    <div *ngIf="!updateMode">
-        <h3>Add {{title}}</h3>
+
+    <div class="text-center" *ngIf="!updateMode; else update">
+        <button class="btn btn-outline-success me-2" [disabled]="flightForm.invalid" name="btnSubmit"
+            type="submit">Add Flight</button>
+        <button class="btn btn-danger" type="button" name="btnCancel" (click)="cancel()">Cancel</button>
     </div>
-</div>
-<hr>
-<form *ngIf="(!updateMode) ||(flightToUpdate$ | async) ; else loading" [formGroup]="form" (ngSubmit)="onSubmit(form)">
+    <ng-template #update class="text-center">
+        <button class="btn btn-outline-success me-2" [disabled]="flightForm.invalid" name="btnSubmit"
+            type="submit">Update Flight</button>
+        <button class="btn btn-danger" type="button" name="btnCancel" (click)="cancel()">Cancel</button>
+
+<!-- <form *ngIf="(!updateMode) ||(flightToUpdate$ | async) ; else loading" [formGroup]="form" (ngSubmit)="onSubmit(form)">
     <div class="row">
 
-        <div class="container mb-3 text-center">
-            <input type="text" formControlName="flightNumber" class="form-control mb-1" placeholder="Flight Number" />
+        <div class="container mb-3 text-center"> -->
+            <!-- <input type="text" formControlName="flightNumber" class="form-control mb-1" placeholder="Flight Number" /> -->
             <!-- <label class="form-label">Arrival</label> -->
-            <input type="datetime-local" formControlName="arrival" class="form-control mb-1" placeholder="Arrival" />
+            <!-- <input type="datetime-local" formControlName="arrival" class="form-control mb-1" placeholder="Arrival" /> -->
             <!-- <label class="form-label">Departure</label> -->
-            <input type="datetime-local" formControlName="departure" class="form-control mb-1"
-                placeholder="Departure" />
+            <!-- <input type="datetime-local" formControlName="departure" class="form-control mb-1" -->
+                <!-- placeholder="Departure" /> -->
             <!-- <label class="form-label">Destination</label> -->
-            <input type="text" formControlName="destination" class="form-control mb-1" placeholder="Destination" />
+            <!-- <input type="text" formControlName="destination" class="form-control mb-1" placeholder="Destination" /> -->
             <!-- <label class="form-label">AircraftType</label> -->
-            <select formControlName="aircraftType" class="form-control mb-1">
+            <!-- <select formControlName="aircraftType" class="form-control mb-1"> -->
                 <!-- <ng-template *ngIf="!updateMode" > -->
-                <option *ngIf="!updateMode" value="" disabled="disabled" selected="true">Please select an Aircraft Type
+                <!-- <option *ngIf="!updateMode" value="" disabled="disabled" selected="true">Please select an Aircraft Type
                 </option>
                 <option *ngIf="updateMode" [ngValue]="flightToUpdate$" disabled="disabled" selected="true">Please select
                     an Aircraft Type</option>
                 <option *ngFor="let aircraftType of aircrafttypeService.currentType$ | async" [ngValue]="aircraftType">
                     {{aircraftType.name + " | UnitLoadOption: " + aircraftType.hasUnitLoadOption}}
-                </option>
+                </option> -->
                 <!-- </ng-template> -->
                 <!-- <ng-template #ELSE>
                     <option disabled="disabled" selected="true"></option>
@@ -37,8 +94,8 @@
                         {{aircraftType.name + " | UnitLoadOption: " + aircraftType.hasUnitLoadOption}}
                     </option>
                 </ng-template> -->
-            </select>
-            <div class="text-center" *ngIf="!updateMode; else update">
+            <!-- </select> -->
+            <!-- <div class="text-center" *ngIf="!updateMode; else update">
                 <button class="btn btn-outline-success me-2" [disabled]="form.invalid" name="btnSubmit"
                     type="submit">Add Flight</button>
                 <button class="btn btn-danger" type="button" name="btnCancel" (click)="cancel()">Cancel</button>
@@ -46,12 +103,12 @@
             <ng-template #update class="text-center">
                 <button class="btn btn-outline-success me-2" [disabled]="form.invalid" name="btnSubmit"
                     type="submit">Update Flight</button>
-                <button class="btn btn-danger" type="button" name="btnCancel" (click)="cancel()">Cancel</button>
-            </ng-template>
+                <button class="btn btn-danger" type="button" name="btnCancel" (click)="cancel()">Cancel</button> -->
+            <!-- </ng-template>
         </div>
     </div>
-</form>
+</form> -->
 
-<ng-template #loading>
+<!-- <ng-template #loading>
     Loading Flight Form ...
-</ng-template>
+</ng-template> -->

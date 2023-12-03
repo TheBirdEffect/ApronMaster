@@ -17,7 +17,7 @@ export class FormsFlightComponent implements OnInit {
   @Output() cancelForm = new EventEmitter();
 
   id: number;
-  form: FormGroup
+  flightForm: FormGroup
   title = "Flight";
 
   flightToUpdate$: Observable<Flight>;
@@ -34,7 +34,7 @@ export class FormsFlightComponent implements OnInit {
   ngOnInit(): void {
     this.getAircraftTypes();
 
-    this.form = this.formBuilder.group({
+    this.flightForm = this.formBuilder.group({
       flightId: ['0', Validators.nullValidator],
       flightNumber: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(8)]],
       arrival: ['', Validators.required],
@@ -47,7 +47,7 @@ export class FormsFlightComponent implements OnInit {
     if (this.updateMode) {
       this.flightToUpdate$ = this.flightService.loadFlight().pipe(
         tap(flight => {         
-          this.form.patchValue(flight)
+          this.flightForm.patchValue(flight)
         })
         
       )
@@ -60,7 +60,7 @@ export class FormsFlightComponent implements OnInit {
   //https://jasonwatmore.com/post/2022/12/05/angular-14-dynamic-add-edit-form-that-supports-create-and-update-mode#users-add-edit-component-ts
   // Hier gehts weiter
 
-  get f() { return this.form.controls; }
+  get f() { return this.flightForm.controls; }
 
 
 
