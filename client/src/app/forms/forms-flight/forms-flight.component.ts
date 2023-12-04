@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { first, map, Observable, tap } from 'rxjs';
+import { first, map, Observable, Subscription, tap } from 'rxjs';
 import { AircraftType } from '../../_models/aircraftType';
 import { Flight } from '../../_models/flight';
 import { AircraftTypesService } from '../../_service/aircraft-types.service';
@@ -15,6 +15,9 @@ import { FlightsService } from '../../_service/flights.service';
 export class FormsFlightComponent implements OnInit {
   @Input() updateMode: boolean;
   @Output() cancelForm = new EventEmitter();
+
+  aircraftTypes$: Observable<AircraftType[] | null>;
+  __aircraftTypes: Subscription;
 
   id: number;
   flightForm: FormGroup
@@ -32,6 +35,7 @@ export class FormsFlightComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.aircraftTypes$ = this.aircrafttypeService.currentType$;
     this.getAircraftTypes();
 
     this.flightForm = this.formBuilder.group({

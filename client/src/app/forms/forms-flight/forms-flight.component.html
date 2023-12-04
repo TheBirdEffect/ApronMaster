@@ -18,6 +18,7 @@
                         id="lbSetFlightNumber" 
                         formControlName="flightNumber" 
                         class="form-control mb-1"
+                        [value]=""
                     >
                 </div>
             </div>
@@ -51,17 +52,47 @@
                     >
                 </div>
             </div>
+            <div class="row accent-grey pt-1 my-1 rounded">
+                <div class="col">
+                    <label for="lbDestination" class="form-label">
+                        Destination
+                    </label>
+                </div>
+                <div class="col-8">
+                    <input 
+                        type="text"
+                        id="lbDestination"
+                        formControlName="destination"
+                        class="form-control mb-1"
+                    >
+                </div>
+            </div>
+            <div class="row accent-grey pt-1 my-1 rounded">
+                <div class="col">
+                    <label for="lbAircraftType" class="form-label">
+                        Aircraft Type
+                    </label>
+                </div>
+                <div class="col-8">
+                    <select id="lbAircraftType" formControlName="aircraftType" class="form-control mb-1">
+                        <option value="" selected disabled>... please select aircraft type</option>
+                        <option value="" *ngFor="let aircraftType of aircraftTypes$ | async" [ngValue]="aircraftType">
+                            {{aircraftType.name + " | Unit load option: " + aircraftType.hasUnitLoadOption}}
+                        </option>
+                    </select>
+                </div>
+            </div>
         </form>
     </div>
 
     <div class="text-center" *ngIf="!updateMode; else update">
         <button class="btn btn-outline-success me-2" [disabled]="flightForm.invalid" name="btnSubmit"
-            type="submit">Add Flight</button>
+            type="submit" (click)="onSubmit(this.flightForm)">Add Flight</button>
         <button class="btn btn-danger" type="button" name="btnCancel" (click)="cancel()">Cancel</button>
     </div>
     <ng-template #update class="text-center">
         <button class="btn btn-outline-success me-2" [disabled]="flightForm.invalid" name="btnSubmit"
-            type="submit">Update Flight</button>
+            type="submit" (click)="onSubmit(this.flightForm)">Update Flight</button>
         <button class="btn btn-danger" type="button" name="btnCancel" (click)="cancel()">Cancel</button>
 
 <!-- <form *ngIf="(!updateMode) ||(flightToUpdate$ | async) ; else loading" [formGroup]="form" (ngSubmit)="onSubmit(form)">
