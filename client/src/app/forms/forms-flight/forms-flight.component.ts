@@ -17,26 +17,24 @@ export class FormsFlightComponent implements OnInit {
   @Output() cancelForm = new EventEmitter();
 
   aircraftTypes$: Observable<AircraftType[] | null>;
+  flightToUpdate$: Observable<Flight>;
+  currentAircraftType: AircraftType;
   __aircraftTypes: Subscription;
 
   id: number;
   flightForm: FormGroup
   title = "Flight";
 
-  flightToUpdate$: Observable<Flight>;
-  currentAircraftType: AircraftType;
-
-
-
-  constructor(private flightService: FlightsService,
+  constructor(
+    private flightService: FlightsService,
     public aircrafttypeService: AircraftTypesService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
+    this.aircrafttypeService.GetAircraftTypes().subscribe();
     this.aircraftTypes$ = this.aircrafttypeService.currentType$;
-    this.getAircraftTypes();
 
     this.flightForm = this.formBuilder.group({
       flightId: ['0', Validators.nullValidator],
@@ -48,17 +46,25 @@ export class FormsFlightComponent implements OnInit {
       aircraftType: ['', Validators.required]
     });
 
+    console.log("UMode: " + this.updateMode)
+    // if (this.updateMode) {
+    //   this.flightToUpdate$ = this.flightService.loadFlight().pipe(
+    //     tap(flight => {        
+    //       console.log("Flight to update: " + flight)
+    //       this.flightForm.patchValue(flight)
+    //     })
+        
+    //   )
+    // }    
     if (this.updateMode) {
       this.flightToUpdate$ = this.flightService.loadFlight().pipe(
-        tap(flight => {         
+        tap(flight => {        
+          console.log("Flight to update: " + flight)
           this.flightForm.patchValue(flight)
         })
-        
       )
-    }
-
-    console.log('UpdateMode', this.updateMode);
-    
+      this.flightToUpdate$.subscribe();
+    }    
   }
 
   //https://jasonwatmore.com/post/2022/12/05/angular-14-dynamic-add-edit-form-that-supports-create-and-update-mode#users-add-edit-component-ts
@@ -80,14 +86,6 @@ export class FormsFlightComponent implements OnInit {
   updateFlight(model: Flight) {
     console.log('ContentOfFlight@updateFlight', model);  
     this.flightService.updateFlight(model).subscribe({
-    })
-  }
-
-  getAircraftTypes() {
-    this.aircrafttypeService.GetAircraftTypes().subscribe({
-      next: response => {
-        //this.aircraftTypes = response;
-      }
     })
   }
 

@@ -32,6 +32,10 @@ export class AircraftTypesService {
     );
   }
 
+  loadAircraftTypes() {
+    return this.currentType$;
+  }
+
   loadAircraftType() {
     return this.selectedType$;
   }
