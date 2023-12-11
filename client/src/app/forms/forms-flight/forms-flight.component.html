@@ -9,6 +9,16 @@
 <hr>
 <form *ngIf="(!updateMode) ||(flightToUpdate$ | async) ; else loading" [formGroup]="form" (ngSubmit)="onSubmit(form)">
     <div class="row">
+        <div class="row accent-grey pt-1 my-1 rounded">
+            <div class="col">
+                <label for="setFlightNumber" class="form-label">
+                    Flight Number
+                </label>
+            </div>
+            <div class="col-8">
+                <input type="text" formControlName="flightNumber" class="form-control mb-1" placeholder="Flight Number" />
+            </div>
+        </div>
 
         <div class="container mb-3 text-center">
             <input type="text" formControlName="flightNumber" class="form-control mb-1" placeholder="Flight Number" />
