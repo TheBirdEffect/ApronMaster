@@ -5,6 +5,7 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { AlertService } from '../../_service/alert.service';
 import { Flight } from '../../_models/flight';
 import { OrderService } from 'src/app/_service/order.service';
+import { ModalService } from 'src/app/_service/modal.service';
 
 @Component({
   selector: 'app-table-flight',
@@ -29,7 +30,8 @@ export class TableFlightComponent implements OnInit {
 
   constructor(public flightService: FlightsService,
     private modalService: BsModalService,
-    private orderService: OrderService
+    private orderService: OrderService,
+    private modalServiceNew: ModalService
   ) { }
 
   ngOnInit(): void {
@@ -37,6 +39,10 @@ export class TableFlightComponent implements OnInit {
     //console.log(this.editMode);
 
     //this.flightService.autoRefreshFlights(30).subscribe();
+  }
+
+  openTemplateOnModal(template: TemplateRef<any>) {
+    this.modalServiceNew.openModal(template)
   }
 
   getFlights() {

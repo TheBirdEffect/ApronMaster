@@ -55,8 +55,10 @@
                 </tbody>
             </table>
             <div *ngIf="editMode" class="container text-center px-0">
-                <button type="button" class="btn-add-tr btn-add-tr-hover" (click)="openModal(addTemplate)">
-                    <i class="bi bi-plus-circle"></i></button>
+                <!-- <button type="button" class="btn-add-tr btn-add-tr-hover" (click)="openModal(addTemplate)"> -->
+                <button type="button" class="btn-add-tr btn-add-tr-hover" (click)="openTemplateOnModal(addTemplate)">
+                    <i class="bi bi-plus-circle"></i>
+                </button>
             </div>
         </div>
     </ng-container>
