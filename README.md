@@ -4,6 +4,8 @@
 
 ApronMaster is a web application developed to efficiently schedule resources during aircraft turnarounds. This system serves as both a management tool and a scheduling system, optimizing the entire process of aircraft maintenance and deployment.
 
+**Note:** This project was developed as part of a Bachelor's thesis.
+
 ## Features
 
 - **Resource Planning:** Manage and schedule resources such as equipment and refueling efficiently.
