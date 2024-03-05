@@ -14,11 +14,18 @@ import { OrderService } from 'src/app/_service/order.service';
 export class TableFlightComponent implements OnInit {
   @Input() editMode = true;
 
+  title = 'flights'
+  rowClicked: any;
+
   registerMode = false;
   modalRef?: BsModalRef;
   flights$: Observable<Flight[] | null> = of(null);
   flights: any;
   subscription: Subscription;
+
+  //Properties for UpdateMode
+  flightToUpdate: Flight;
+  responsedFlight: any;
 
   constructor(public flightService: FlightsService,
     private modalService: BsModalService,
@@ -27,7 +34,7 @@ export class TableFlightComponent implements OnInit {
 
   ngOnInit(): void {
     this.getFlights();
-    console.log(this.editMode);
+    //console.log(this.editMode);
 
     //this.flightService.autoRefreshFlights(30).subscribe();
   }
@@ -36,11 +43,36 @@ export class TableFlightComponent implements OnInit {
     return this.flightService.getFlights().subscribe({
       next: response => {
         this.flights = response
+        //console.log(this.flights);
+        
       },
       error: error => console.log(error)
     })
   }
 
+  getFullFlightById(id: number) {
+    this.flightService.getFullFlightByID(id).subscribe({
+      next: (response: Flight) => { 
+        // const flight = new Flight();
+
+        // flight.aircraftType = response.aircraftType;
+        // flight.aircraftTypeId = response.aircraftTypeId;
+        // flight.arrival = response.arrival;
+        // flight.departure = response.departure;
+        // flight.destination = response.destination;
+        // flight.flightId = response.flightId,
+        // flight.flightNumber = response.flightNumber;
+
+        return response;         
+      }
+    });
+  }
+
+  updateFlight(flight: Flight){     
+    this.flightService.getFullFlightByID(flight.flightId).subscribe(
+      (response: Flight) => this.flightService.flightSource.next(response)
+    );
+  }
 
   deleteFlight(flightId: number): void {
     this.flightService.deleteFlight(flightId).subscribe()
@@ -65,14 +97,27 @@ export class TableFlightComponent implements OnInit {
     this.closeModal()
   }
 
+  changeRowColor(index: any) {
+    if(this.rowClicked === index)
+    {
+      this.rowClicked = -1;
+    } else {
+      this.rowClicked = index;
+    }
+    console.log('Index: ', index);
+    console.log('RowClicked: ', this.rowClicked);
+    
+  }
+
   transmitChosenFlightForOrders(flight: Flight) {
     this.orderService.GetOrdersOfFlight(flight).subscribe({
       next: response => {
-        console.log(response);
+        //console.log(response);
       },
       error: error => console.log(error)
       
     })
+    this.flightService.getSortedFlightsByChosenFlight(flight).subscribe();
   }
 
 

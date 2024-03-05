@@ -1,0 +1,4 @@
+export enum stateObservablesEnum {
+    ORDER_DETAIL_PRESELECTOR_IS_OPEN,
+    ORDER_COLLECTION_TIME_OFFSET_LOADED
+}

@@ -36,6 +36,16 @@
                 "${workspaceFolder}/API/API.csproj"
             ],
             "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "scheduler tests",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "test",
+                "${workspaceFolder}/ApiTest/ApiTest.csproj"
+            ],
+            "problemMatcher": "$msCompile"
         }
     ]
 }

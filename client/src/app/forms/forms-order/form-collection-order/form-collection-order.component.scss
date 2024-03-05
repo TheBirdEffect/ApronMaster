@@ -1,0 +1,11 @@
+@import "./../../../../variables.scss";
+
+.accent-grey {
+    background-color: $--bs-form-row-bg-primary;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-color {
+    color: rgba(11, 139, 88, 0.806);
+}

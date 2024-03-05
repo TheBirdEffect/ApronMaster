@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, map, tap, Observable, timer, share } from 'rxjs';
+import { BehaviorSubject, catchError, map, tap, Observable, timer, share, delay } from 'rxjs';
 import { FilterEnum } from '../_enums/FilterEnum';
 import { SortEnum } from '../_enums/SortEnum';
 import { Flight } from '../_models/flight';
@@ -14,18 +14,64 @@ export class FlightsService {
   flightsSource = new BehaviorSubject<Flight[] | null>(null);
   currentFlights$ = this.flightsSource.asObservable();
 
-  constructor(private http:HttpClient) { }
+  orderedFlightSource = new BehaviorSubject<Flight[] | null>(null);
+  currentOrderedFlight$ = this.orderedFlightSource.asObservable();
+
+  flightSource = new BehaviorSubject<Flight | any>(null);
+  currentFlight$ = this.flightSource.asObservable();
+
+  constructor(private http: HttpClient) { }
 
   getFlights(): Observable<Flight[]> {
     return this.http.get<Flight[]>(this.basicUrl).pipe(
-      map((response:Flight[]) => {
-        let flights: Flight[] = response;              
+      map((response: Flight[]) => {
+        let flights: Flight[] = response;
         flights = this.filterFlights(flights, FilterEnum.everything);
-        flights = this.sortFlights(flights, SortEnum.increase);       
-        this.flightsSource.next(flights);      
+        flights = this.sortFlights(flights, SortEnum.increase);
+        this.flightsSource.next(flights);
         return response;
       })
     );
+  }
+
+  /*
+    Push flight which is equal to chosenFlight on the first array index
+  */
+  getSortedFlightsByChosenFlight(chosenFlight: Flight) {    
+    return this.http.get<Flight[]>(this.basicUrl).pipe(
+      map((response: Flight[]) => {
+        let flights: Flight[] = response;
+        let flightsToBeReturned = new Array<Flight>;
+        let equalFlight = new Flight;
+        flights.forEach((flight) => {
+          if(flight.flightNumber != chosenFlight.flightNumber) {
+            flightsToBeReturned.push(flight)
+          } else {
+            flightsToBeReturned.unshift(flight);
+          }
+        })
+        this.orderedFlightSource.next(flightsToBeReturned);
+        
+        return flightsToBeReturned;
+      })
+    );
+  }
+
+  getFlightById(id: number): Observable<Flight> {
+    return this.http.get<Flight>(this.basicUrl + "/" + id).pipe(
+      map( (response: Flight) => {
+        this.flightSource.next(response);
+        return response;
+      })
+    );
+  }
+
+  getFullFlightByID(id: number): Observable<Flight> {
+    return this.http.get<Flight>(this.basicUrl + "/full/" + id).pipe(
+      map((response: Flight) => {
+        return response;
+      })
+    )
   }
 
   addFlight(model: Flight) {
@@ -33,9 +79,27 @@ export class FlightsService {
       map((response: Flight) => {
         let flightsFromSource = this.flightsSource.getValue();
         flightsFromSource?.push(response);
-        if(flightsFromSource) {
+        if (flightsFromSource) {
           flightsFromSource = this.sortFlights(flightsFromSource, SortEnum.increase)
-          this.flightsSource.next(flightsFromSource);     
+          this.flightsSource.next(flightsFromSource);
+        }
+      })
+    )
+  }
+
+  updateFlight(model: Flight) {
+    return this.http.post<Flight>(this.basicUrl + "/update", model).pipe(
+      map((response: Flight) => {        
+        console.log('UpdateMethodContainedFlight', model)
+        let flightsFromSource = this.flightsSource.getValue();
+        flightsFromSource?.forEach((flight, index) => {
+          if (flight == response) {
+            flightsFromSource?.splice(index, 1, response);
+          }
+        })
+        if (flightsFromSource) {
+          flightsFromSource = this.sortFlights(flightsFromSource, SortEnum.increase)
+          this.flightsSource.next(flightsFromSource);
         }
       })
     )
@@ -43,10 +107,10 @@ export class FlightsService {
 
   deleteFlight(id: number) {
     return this.http.delete<Flight>(this.basicUrl + "/" + id).pipe(
-      map( response => {
+      map(response => {
         const flightsFromSource = this.flightsSource.getValue()
         flightsFromSource?.forEach((flight, index) => {
-          if(flight.flightId == response.flightId) flightsFromSource.splice(index, 1)
+          if (flight.flightId == response.flightId) flightsFromSource.splice(index, 1)
         })
       })
     )
@@ -55,36 +119,52 @@ export class FlightsService {
   autoRefreshFlights(timeInSeconds: number) {
     timeInSeconds = (timeInSeconds * 1000)
     return timer(0, timeInSeconds)
-    .pipe(
-      map( () => this.getFlights().subscribe()),
-      share()
-    )
+      .pipe(
+        map(() => this.getFlights().subscribe()),
+        share()
+      )
   }
 
   sortFlights(flights: Flight[], kindOfSort: SortEnum): Flight[] {
-    if(kindOfSort === SortEnum.increase) {
-      return flights.sort((a,b) => {
+    if (kindOfSort === SortEnum.increase) {
+      return flights.sort((a, b) => {
         return <any>new Date(a.arrival) - <any>new Date(b.arrival);
       })
     } else {
-      return flights.sort((a,b) => {
+      return flights.sort((a, b) => {
         return <any>new Date(b.arrival) - <any>new Date(a.arrival);
       })
     }
   }
 
   filterFlights(flights: Flight[], filterEnum: FilterEnum): Flight[] {
-    const now = new Date();   
-    if(filterEnum === FilterEnum.onlyCurrent) {
+    const now = new Date();
+    if (filterEnum === FilterEnum.onlyCurrent) {
       const newFlightsArray: Flight[] = [];
-      flights.forEach(flight => {        
-        if(<any>new Date(flight.arrival) > now) {
+      flights.forEach(flight => {
+        if (<any>new Date(flight.arrival) > now) {
           newFlightsArray.push(flight);
-          
+
         }
-      })            
+      })
       return newFlightsArray;
     }
     return flights;
+  }
+
+  loadFlight() {
+    return this.currentFlight$;
+  }
+
+  loadFlights() {
+    return this.currentFlights$;
+  }
+
+  loadOrderedFlights() {
+    return this.currentOrderedFlight$;
+  }
+
+  setFlightObservable(flight: Flight) {
+    this.flightSource.next(flight);
   }
 }

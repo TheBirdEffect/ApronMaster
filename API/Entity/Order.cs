@@ -15,7 +15,9 @@ namespace API.Entity
         public DateTime StartOfService { get; set; }
         [Required]
         public DateTime EndOfService { get; set; }
+        public TimeSpan? Delay { get; set; }
         public int QtyFuel { get; set; }
+        public string? fuelType { get; set; }
 
         //Create FK for Position
         public int PositionId { get; set; }

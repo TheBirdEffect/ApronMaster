@@ -3,19 +3,26 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { Flight } from '../_models/flight';
 import { order } from '../_models/order';
+import { FlightsService } from './flights.service';
+import { vehicleType } from '../_models/vehicleType';
+import { VehicleService } from './vehicle.service';
+import { PositionService } from './position.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
-  private basicApiPath = "https://localhost:5001/api"
+  private basicApiPath = "https://localhost:5001/api";
   _ordersSource = new BehaviorSubject<order[] | null>(null);
   currentOrders$ = this._ordersSource.asObservable();
 
   private _ordersOfFlight = new BehaviorSubject<order[] | null>(null);
   currentOrdersOfFlight$ = this._ordersOfFlight.asObservable();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient
+              , private flightService: FlightsService
+              , private vehicleTypeService: VehicleService
+              , private positionService: PositionService) { }
 
   GetOrders():Observable<order[]> {
     return this.http.get<order[]>(this.basicApiPath + "/order").pipe(
@@ -27,7 +34,7 @@ export class OrderService {
   }
 
   GetOrdersOfFlight(flight: Flight) {
-    console.log(flight);
+    //console.log(flight);
     return this.http.get<order[]>(this.basicApiPath + "/order/flight" + flight?.flightId).pipe(
       map(response => {
         this._ordersOfFlight.next(response);
@@ -40,7 +47,25 @@ export class OrderService {
     return this.http.post<order>(this.basicApiPath + "/order/add", order).pipe(
       map(response => {
         this.AddToObservableArray(response);
-        console.log(this._ordersOfFlight.getValue());
+        //console.log(this._ordersOfFlight.getValue());
+        return response;
+      })
+    )
+  }
+
+  SetOrderCollection(offset: any): Observable<order[]> {
+    return this.http.post<order[]>(this.basicApiPath + "/Order/transfer/fromVehicleOffsets", offset).pipe(
+      map( response => {
+        this.AddCollectionToObservableArray(response);
+        return response;
+      })
+    )
+  }
+
+  SetSingleOrders(singleOrderFromForm: any): Observable<order[]> {
+    return this.http.post<order[]>(this.basicApiPath + "/Order/transfer/fromSingleOrderForm", singleOrderFromForm).pipe(
+      map( response => {
+        this.AddCollectionToObservableArray(response);
         return response;
       })
     )
@@ -77,6 +102,24 @@ export class OrderService {
       orders.push(order)
     }
     this._ordersSource.next(orders);
+  }
+
+  AddCollectionToObservableArray(orders: order[]) {
+    const currentOrders = this._ordersOfFlight.getValue();
+    if(currentOrders != null) {
+      orders.forEach(order => {
+        currentOrders.push(order);
+      })
+      this._ordersOfFlight.next(currentOrders);
+    }
+  }
+
+  loadOrdersOfFlight() {
+    return this.currentOrdersOfFlight$;
+  }
+
+  setOrdersOfFlightSource(order: any) {
+    this._ordersOfFlight.next(order);
   }
   /*
     Getter and setter to set BehaviorSubjects

@@ -1,0 +1,17 @@
+<div class="row mb-2 centerButtons">
+    <button type="button" class="btn btn-success" (click)="initializeBackend()">initialize</button>
+    <button type="button" class="btn btn-primary" (click)="updateScheduling()">Update</button>
+    <button type="button" class="btn btn-danger" (click)="deleteData()">delete</button>
+</div>
+<div class="text-center">
+    <ng-template [ngIf]="vehicleSchedules$ | async">
+        <google-chart class="chart" [data]="timeLineChartData"></google-chart>
+    </ng-template>
+
+    <ng-template [ngIf]="!(vehicleSchedules$ | async)">
+        <div class="spinner-border custom-spinner mt-5" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+        <p>Loading {{title}}...</p>
+    </ng-template>
+</div>

@@ -1,0 +1,8 @@
+{
+    "dotnet-test-explorer.autoExpandTree": true,
+    "dotnet-test-explorer.autoWatch": true,
+    "dotnet-test-explorer.testProjectPath": "ApiTest/ApiTest.csproj",
+    "workbench.preferredDarkColorTheme": "Default Dark Modern",
+    "window.autoDetectColorScheme": true,
+    "workbench.colorTheme": "Solarized Dark"
+}

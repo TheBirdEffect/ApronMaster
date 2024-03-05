@@ -39,7 +39,8 @@ nav {
 }
 
 .corners-round {
-    border-radius: 7px;
+    
+    border-radius: 0px 0px 7px 7px;
 }
 
 .table-collapse-header {
@@ -52,6 +53,10 @@ nav {
 
 .icon-edit {
     color: $--bs-bg-primary !important;
+}
+
+.custom-spinner {
+    color: $--bs-text-primary !important;
 }
 
 .underconstruction {
@@ -71,3 +76,8 @@ nav {
 ::ng-deep.tabset-link :active {
     color: $--bs-bg-secondary;
 }
+
+.form-header {
+    color:dimgray; 
+}
+
